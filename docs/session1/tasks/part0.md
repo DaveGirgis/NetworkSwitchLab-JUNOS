@@ -15,11 +15,15 @@
 
 ## Step 2: Configure GNS3 VM Resources
 
-In VMware Workstation, edit the GNS3 VM settings:
+In GNS3, go to **Edit** > **Preferences** > **GNS3 VM** and set the resources allocated to the VM:
 
 - **RAM**: 16 GB (minimum 8 GB — each vJunos node needs 4 GB)
 - **vCPUs**: 4 or more
-- **Nested virtualization**: Enable "Virtualize Intel VT-x/EPT or AMD-V/RVI" (required for QEMU)
+
+Click **OK** to apply. GNS3 will restart the VM with the updated resources.
+
+!!! warning "Nested virtualization — VMware setting"
+    QEMU requires hardware virtualization support. In VMware Workstation, open the GNS3 VM's settings, go to **Processors**, and enable **"Virtualize Intel VT-x/EPT or AMD-V/RVI"**. This is a VMware-level setting that GNS3 cannot control — it must be set before starting the VM.
 
 Start the GNS3 VM. Wait for it to show its IP address on the console before launching GNS3.
 
