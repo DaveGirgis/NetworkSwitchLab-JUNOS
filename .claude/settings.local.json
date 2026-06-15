@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:davegirgis.github.io)",
+      "Bash(gh api *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://api.github.com/repos/DaveGirgis/NetworkSwitchLab/git/trees/main?recursive=1\")",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); [print\\(i['path']\\) for i in data.get\\('tree',[]\\) if i['type']=='blob']\")",
+      "WebFetch(domain:api.github.com)"
+    ]
+  }
+}

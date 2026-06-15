@@ -1,0 +1,166 @@
+site_name: Junos SP Training Labs
+site_description: JNCIS-SP Lab Series — vJunos-router in GNS3
+site_author: Network Training Lab
+site_url: https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/
+
+repo_name: DaveGirgis/NetworkSwitchLab-JUNOS
+repo_url: https://github.com/DaveGirgis/NetworkSwitchLab-JUNOS
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - content.code.annotate
+    - toc.integrate
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Session 1 — GNS3 Platform & Junos CLI:
+    - Overview: session1/index.md
+    - Topology: session1/topology.md
+    - Platform Setup: session1/addressing.md
+    - Tasks:
+      - Part 0 — Installation & vJunos Image: session1/tasks/part0.md
+      - Part 1 — Adding Devices: session1/tasks/part1.md
+      - Part 2 — Connecting & Booting: session1/tasks/part2.md
+      - Part 3 — Junos CLI Fundamentals: session1/tasks/part3.md
+      - Verification: session1/tasks/verify.md
+    - Reference:
+      - Command Reference: session1/reference/commands.md
+      - Troubleshooting: session1/reference/troubleshooting.md
+  - Session 2 — Interfaces & Static Routing:
+    - Overview: session2/index.md
+    - Topology: session2/topology.md
+    - Addressing: session2/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session2/tasks/part0.md
+      - Part 1 — Interface Addressing: session2/tasks/part1.md
+      - Part 2 — Loopbacks & Static Routes: session2/tasks/part2.md
+      - Part 3 — Default Routes & Summarization: session2/tasks/part3.md
+      - Verification: session2/tasks/verify.md
+    - Reference:
+      - Command Reference: session2/reference/commands.md
+      - Troubleshooting: session2/reference/troubleshooting.md
+  - Session 3 — OSPF Single-Area:
+    - Overview: session3/index.md
+    - Topology: session3/topology.md
+    - Addressing: session3/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session3/tasks/part0.md
+      - Part 1 — OSPF Configuration: session3/tasks/part1.md
+      - Part 2 — OSPF Tuning: session3/tasks/part2.md
+      - Part 3 — Route Summarization: session3/tasks/part3.md
+      - Verification: session3/tasks/verify.md
+    - Reference:
+      - Command Reference: session3/reference/commands.md
+      - Troubleshooting: session3/reference/troubleshooting.md
+  - Session 4 — IS-IS:
+    - Overview: session4/index.md
+    - Topology: session4/topology.md
+    - Addressing: session4/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session4/tasks/part0.md
+      - Part 1 — IS-IS Level 1 & 2: session4/tasks/part1.md
+      - Part 2 — Route Leaking: session4/tasks/part2.md
+      - Part 3 — IS-IS vs OSPF Redistribution: session4/tasks/part3.md
+      - Verification: session4/tasks/verify.md
+    - Reference:
+      - Command Reference: session4/reference/commands.md
+      - Troubleshooting: session4/reference/troubleshooting.md
+  - Session 5 — BGP:
+    - Overview: session5/index.md
+    - Topology: session5/topology.md
+    - Addressing: session5/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session5/tasks/part0.md
+      - Part 1 — eBGP Peering: session5/tasks/part1.md
+      - Part 2 — iBGP & Route Reflectors: session5/tasks/part2.md
+      - Part 3 — Routing Policies: session5/tasks/part3.md
+      - Verification: session5/tasks/verify.md
+    - Reference:
+      - Command Reference: session5/reference/commands.md
+      - Troubleshooting: session5/reference/troubleshooting.md
+  - Session 6 — MPLS & LDP:
+    - Overview: session6/index.md
+    - Topology: session6/topology.md
+    - Addressing: session6/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session6/tasks/part0.md
+      - Part 1 — MPLS Enable & LDP: session6/tasks/part1.md
+      - Part 2 — Label Distribution: session6/tasks/part2.md
+      - Part 3 — RSVP-TE Intro: session6/tasks/part3.md
+      - Verification: session6/tasks/verify.md
+    - Reference:
+      - Command Reference: session6/reference/commands.md
+      - Troubleshooting: session6/reference/troubleshooting.md
+  - Session 6a — Layer 2 Services (Self-Directed):
+    - Overview: session6a/index.md
+    - Topology: session6a/topology.md
+    - Addressing: session6a/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session6a/tasks/part0.md
+      - Part 1 — L2circuit (Pseudowire): session6a/tasks/part1.md
+      - Part 2 — VPLS: session6a/tasks/part2.md
+      - Verification: session6a/tasks/verify.md
+    - Reference:
+      - Command Reference: session6a/reference/commands.md
+      - Troubleshooting: session6a/reference/troubleshooting.md
+  - Session 7 — BGP/MPLS L3 VPN:
+    - Overview: session7/index.md
+    - Topology: session7/topology.md
+    - Addressing: session7/addressing.md
+    - Tasks:
+      - Part 0 — Base Config: session7/tasks/part0.md
+      - Part 1 — VRF & Route Distinguishers: session7/tasks/part1.md
+      - Part 2 — MP-BGP & Route Targets: session7/tasks/part2.md
+      - Part 3 — PE-CE Routing: session7/tasks/part3.md
+      - Verification: session7/tasks/verify.md
+    - Reference:
+      - Command Reference: session7/reference/commands.md
+      - Troubleshooting: session7/reference/troubleshooting.md
+  - Session 8 — Capstone Troubleshooting Lab:
+    - Overview: session8/index.md
+    - Topology: session8/topology.md
+    - Addressing: session8/addressing.md
+    - Tasks:
+      - Part 0 — Project Import: session8/tasks/part0.md
+      - Part 1 — Fault 1 (IGP): session8/tasks/part1.md
+      - Part 2 — Fault 2 (BGP): session8/tasks/part2.md
+      - Part 3 — Fault 3 (MPLS VPN): session8/tasks/part3.md
+      - Verification: session8/tasks/verify.md
+    - Reference:
+      - Command Reference: session8/reference/commands.md
+      - Troubleshooting: session8/reference/troubleshooting.md
