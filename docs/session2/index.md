@@ -19,7 +19,7 @@ By the end of this session you will be able to:
 
 ```mermaid
 graph LR
-  R1([R1<br/>10.0.0.1/32]) -- ge-0/0/0<br/>10.1.12.1/30 --- ge-0/0/0<br/>10.1.12.2/30 -- R2([R2<br/>10.0.0.2/32])
+  R1([R1<br/>10.0.0.1/32]) ---|"ge-0/0/0 / 10.1.12.0/30"| R2([R2<br/>10.0.0.2/32])
 ```
 
 ## Addressing Table

@@ -21,7 +21,7 @@ By the end of this session you will be able to:
 
 ```mermaid
 graph LR
-  R1([R1<br/>vJunos-router]) -- ge-0/0/0 --- ge-0/0/0 -- R2([R2<br/>vJunos-router])
+  R1([R1<br/>vJunos-router]) ---|ge-0/0/0| R2([R2<br/>vJunos-router])
 ```
 
 Two routers connected back-to-back. No routing protocol yet — the goal is platform familiarity.

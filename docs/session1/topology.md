@@ -4,7 +4,7 @@
 
 ```mermaid
 graph LR
-  R1([R1<br/>vJunos-router]) -- ge-0/0/0 --- ge-0/0/0 -- R2([R2<br/>vJunos-router])
+  R1([R1<br/>vJunos-router]) ---|ge-0/0/0| R2([R2<br/>vJunos-router])
 ```
 
 ## Device Summary

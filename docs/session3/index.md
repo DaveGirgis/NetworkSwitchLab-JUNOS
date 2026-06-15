@@ -20,9 +20,9 @@ By the end of this session you will be able to:
 
 ```mermaid
 graph LR
-  PE1([PE1<br/>10.0.0.1]) -- ge-0/0/0<br/>10.1.12.0/30 --- ge-0/0/0<br/>10.1.12.0/30 -- P1([P1<br/>10.0.0.2])
-  P1 -- ge-0/0/1<br/>10.1.23.0/30 --- ge-0/0/0<br/>10.1.23.0/30 -- P2([P2<br/>10.0.0.3])
-  P2 -- ge-0/0/1<br/>10.1.34.0/30 --- ge-0/0/0<br/>10.1.34.0/30 -- PE2([PE2<br/>10.0.0.4])
+  PE1([PE1<br/>10.0.0.1]) ---|"10.1.12.0/30"| P1([P1<br/>10.0.0.2])
+  P1 ---|"10.1.23.0/30"| P2([P2<br/>10.0.0.3])
+  P2 ---|"10.1.34.0/30"| PE2([PE2<br/>10.0.0.4])
 ```
 
 This is the full provider backbone used in Sessions 3–8. It has four routers: two **Provider Edge (PE)** routers that connect to customers, and two **Provider (P)** routers that form the transit core.
