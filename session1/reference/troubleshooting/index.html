@@ -789,10 +789,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vjunos-router-node-shows-red-x" class="md-nav__link">
+  <a href="#vmx-node-shows-red-x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vJunos-router Node Shows Red X
+        vMX Node Shows Red X
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boot-hangs-at-mount-devvda-boot-or-mount-devhda1-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boot Hangs at mount /dev/vda /boot or mount /dev/hda1 /boot
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-boot-warning-chassis-configuration-for-network-services-has-been-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Boot Warning: "Chassis configuration for network services has been changed"
       
     </span>
   </a>
@@ -811,10 +833,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#commit-returns-error-must-be-authenticated" class="md-nav__link">
+  <a href="#ge-000-not-reachable-after-connecting-nodes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        commit Returns Error: "Must be authenticated"
+        ge-0/0/0 Not Reachable After Connecting Nodes
       
     </span>
   </a>
@@ -826,17 +848,6 @@
     <span class="md-ellipsis">
       
         Hostname Does Not Change After commit
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#show-compare-shows-nothing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        show | compare Shows Nothing
       
     </span>
   </a>
@@ -4596,7 +4607,7 @@
 <li>Confirm the GNS3 app version matches the GNS3 VM version exactly</li>
 </ol>
 <hr />
-<h2 id="vjunos-router-node-shows-red-x">vJunos-router Node Shows Red X</h2>
+<h2 id="vmx-node-shows-red-x">vMX Node Shows Red X</h2>
 <p><strong>Symptom:</strong> After starting nodes, one or both nodes show a red X instead of green.</p>
 <p><strong>Cause / Fix:</strong></p>
 <ol>
@@ -4608,42 +4619,57 @@
 <li>Second common cause: insufficient RAM — confirm GNS3 VM has at least 8 GB</li>
 </ol>
 <hr />
+<h2 id="boot-hangs-at-mount-devvda-boot-or-mount-devhda1-boot">Boot Hangs at <code>mount /dev/vda /boot</code> or <code>mount /dev/hda1 /boot</code></h2>
+<p><strong>Symptom:</strong> The console shows boot messages but freezes at a mount line.</p>
+<p><strong>Cause:</strong> QEMU 8.x defaults to the <code>q35</code> machine type. vMX was built for the older <code>pc</code> (i440FX) machine type and stalls during boot when <code>q35</code> is used.</p>
+<p><strong>Fix:</strong></p>
+<ol>
+<li>Stop the node (right-click &gt; <strong>Stop</strong>)</li>
+<li>Go to <strong>Edit</strong> &gt; <strong>Preferences</strong> &gt; <strong>QEMU</strong> &gt; <strong>QEMU VMs</strong></li>
+<li>Select <strong>vMX-14.1</strong> and click <strong>Edit</strong></li>
+<li>Go to the <strong>Advanced</strong> tab</li>
+<li>Confirm <strong>Additional settings</strong> contains <code>-M pc</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>-serial mon:stdio -nographic -M pc
+</code></pre></div>
+<ol>
+<li>Click <strong>OK</strong>, then start the node again</li>
+</ol>
+<hr />
+<h2 id="first-boot-warning-chassis-configuration-for-network-services-has-been-changed">First Boot Warning: "Chassis configuration for network services has been changed"</h2>
+<p><strong>Symptom:</strong> On first boot, the console prints:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>WARNING: Chassis configuration for network services has been changed.
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>A system reboot is mandatory. Please reboot the system NOW.
+</code></pre></div>
+<p><strong>Cause:</strong> This is expected on a fresh image — vMX is setting its network-services mode for the first time.</p>
+<p><strong>Fix:</strong> This is a one-time initialization. Log in as <code>root</code>, type <code>cli</code>, then reboot:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>request system reboot
+</code></pre></div>
+<p>Confirm with <code>yes</code>. The warning will not appear on subsequent boots of the same node instance.</p>
+<hr />
 <h2 id="console-shows-no-output-stays-blank">Console Shows No Output / Stays Blank</h2>
-<p><strong>Symptom:</strong> Console opens but nothing appears, or the cursor blinks with no boot messages.</p>
+<p><strong>Symptom:</strong> Console opens but nothing appears.</p>
 <p><strong>Cause / Fix:</strong></p>
 <ol>
-<li>Wait — vJunos-router takes 3–5 minutes to boot; a blank console is normal for the first 60–90 seconds</li>
+<li>Wait — vMX takes 3–5 minutes to boot; a blank console is normal for the first 60–90 seconds</li>
 <li>Press Enter once — this sometimes wakes a stalled console</li>
 <li>If still blank after 10 minutes, right-click the node &gt; <strong>Stop</strong>, then <strong>Start</strong> again</li>
 </ol>
 <hr />
-<h2 id="commit-returns-error-must-be-authenticated"><code>commit</code> Returns Error: "Must be authenticated"</h2>
-<p><strong>Symptom:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[edit]
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>R1# commit
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>error: configuration check-out failed
-</code></pre></div>
-<p><strong>Cause:</strong> Another session has the configuration locked (e.g., you have two consoles open on the same node).</p>
-<p><strong>Fix:</strong> Close duplicate console windows. Only one configuration session should be active per node.</p>
+<h2 id="ge-000-not-reachable-after-connecting-nodes"><code>ge-0/0/0</code> Not Reachable After Connecting Nodes</h2>
+<p><strong>Symptom:</strong> You connected two nodes and configured <code>ge-0/0/0</code> but pings fail.</p>
+<p><strong>Cause:</strong> The link was drawn using <strong>Adapter 0</strong> or <strong>Adapter 1</strong> instead of <strong>Adapter 2</strong>. vMX reserves the first two adapters for management — <code>ge-0/0/0</code> maps to Adapter 2.</p>
+<p><strong>Fix:</strong> Delete the link in GNS3, redraw it connecting <strong>Adapter 2</strong> on each node.</p>
 <hr />
 <h2 id="hostname-does-not-change-after-commit">Hostname Does Not Change After <code>commit</code></h2>
 <p><strong>Symptom:</strong> You set <code>system host-name R1</code> and committed, but the prompt still shows <code>root</code>.</p>
-<p><strong>Cause / Fix:</strong></p>
-<ul>
-<li>The hostname change takes effect in <strong>new</strong> CLI sessions. Exit and re-enter:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[edit]
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>root# exit
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>root&gt; exit
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>root@% cli
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>R1&gt;
+<p><strong>Fix:</strong> Exit and re-enter the CLI:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[edit]
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>root# exit
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>root&gt; exit
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>root@% cli
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>R1&gt;
 </code></pre></div>
-<p>If you exited back to the shell (<code>root@%</code>), re-enter the CLI with <code>cli</code>.</p>
-<hr />
-<h2 id="show-compare-shows-nothing"><code>show | compare</code> Shows Nothing</h2>
-<p><strong>Symptom:</strong> You made changes but <code>show | compare</code> returns nothing.</p>
-<p><strong>Cause:</strong> You have not made any changes in this configuration session, OR you inadvertently ran <code>rollback 0</code> which discarded the changes.</p>
-<p><strong>Fix:</strong> Re-enter configuration mode and re-apply your changes.</p>
 
 
 

@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-0-install-gns3-import-vjunos-router" class="md-skip">
+        <a href="#part-0-install-gns3-import-vmx" class="md-skip">
           Skip to content
         </a>
       
@@ -569,10 +569,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-import-the-vjunos-router-image" class="md-nav__link">
+  <a href="#step-3-obtain-the-vmx-image" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Import the vJunos-router Image
+        Step 3: Obtain the vMX Image
       
     </span>
   </a>
@@ -580,10 +580,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-configure-the-vjunos-router-template" class="md-nav__link">
+  <a href="#step-4-create-the-gns3-qemu-template" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Configure the vJunos-router Template
+        Step 4: Create the GNS3 QEMU Template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-first-boot-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: First Boot Procedure
       
     </span>
   </a>
@@ -4563,7 +4574,7 @@
   
 
 
-<h1 id="part-0-install-gns3-import-vjunos-router">Part 0 — Install GNS3 &amp; Import vJunos-router</h1>
+<h1 id="part-0-install-gns3-import-vmx">Part 0 — Install GNS3 &amp; Import vMX</h1>
 <h2 id="step-1-install-gns3-and-gns3-vm">Step 1: Install GNS3 and GNS3 VM</h2>
 <ol>
 <li>Download the GNS3 all-in-one installer from <a href="https://www.gns3.com/software/download">gns3.com/software</a></li>
@@ -4579,69 +4590,141 @@
 <p>The GNS3 application and GNS3 VM version numbers must match (e.g., both 2.2.44). Mismatched versions cause connection errors that are difficult to diagnose.</p>
 </div>
 <h2 id="step-2-configure-gns3-vm-resources">Step 2: Configure GNS3 VM Resources</h2>
-<p>In GNS3, go to <strong>Edit</strong> &gt; <strong>Preferences</strong> &gt; <strong>GNS3 VM</strong> and set the resources allocated to the VM:</p>
+<p>In GNS3, go to <strong>Edit</strong> &gt; <strong>Preferences</strong> &gt; <strong>GNS3 VM</strong> and set the resources:</p>
 <ul>
-<li><strong>RAM</strong>: 16 GB (minimum 8 GB — each vJunos node needs 4 GB)</li>
+<li><strong>RAM</strong>: 8 GB minimum (each vMX node needs 2 GB)</li>
 <li><strong>vCPUs</strong>: 4 or more</li>
 </ul>
 <p>Click <strong>OK</strong> to apply. GNS3 will restart the VM with the updated resources.</p>
 <div class="admonition warning">
 <p class="admonition-title">Nested virtualization — VMware setting</p>
-<p>QEMU requires hardware virtualization support. In VMware Workstation, open the GNS3 VM's settings, go to <strong>Processors</strong>, and enable <strong>"Virtualize Intel VT-x/EPT or AMD-V/RVI"</strong>. This is a VMware-level setting that GNS3 cannot control — it must be set before starting the VM.</p>
+<p>QEMU requires hardware virtualization support. In VMware Workstation, open the GNS3 VM's settings, go to <strong>Processors</strong>, and enable <strong>"Virtualize Intel VT-x/EPT or AMD-V/RVI"</strong>. This must be set before starting the GNS3 VM.</p>
 </div>
-<p>Start the GNS3 VM. Wait for it to show its IP address on the console before launching GNS3.</p>
-<h2 id="step-3-import-the-vjunos-router-image">Step 3: Import the vJunos-router Image</h2>
+<p>Start the GNS3 VM and wait for it to show its IP address before launching GNS3.</p>
+<h2 id="step-3-obtain-the-vmx-image">Step 3: Obtain the vMX Image</h2>
+<p>These labs use the <strong>Juniper vMX 14.1</strong> image (<code>hda.qcow2</code>). The image is available from:</p>
+<ul>
+<li><strong>Juniper Software Portal</strong> — <a href="https://support.juniper.net">support.juniper.net</a> (free account required) &gt; Downloads &gt; Junos Platforms &gt; Virtual &gt; vMX</li>
+<li><strong>Existing EVE-NG installation</strong> — copy from <code>/opt/unetlab/addons/qemu/vmx-14.1R&lt;x&gt;.&lt;y&gt;/hda.qcow2</code></li>
+</ul>
+<h2 id="step-4-create-the-gns3-qemu-template">Step 4: Create the GNS3 QEMU Template</h2>
 <ol>
-<li>In GNS3, open <strong>Edit</strong> &gt; <strong>Preferences</strong> &gt; <strong>QEMU</strong> &gt; <strong>QEMU VMs</strong></li>
-<li>Click <strong>New</strong></li>
-<li>Set <strong>Name</strong>: <code>vJunos-router</code></li>
-<li>Set <strong>Qemu binary</strong>: <code>/bin/qemu-system-x86_64</code> (auto-detected in most cases)</li>
-<li>Set <strong>RAM</strong>: <code>4096</code></li>
-<li>Click <strong>Next</strong>, then select <strong>New Image</strong></li>
-<li>Browse to your <code>.qcow2</code> file and import it</li>
-<li>Leave all other defaults and click <strong>Finish</strong></li>
+<li>In GNS3, go to <strong>Edit</strong> &gt; <strong>Preferences</strong> &gt; <strong>QEMU</strong> &gt; <strong>QEMU VMs</strong> &gt; <strong>New</strong></li>
+<li>Set <strong>Name</strong>: <code>vMX-14.1</code></li>
+<li>Set <strong>RAM</strong>: <code>2048</code></li>
+<li>Leave QEMU binary as default (<code>qemu-system-x86_64</code>)</li>
+<li>Click <strong>Next</strong>, select <strong>New Image</strong>, browse to your <code>hda.qcow2</code> — GNS3 uploads it to the GNS3 VM automatically</li>
+<li>Click <strong>Finish</strong></li>
 </ol>
-<h2 id="step-4-configure-the-vjunos-router-template">Step 4: Configure the vJunos-router Template</h2>
-<p>After import, right-click the template and choose <strong>Edit</strong>:</p>
+<p>Then right-click the template and choose <strong>Edit</strong>:</p>
 <table>
 <thead>
 <tr>
+<th>Tab</th>
 <th>Setting</th>
 <th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>General &gt; Symbol</td>
-<td>Router (or any router icon)</td>
+<td>General</td>
+<td>vCPUs</td>
+<td><code>1</code></td>
 </tr>
 <tr>
-<td>General &gt; Category</td>
-<td>Routers</td>
+<td>HDD</td>
+<td>Disk interface</td>
+<td><code>ide</code></td>
 </tr>
 <tr>
-<td>HDD &gt; Disk image</td>
-<td>your <code>.qcow2</code> path</td>
+<td>Network</td>
+<td>Adapters</td>
+<td><code>6</code></td>
 </tr>
 <tr>
-<td>Network &gt; Adapters</td>
-<td>4</td>
+<td>Network</td>
+<td>Type</td>
+<td><code>virtio-net-pci</code></td>
 </tr>
 <tr>
-<td>Network &gt; Type</td>
-<td>virtio-net-pci</td>
+<td>Advanced</td>
+<td>Additional settings</td>
+<td><code>-serial mon:stdio -nographic -M pc</code></td>
 </tr>
 <tr>
-<td>Advanced &gt; Options</td>
-<td><code>-nographic</code></td>
+<td>Advanced</td>
+<td>Use KVM if available</td>
+<td>checked</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">Machine type must be <code>pc</code></p>
+<p>The <code>-M pc</code> flag forces the legacy i440FX machine type. Without it, QEMU 8.x defaults to <code>q35</code> and vMX hangs at <code>mount /dev/vda /boot</code> on every boot.</p>
+</div>
 <div class="admonition note">
-<p class="admonition-title">4 adapters</p>
-<p>vJunos-router maps its interfaces as <code>ge-0/0/0</code> through <code>ge-0/0/3</code>. Each GNS3 adapter corresponds to one <code>ge-0/0/X</code> interface. You need at least 4 for the full topology used in Sessions 3–8.</p>
+<p class="admonition-title">Why 6 adapters?</p>
+<p>vMX reserves the first two adapters for management interfaces — Adapter 0 becomes <code>em0</code> (external management) and Adapter 1 becomes <code>em1</code> (internal, pre-configured at <code>172.16.0.1/16</code>). Data plane interfaces start at Adapter 2. Six adapters gives you <code>ge-0/0/0</code> through <code>ge-0/0/3</code> for lab use.</p>
+<table>
+<thead>
+<tr>
+<th>GNS3 Adapter</th>
+<th>Junos Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adapter 0</td>
+<td><code>em0</code> (management)</td>
+</tr>
+<tr>
+<td>Adapter 1</td>
+<td><code>em1</code> (internal)</td>
+</tr>
+<tr>
+<td>Adapter 2</td>
+<td><code>ge-0/0/0</code></td>
+</tr>
+<tr>
+<td>Adapter 3</td>
+<td><code>ge-0/0/1</code></td>
+</tr>
+<tr>
+<td>Adapter 4</td>
+<td><code>ge-0/0/2</code></td>
+</tr>
+<tr>
+<td>Adapter 5</td>
+<td><code>ge-0/0/3</code></td>
+</tr>
+</tbody>
+</table>
 </div>
 <p>Click <strong>OK</strong> to save the template.</p>
+<h2 id="step-5-first-boot-procedure">Step 5: First Boot Procedure</h2>
+<p>vMX requires a one-time reboot on first boot to apply its network-services configuration. This only happens once per fresh image instance.</p>
+<ol>
+<li>Drag a <strong>vMX-14.1</strong> node onto the canvas and start it</li>
+<li>Open the console — wait 3–5 minutes for boot to complete</li>
+<li>At the login prompt, type <code>root</code> and press Enter (no password on a fresh image)</li>
+<li>Type <code>cli</code> to enter the Junos CLI from the BSD shell:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>--- JUNOS 14.1R4.8 built 2015-01-28 03:38:12 UTC
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>root@% cli
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>root&gt;
+</code></pre></div>
+<ol>
+<li>You will see a warning during first boot:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>WARNING: Chassis configuration for network services has been changed.
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>A system reboot is mandatory. Please reboot the system NOW.
+</code></pre></div>
+<ol>
+<li>Reboot immediately:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>request system reboot
+</code></pre></div>
+<p>Confirm with <code>yes</code>. After the second boot the warning will not appear again.</p>
 
 
 

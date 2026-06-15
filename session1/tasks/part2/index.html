@@ -625,10 +625,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-open-the-console" class="md-nav__link">
+  <a href="#step-3-open-the-console-and-log-in" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Open the Console
+        Step 3: Open the Console and Log In
       
     </span>
   </a>
@@ -4567,48 +4567,85 @@
 <h2 id="step-1-draw-the-link">Step 1: Draw the Link</h2>
 <ol>
 <li>In GNS3, click the <strong>Add a link</strong> button (cable icon in the toolbar)</li>
-<li>Click <strong>R1</strong> — a menu pops up showing its interfaces</li>
-<li>Select <code>ge-0/0/0 (Adapter 0)</code></li>
-<li>Click <strong>R2</strong> — select <code>ge-0/0/0 (Adapter 0)</code></li>
+<li>Click <strong>R1</strong> — a menu pops up showing its adapters</li>
+<li>Select <strong>Adapter 2</strong> (this maps to <code>ge-0/0/0</code> inside Junos)</li>
+<li>Click <strong>R2</strong> — select <strong>Adapter 2</strong></li>
 </ol>
-<p>A line appears between the two nodes. The link is red (down) because the nodes are not running yet.</p>
-<h2 id="step-2-start-the-nodes">Step 2: Start the Nodes</h2>
-<p>Click the green <strong>Start all nodes</strong> button (play icon) or right-click each node and choose <strong>Start</strong>.</p>
+<p>A line appears between the two nodes.</p>
 <div class="admonition warning">
-<p class="admonition-title">Boot time: 3-5 minutes</p>
-<p>vJunos-router loads a full Junos OS. The GNS3 progress indicator will show activity for several minutes. Do not open a console or attempt configuration until the node is fully booted.</p>
+<p class="admonition-title">Always use Adapter 2 for ge-0/0/0</p>
+<p>vMX reserves Adapter 0 (<code>em0</code>) and Adapter 1 (<code>em1</code>) for internal management. Data plane interfaces start at Adapter 2. Connecting Adapter 0 or 1 between nodes will not produce <code>ge-0/0/0</code> connectivity.</p>
+<table>
+<thead>
+<tr>
+<th>GNS3 Adapter</th>
+<th>Junos Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adapter 0</td>
+<td><code>em0</code> — management only</td>
+</tr>
+<tr>
+<td>Adapter 1</td>
+<td><code>em1</code> — internal (172.16.0.1/16)</td>
+</tr>
+<tr>
+<td>Adapter 2</td>
+<td><code>ge-0/0/0</code></td>
+</tr>
+<tr>
+<td>Adapter 3</td>
+<td><code>ge-0/0/1</code></td>
+</tr>
+<tr>
+<td>Adapter 4</td>
+<td><code>ge-0/0/2</code></td>
+</tr>
+<tr>
+<td>Adapter 5</td>
+<td><code>ge-0/0/3</code></td>
+</tr>
+</tbody>
+</table>
 </div>
-<h2 id="step-3-open-the-console">Step 3: Open the Console</h2>
+<h2 id="step-2-start-the-nodes">Step 2: Start the Nodes</h2>
+<p>Click the green <strong>Start all nodes</strong> button or right-click each node and choose <strong>Start</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Boot time: 3–5 minutes</p>
+<p>vMX loads a full Junos OS. Do not open a console or attempt configuration until the node is fully booted.</p>
+</div>
+<h2 id="step-3-open-the-console-and-log-in">Step 3: Open the Console and Log In</h2>
 <p>Once both nodes show green links:</p>
 <ol>
 <li>Right-click <strong>R1</strong> &gt; <strong>Console</strong></li>
-<li>A terminal window opens — wait for the <code>root@</code> prompt</li>
+<li>Wait for the login prompt, then type <code>root</code> and press Enter — no password required on a fresh image</li>
+<li>Type <code>cli</code> to enter the Junos CLI:</li>
 </ol>
-<p>You will see boot messages scroll by, then eventually:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Amnesiac (ttyd0)
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>login:
-</code></pre></div>
-<p>Type <code>root</code> and press Enter. No password is required on a fresh boot.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>root@%
-</code></pre></div>
-<p>You are now in the Junos <strong>shell</strong> (BSD shell). Type <code>cli</code> to enter the Junos CLI:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>root@% cli
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>root&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>--- JUNOS 14.1R4.8 built 2015-01-28 03:38:12 UTC
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>root@% cli
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>root&gt;
 </code></pre></div>
 <p>The <code>&gt;</code> prompt indicates you are in <strong>operational mode</strong>.</p>
 <h2 id="step-4-verify-the-node-is-ready">Step 4: Verify the Node is Ready</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show version
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show version
 </code></pre></div>
-<p>Expected output includes the Junos version and platform:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Junos: 23.2R1.15
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>...
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Model: vjunos-router
+<p>Expected output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Junos: 14.1R4.8
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>...
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Model: vmx
 </code></pre></div>
-<p>If you see the model and version, the node is fully booted and ready for configuration.</p>
-<div class="admonition tip">
-<p class="admonition-title">Console shortcut</p>
-<p>In GNS3 you can also double-click a node to open its console. Middle-click closes it.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show interfaces ge-0/0/0 terse
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Interface               Admin Link Proto    Local                 Remote
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>ge-0/0/0                up    up
+</code></pre></div>
+<p>If <code>ge-0/0/0</code> shows <code>up up</code> the node is ready for configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">ge-0/0/x not visible in <code>show interfaces terse</code></p>
+<p>On vMX 14.1, <code>ge-0/0/x</code> interfaces do not appear in the general <code>show interfaces terse</code> output until they have an IP address configured. Query them directly with <code>show interfaces ge-0/0/0 terse</code> to confirm they exist.</p>
 </div>
 
 

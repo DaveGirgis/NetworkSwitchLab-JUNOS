@@ -4558,7 +4558,7 @@
 
 
 <h1 id="junos-sp-training-labs">Junos SP Training Labs</h1>
-<p>These labs are designed for adult professionals learning Juniper Networks service provider concepts using <strong>vJunos-router</strong> (MX-based) images in <strong>GNS3</strong>. The series maps to the <strong>JNCIS-SP</strong> (JN0-362) exam objectives and assumes you have already completed a CCNA-level routing &amp; switching foundation.</p>
+<p>These labs are designed for adult professionals learning Juniper Networks service provider concepts using <strong>vMX</strong> (Junos 14.1, VCP-only) in <strong>GNS3</strong>. The series maps to the <strong>JNCIS-SP</strong> (JN0-362) exam objectives and assumes you have already completed a CCNA-level routing &amp; switching foundation.</p>
 <hr />
 <h2 id="what-you-will-build">What You Will Build</h2>
 <p>By the end of this series you will have configured and verified a complete MPLS service provider network from scratch — including IGP, BGP, LDP, and L3 VPNs — using the same Junos CLI and configuration hierarchy used in production ISP environments.</p>
@@ -4645,20 +4645,20 @@
 <td>2.2.44 (VMware Workstation or VirtualBox)</td>
 </tr>
 <tr>
-<td>vJunos-router image</td>
-<td>Junos 23.2R1 or later (free from Juniper)</td>
+<td>vMX image</td>
+<td>Junos 14.1R4.8 <code>hda.qcow2</code> (from Juniper support portal)</td>
 </tr>
 <tr>
 <td>RAM per node</td>
-<td>4096 MB</td>
+<td>2048 MB</td>
 </tr>
 <tr>
 <td>vCPUs per node</td>
-<td>2</td>
+<td>1</td>
 </tr>
 <tr>
 <td>Nodes per lab</td>
-<td>4–6 (24–32 GB host RAM recommended)</td>
+<td>4–6 (16–24 GB host RAM recommended)</td>
 </tr>
 <tr>
 <td>Host OS</td>
@@ -4667,8 +4667,8 @@
 </tbody>
 </table>
 <div class="admonition warning">
-<p class="admonition-title">Boot time</p>
-<p>vJunos-router takes <strong>3–5 minutes</strong> to boot. Do not attempt configuration until the <code>root@</code> prompt appears on the console. Starting too early will result in commands silently failing or being lost on commit.</p>
+<p class="admonition-title">Boot time &amp; first boot reboot</p>
+<p>vMX takes <strong>3–5 minutes</strong> to boot. Do not attempt configuration until the <code>root@%</code> prompt appears. On the <strong>first boot of a fresh image</strong>, vMX prints a network-services warning and requires an immediate <code>request system reboot</code> before proceeding — this is normal and only happens once.</p>
 </div>
 <hr />
 <h2 id="key-differences-from-cisco-ios">Key Differences from Cisco IOS</h2>

@@ -467,10 +467,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vjunos-router-image" class="md-nav__link">
+  <a href="#vmx-image" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vJunos-router Image
+        vMX Image
       
     </span>
   </a>
@@ -478,10 +478,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-steps" class="md-nav__link">
+  <a href="#qemu-template-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Download Steps
+        QEMU Template Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adapter-to-interface-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter to Interface Mapping
       
     </span>
   </a>
@@ -4593,7 +4604,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="vjunos-router-image">vJunos-router Image</h2>
+<h2 id="vmx-image">vMX Image</h2>
 <table>
 <thead>
 <tr>
@@ -4604,7 +4615,7 @@
 <tbody>
 <tr>
 <td>Image name</td>
-<td><code>vjunos-router-23.2R1.15.qcow2</code> (or later)</td>
+<td><code>hda.qcow2</code> (vMX 14.1R4.8)</td>
 </tr>
 <tr>
 <td>Source</td>
@@ -4616,15 +4627,15 @@
 </tr>
 <tr>
 <td>Disk size</td>
-<td>~5 GB</td>
+<td>~2 GB</td>
 </tr>
 <tr>
 <td>RAM per node</td>
-<td>4096 MB</td>
+<td>2048 MB</td>
 </tr>
 <tr>
 <td>vCPUs per node</td>
-<td>2</td>
+<td>1</td>
 </tr>
 <tr>
 <td>Boot time</td>
@@ -4632,17 +4643,90 @@
 </tr>
 </tbody>
 </table>
-<h2 id="download-steps">Download Steps</h2>
-<ol>
-<li>Create a free account at <a href="https://support.juniper.net">support.juniper.net</a></li>
-<li>Navigate to <strong>Downloads</strong> &gt; <strong>Software</strong> &gt; <strong>Junos Platforms</strong> &gt; <strong>Virtual</strong> &gt; <strong>vJunos-router</strong></li>
-<li>Select the latest <strong>23.2R1</strong> (or higher) release</li>
-<li>Download the <code>.qcow2</code> file</li>
-<li>Place the file in a memorable location — you will point GNS3 to it during import</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">No license required</p>
-<p>vJunos-router does not require a license file for lab use. All JNCIS-SP features (OSPF, IS-IS, BGP, MPLS, VPN) are available in the evaluation image.</p>
+<h2 id="qemu-template-settings">QEMU Template Settings</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM</td>
+<td>2048 MB</td>
+</tr>
+<tr>
+<td>vCPUs</td>
+<td>1</td>
+</tr>
+<tr>
+<td>HDD interface</td>
+<td><code>ide</code></td>
+</tr>
+<tr>
+<td>NIC type</td>
+<td><code>virtio-net-pci</code></td>
+</tr>
+<tr>
+<td>NIC count</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Additional QEMU options</td>
+<td><code>-serial mon:stdio -nographic -M pc</code></td>
+</tr>
+<tr>
+<td>KVM</td>
+<td>Required</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adapter-to-interface-mapping">Adapter to Interface Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>GNS3 Adapter</th>
+<th>Junos Interface</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adapter 0</td>
+<td><code>em0</code></td>
+<td>External management</td>
+</tr>
+<tr>
+<td>Adapter 1</td>
+<td><code>em1</code></td>
+<td>Internal (pre-configured 172.16.0.1/16)</td>
+</tr>
+<tr>
+<td>Adapter 2</td>
+<td><code>ge-0/0/0</code></td>
+<td>First lab interface</td>
+</tr>
+<tr>
+<td>Adapter 3</td>
+<td><code>ge-0/0/1</code></td>
+<td>Second lab interface</td>
+</tr>
+<tr>
+<td>Adapter 4</td>
+<td><code>ge-0/0/2</code></td>
+<td>Third lab interface</td>
+</tr>
+<tr>
+<td>Adapter 5</td>
+<td><code>ge-0/0/3</code></td>
+<td>Fourth lab interface</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Always connect Adapter 2+ for lab links</p>
+<p>Adapters 0 and 1 are reserved by vMX for management. All GNS3 topology links must use Adapter 2 or higher.</p>
 </div>
 
 
