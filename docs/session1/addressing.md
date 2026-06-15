@@ -11,25 +11,40 @@
 | GNS3 VM vCPUs | 4 | 8 |
 | GNS3 VM Disk | 50 GB | 100 GB |
 
-## vJunos-router Image
+## vMX Image
 
 | Property | Value |
 |----------|-------|
-| Image name | `vjunos-router-23.2R1.15.qcow2` (or later) |
+| Image name | `hda.qcow2` (vMX 14.1R4.8) |
 | Source | [support.juniper.net](https://support.juniper.net) — free with Juniper account |
 | Format | QCOW2 (QEMU disk image) |
-| Disk size | ~5 GB |
-| RAM per node | 4096 MB |
-| vCPUs per node | 2 |
+| Disk size | ~2 GB |
+| RAM per node | 2048 MB |
+| vCPUs per node | 1 |
 | Boot time | 3–5 minutes |
 
-## Download Steps
+## QEMU Template Settings
 
-1. Create a free account at [support.juniper.net](https://support.juniper.net)
-2. Navigate to **Downloads** > **Software** > **Junos Platforms** > **Virtual** > **vJunos-router**
-3. Select the latest **23.2R1** (or higher) release
-4. Download the `.qcow2` file
-5. Place the file in a memorable location — you will point GNS3 to it during import
+| Setting | Value |
+|---------|-------|
+| RAM | 2048 MB |
+| vCPUs | 1 |
+| HDD interface | `ide` |
+| NIC type | `virtio-net-pci` |
+| NIC count | 6 |
+| Additional QEMU options | `-serial mon:stdio -nographic -M pc` |
+| KVM | Required |
 
-!!! note "No license required"
-    vJunos-router does not require a license file for lab use. All JNCIS-SP features (OSPF, IS-IS, BGP, MPLS, VPN) are available in the evaluation image.
+## Adapter to Interface Mapping
+
+| GNS3 Adapter | Junos Interface | Notes |
+|---|---|---|
+| Adapter 0 | `em0` | External management |
+| Adapter 1 | `em1` | Internal (pre-configured 172.16.0.1/16) |
+| Adapter 2 | `ge-0/0/0` | First lab interface |
+| Adapter 3 | `ge-0/0/1` | Second lab interface |
+| Adapter 4 | `ge-0/0/2` | Third lab interface |
+| Adapter 5 | `ge-0/0/3` | Fourth lab interface |
+
+!!! warning "Always connect Adapter 2+ for lab links"
+    Adapters 0 and 1 are reserved by vMX for management. All GNS3 topology links must use Adapter 2 or higher.

@@ -3,43 +3,41 @@
 ## Step 1: Draw the Link
 
 1. In GNS3, click the **Add a link** button (cable icon in the toolbar)
-2. Click **R1** — a menu pops up showing its interfaces
-3. Select `ge-0/0/0 (Adapter 0)`
-4. Click **R2** — select `ge-0/0/0 (Adapter 0)`
+2. Click **R1** — a menu pops up showing its adapters
+3. Select **Adapter 2** (this maps to `ge-0/0/0` inside Junos)
+4. Click **R2** — select **Adapter 2**
 
-A line appears between the two nodes. The link is red (down) because the nodes are not running yet.
+A line appears between the two nodes.
+
+!!! warning "Always use Adapter 2 for ge-0/0/0"
+    vMX reserves Adapter 0 (`em0`) and Adapter 1 (`em1`) for internal management. Data plane interfaces start at Adapter 2. Connecting Adapter 0 or 1 between nodes will not produce `ge-0/0/0` connectivity.
+
+    | GNS3 Adapter | Junos Interface |
+    |---|---|
+    | Adapter 0 | `em0` — management only |
+    | Adapter 1 | `em1` — internal (172.16.0.1/16) |
+    | Adapter 2 | `ge-0/0/0` |
+    | Adapter 3 | `ge-0/0/1` |
+    | Adapter 4 | `ge-0/0/2` |
+    | Adapter 5 | `ge-0/0/3` |
 
 ## Step 2: Start the Nodes
 
-Click the green **Start all nodes** button (play icon) or right-click each node and choose **Start**.
+Click the green **Start all nodes** button or right-click each node and choose **Start**.
 
-!!! warning "Boot time: 3-5 minutes"
-    vJunos-router loads a full Junos OS. The GNS3 progress indicator will show activity for several minutes. Do not open a console or attempt configuration until the node is fully booted.
+!!! warning "Boot time: 3–5 minutes"
+    vMX loads a full Junos OS. Do not open a console or attempt configuration until the node is fully booted.
 
-## Step 3: Open the Console
+## Step 3: Open the Console and Log In
 
 Once both nodes show green links:
 
 1. Right-click **R1** > **Console**
-2. A terminal window opens — wait for the `root@` prompt
-
-You will see boot messages scroll by, then eventually:
-
-```
-Amnesiac (ttyd0)
-
-login:
-```
-
-Type `root` and press Enter. No password is required on a fresh boot.
+2. Wait for the login prompt, then type `root` and press Enter — no password required on a fresh image
+3. Type `cli` to enter the Junos CLI:
 
 ```text
-root@%
-```
-
-You are now in the Junos **shell** (BSD shell). Type `cli` to enter the Junos CLI:
-
-```text
+--- JUNOS 14.1R4.8 built 2015-01-28 03:38:12 UTC
 root@% cli
 root>
 ```
@@ -52,15 +50,26 @@ The `>` prompt indicates you are in **operational mode**.
 show version
 ```
 
-Expected output includes the Junos version and platform:
+Expected output:
 
 ```text
-Junos: 23.2R1.15
+Junos: 14.1R4.8
 ...
-Model: vjunos-router
+Model: vmx
 ```
 
-If you see the model and version, the node is fully booted and ready for configuration.
+```junos
+show interfaces ge-0/0/0 terse
+```
 
-!!! tip "Console shortcut"
-    In GNS3 you can also double-click a node to open its console. Middle-click closes it.
+Expected:
+
+```text
+Interface               Admin Link Proto    Local                 Remote
+ge-0/0/0                up    up
+```
+
+If `ge-0/0/0` shows `up up` the node is ready for configuration.
+
+!!! note "ge-0/0/x not visible in `show interfaces terse`"
+    On vMX 14.1, `ge-0/0/x` interfaces do not appear in the general `show interfaces terse` output until they have an IP address configured. Query them directly with `show interfaces ge-0/0/0 terse` to confirm they exist.

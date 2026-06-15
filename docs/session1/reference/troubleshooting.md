@@ -13,7 +13,7 @@
 
 ---
 
-## vJunos-router Node Shows Red X
+## vMX Node Shows Red X
 
 **Symptom:** After starting nodes, one or both nodes show a red X instead of green.
 
@@ -28,31 +28,68 @@
 
 ---
 
+## Boot Hangs at `mount /dev/vda /boot` or `mount /dev/hda1 /boot`
+
+**Symptom:** The console shows boot messages but freezes at a mount line.
+
+**Cause:** QEMU 8.x defaults to the `q35` machine type. vMX was built for the older `pc` (i440FX) machine type and stalls during boot when `q35` is used.
+
+**Fix:**
+
+1. Stop the node (right-click > **Stop**)
+2. Go to **Edit** > **Preferences** > **QEMU** > **QEMU VMs**
+3. Select **vMX-14.1** and click **Edit**
+4. Go to the **Advanced** tab
+5. Confirm **Additional settings** contains `-M pc`:
+
+```
+-serial mon:stdio -nographic -M pc
+```
+
+6. Click **OK**, then start the node again
+
+---
+
+## First Boot Warning: "Chassis configuration for network services has been changed"
+
+**Symptom:** On first boot, the console prints:
+
+```text
+WARNING: Chassis configuration for network services has been changed.
+A system reboot is mandatory. Please reboot the system NOW.
+```
+
+**Cause:** This is expected on a fresh image — vMX is setting its network-services mode for the first time.
+
+**Fix:** This is a one-time initialization. Log in as `root`, type `cli`, then reboot:
+
+```junos
+request system reboot
+```
+
+Confirm with `yes`. The warning will not appear on subsequent boots of the same node instance.
+
+---
+
 ## Console Shows No Output / Stays Blank
 
-**Symptom:** Console opens but nothing appears, or the cursor blinks with no boot messages.
+**Symptom:** Console opens but nothing appears.
 
 **Cause / Fix:**
 
-1. Wait — vJunos-router takes 3–5 minutes to boot; a blank console is normal for the first 60–90 seconds
+1. Wait — vMX takes 3–5 minutes to boot; a blank console is normal for the first 60–90 seconds
 2. Press Enter once — this sometimes wakes a stalled console
 3. If still blank after 10 minutes, right-click the node > **Stop**, then **Start** again
 
 ---
 
-## `commit` Returns Error: "Must be authenticated"
+## `ge-0/0/0` Not Reachable After Connecting Nodes
 
-**Symptom:**
+**Symptom:** You connected two nodes and configured `ge-0/0/0` but pings fail.
 
-```text
-[edit]
-R1# commit
-error: configuration check-out failed
-```
+**Cause:** The link was drawn using **Adapter 0** or **Adapter 1** instead of **Adapter 2**. vMX reserves the first two adapters for management — `ge-0/0/0` maps to Adapter 2.
 
-**Cause:** Another session has the configuration locked (e.g., you have two consoles open on the same node).
-
-**Fix:** Close duplicate console windows. Only one configuration session should be active per node.
+**Fix:** Delete the link in GNS3, redraw it connecting **Adapter 2** on each node.
 
 ---
 
@@ -60,9 +97,7 @@ error: configuration check-out failed
 
 **Symptom:** You set `system host-name R1` and committed, but the prompt still shows `root`.
 
-**Cause / Fix:**
-
-- The hostname change takes effect in **new** CLI sessions. Exit and re-enter:
+**Fix:** Exit and re-enter the CLI:
 
 ```junos
 [edit]
@@ -71,15 +106,3 @@ root> exit
 root@% cli
 R1>
 ```
-
-If you exited back to the shell (`root@%`), re-enter the CLI with `cli`.
-
----
-
-## `show | compare` Shows Nothing
-
-**Symptom:** You made changes but `show | compare` returns nothing.
-
-**Cause:** You have not made any changes in this configuration session, OR you inadvertently ran `rollback 0` which discarded the changes.
-
-**Fix:** Re-enter configuration mode and re-apply your changes.

@@ -49,8 +49,9 @@ New sessions require updates to `mkdocs.yml` nav and `docs/index.md`.
 
 ## Hardware / Image Rules
 
-**vJunos-router specifics (MX-based, Junos 23.2R1+):**
-- Interface naming: `ge-0/0/0` through `ge-0/0/3` (4 data interfaces per node)
+**vMX specifics (Junos 14.1R4.8, VCP-only single VM):**
+- Image file: `hda.qcow2`
+- Interface naming: `ge-0/0/0` through `ge-0/0/3` (data interfaces)
 - Loopback: `lo0` with `unit 0 family inet address X.X.X.X/32`
 - OSPF/IS-IS/MPLS run under `[edit protocols]`
 - Routing options (static routes, router-id, AS): `[edit routing-options]`
@@ -60,10 +61,14 @@ New sessions require updates to `mkdocs.yml` nav and `docs/index.md`.
 - Commit model: always `commit` or `commit confirmed <minutes>`
 
 **GNS3 setup notes:**
-- vJunos-router requires QEMU/KVM — runs inside GNS3 VM (Linux)
-- Recommended RAM per node: 4096 MB; CPUs: 2
-- Boot time: ~3-5 minutes — warn students not to start configs until `root@` prompt appears
-- Console access via GNS3 built-in terminal (right-click > Console)
+- vMX requires QEMU/KVM — runs inside GNS3 VM (Linux)
+- RAM per node: 2048 MB; vCPUs: 1
+- QEMU options: `-serial mon:stdio -nographic -M pc` (`-M pc` required — QEMU 8.x defaults to q35 which causes boot hang)
+- Adapters: 6 total — Adapter 0 = em0 (mgmt), Adapter 1 = em1 (internal), Adapter 2 = ge-0/0/0, Adapter 3 = ge-0/0/1, Adapter 4 = ge-0/0/2, Adapter 5 = ge-0/0/3
+- Always connect GNS3 topology links on Adapter 2+ (never Adapter 0 or 1)
+- First boot: reboot required due to network-services initialization warning
+- Boot time: ~3-5 minutes — warn students not to start configs until `root@%` prompt appears
+- Console access: right-click > Console in GNS3; type `root` to login, then `cli` for Junos CLI
 
 ---
 

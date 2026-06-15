@@ -1,6 +1,6 @@
 # Junos SP Training Labs
 
-These labs are designed for adult professionals learning Juniper Networks service provider concepts using **vJunos-router** (MX-based) images in **GNS3**. The series maps to the **JNCIS-SP** (JN0-362) exam objectives and assumes you have already completed a CCNA-level routing & switching foundation.
+These labs are designed for adult professionals learning Juniper Networks service provider concepts using **vMX** (Junos 14.1, VCP-only) in **GNS3**. The series maps to the **JNCIS-SP** (JN0-362) exam objectives and assumes you have already completed a CCNA-level routing & switching foundation.
 
 ---
 
@@ -41,14 +41,14 @@ graph LR
 |-----------|-------------|
 | GNS3 | 2.2.44 or later |
 | GNS3 VM | 2.2.44 (VMware Workstation or VirtualBox) |
-| vJunos-router image | Junos 23.2R1 or later (free from Juniper) |
-| RAM per node | 4096 MB |
-| vCPUs per node | 2 |
-| Nodes per lab | 4–6 (24–32 GB host RAM recommended) |
+| vMX image | Junos 14.1R4.8 `hda.qcow2` (from Juniper support portal) |
+| RAM per node | 2048 MB |
+| vCPUs per node | 1 |
+| Nodes per lab | 4–6 (16–24 GB host RAM recommended) |
 | Host OS | Windows 10/11 or Linux |
 
-!!! warning "Boot time"
-    vJunos-router takes **3–5 minutes** to boot. Do not attempt configuration until the `root@` prompt appears on the console. Starting too early will result in commands silently failing or being lost on commit.
+!!! warning "Boot time & first boot reboot"
+    vMX takes **3–5 minutes** to boot. Do not attempt configuration until the `root@%` prompt appears. On the **first boot of a fresh image**, vMX prints a network-services warning and requires an immediate `request system reboot` before proceeding — this is normal and only happens once.
 
 ---
 

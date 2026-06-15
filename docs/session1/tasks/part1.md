@@ -8,11 +8,11 @@
 
 The project opens on a blank canvas.
 
-## Step 2: Add Two vJunos-router Nodes
+## Step 2: Add Two vMX Nodes
 
 1. In the **Devices** panel on the left, expand **Routers**
-2. Drag **vJunos-router** onto the canvas twice
-3. GNS3 names them `vJunos-router-1` and `vJunos-router-2` automatically
+2. Drag **vMX-14.1** onto the canvas twice
+3. GNS3 names them `vMX-14.1-1` and `vMX-14.1-2` automatically
 
 !!! tip "Rename for clarity"
     Right-click each node, choose **Change hostname**, and rename them `R1` and `R2`. These names appear on the canvas and on the Junos console prompt after configuration.
@@ -21,9 +21,9 @@ The project opens on a blank canvas.
 
 Right-click `R1` and choose **Configure** to confirm:
 
-- RAM: 4096 MB
-- Adapters: 4
-- The `.qcow2` disk image is attached
+- RAM: 2048 MB
+- Adapters: 6
+- The `hda.qcow2` disk image is attached
 
 Repeat for `R2`.
 
