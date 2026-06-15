@@ -4579,12 +4579,16 @@
 <p>The GNS3 application and GNS3 VM version numbers must match (e.g., both 2.2.44). Mismatched versions cause connection errors that are difficult to diagnose.</p>
 </div>
 <h2 id="step-2-configure-gns3-vm-resources">Step 2: Configure GNS3 VM Resources</h2>
-<p>In VMware Workstation, edit the GNS3 VM settings:</p>
+<p>In GNS3, go to <strong>Edit</strong> &gt; <strong>Preferences</strong> &gt; <strong>GNS3 VM</strong> and set the resources allocated to the VM:</p>
 <ul>
 <li><strong>RAM</strong>: 16 GB (minimum 8 GB — each vJunos node needs 4 GB)</li>
 <li><strong>vCPUs</strong>: 4 or more</li>
-<li><strong>Nested virtualization</strong>: Enable "Virtualize Intel VT-x/EPT or AMD-V/RVI" (required for QEMU)</li>
 </ul>
+<p>Click <strong>OK</strong> to apply. GNS3 will restart the VM with the updated resources.</p>
+<div class="admonition warning">
+<p class="admonition-title">Nested virtualization — VMware setting</p>
+<p>QEMU requires hardware virtualization support. In VMware Workstation, open the GNS3 VM's settings, go to <strong>Processors</strong>, and enable <strong>"Virtualize Intel VT-x/EPT or AMD-V/RVI"</strong>. This is a VMware-level setting that GNS3 cannot control — it must be set before starting the VM.</p>
+</div>
 <p>Start the GNS3 VM. Wait for it to show its IP address on the console before launching GNS3.</p>
 <h2 id="step-3-import-the-vjunos-router-image">Step 3: Import the vJunos-router Image</h2>
 <ol>
