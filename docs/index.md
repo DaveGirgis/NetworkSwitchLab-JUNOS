@@ -23,7 +23,7 @@ graph LR
 
 | Session | Topic | Key Skills |
 |---------|-------|------------|
-| [Session 1](session1/index.md) | GNS3 Platform & Junos CLI | vJunos setup, operational/config modes, commit/rollback |
+| [Session 1](session1/index.md) | GNS3 Platform & Junos CLI | vMX setup, operational/config modes, commit/rollback |
 | [Session 2](session2/index.md) | Interfaces & Static Routing | ge-0/0/X config, family inet, loopbacks, static routes |
 | [Session 3](session3/index.md) | OSPF Single-Area | Area 0, neighbor adjacency, LSAs, passive interfaces |
 | [Session 4](session4/index.md) | IS-IS | Level 1/2, NET addressing, redistribution |
