@@ -5050,23 +5050,29 @@
 <h2 id="access-ports">Access Ports</h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW1 ge-0/0/1.0 is in VLAN10 bridge domain and shows <code>up up Bridge</code></li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW2 ge-0/0/1.0 is in VLAN11 bridge domain and shows <code>up up Bridge</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW1 ge-0/0/2.0 is in VLAN11 bridge domain and shows <code>up up Bridge</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW2 ge-0/0/1.0 is in VLAN10 bridge domain and shows <code>up up Bridge</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW2 ge-0/0/2.0 is in VLAN11 bridge domain and shows <code>up up Bridge</code></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC1 has IP 192.168.10.1/24 with gateway 192.168.10.254</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC2 has IP 192.168.11.1/24 with gateway 192.168.11.254</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC3 has IP 192.168.10.2/24 with gateway 192.168.10.254</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC4 has IP 192.168.11.2/24 with gateway 192.168.11.254</li>
 </ul>
 <h2 id="trunk">Trunk</h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW1 and SW2 ge-0/0/0 trunk is up with subunits .10 and .11 showing <code>up up Bridge</code></li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> VLAN10 bridge domain shows 2 interfaces on SW1 (access + trunk)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> VLAN11 bridge domain shows 1 interface on SW1 (trunk only) and 2 on SW2 (trunk + access)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Both VLAN10 and VLAN11 bridge domains show 2 interfaces on each switch (access + trunk)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC1 (192.168.10.1) can ping PC3 (192.168.10.2) — same VLAN across trunk</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC2 (192.168.11.1) can ping PC4 (192.168.11.2) — same VLAN across trunk</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC1 cannot ping PC2 (different VLANs, no routing yet)</li>
 </ul>
 <h2 id="irb-inter-vlan-routing">IRB / Inter-VLAN Routing</h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW1 irb.10 shows <code>192.168.10.254/24</code> and is <code>up up</code></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SW1 irb.11 shows <code>192.168.11.254/24</code> and is <code>up up</code></li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC1 can ping its gateway (192.168.10.254)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC2 can ping its gateway (192.168.11.254)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> All four PCs can ping their default gateway (192.168.10.254 or 192.168.11.254)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC1 can ping PC2 (192.168.11.1) — inter-VLAN routing works</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PC3 can ping PC4 (192.168.11.2) — inter-VLAN routing works across trunk</li>
 </ul>
 <h2 id="quick-commands">Quick Commands</h2>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show chassis network-services
@@ -5074,10 +5080,10 @@
 Expected: <code>Network Services Mode: Enhanced-Ethernet</code></p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show bridge domain
 </code></pre></div>
-Expected: VLAN10 and VLAN11 listed with correct interface counts and IRB interfaces</p>
+Expected: VLAN10 and VLAN11 each showing 2 interfaces and 1 IRB interface (after Part 3)</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bridge mac-table
 </code></pre></div>
-Expected: MAC addresses for PC1 and PC2 in their respective bridge domains after traffic is generated</p>
+Expected: MAC addresses for all four PCs in their respective bridge domains after traffic is generated</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show interfaces irb terse
 </code></pre></div>
 Expected: irb.10 and irb.11 both <code>up up inet</code></p>

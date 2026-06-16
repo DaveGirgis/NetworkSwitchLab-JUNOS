@@ -1585,10 +1585,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-test-from-pc1-gateway" class="md-nav__link">
+  <a href="#step-3-test-gateway-reachability-from-each-pc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Test from PC1 → gateway
+        Step 3: Test gateway reachability from each PC
       
     </span>
   </a>
@@ -1607,10 +1607,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-check-the-routing-table" class="md-nav__link">
+  <a href="#step-5-check-the-routing-table-on-sw1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5: Check the routing table
+        Step 5: Check the routing table on SW1
       
     </span>
   </a>
@@ -5052,7 +5052,7 @@
 
 
 <h1 id="part-3-irb-for-inter-vlan-routing">Part 3 — IRB for Inter-VLAN Routing</h1>
-<p>An <strong>IRB (Integrated Routing and Bridging)</strong> interface is a logical Layer 3 interface attached to a bridge domain. It gives the vMX a routable IP address within a VLAN — equivalent to a Cisco SVI (<code>interface Vlan10</code>). With IRB interfaces on both VLANs, SW1 can route between them.</p>
+<p>An <strong>IRB (Integrated Routing and Bridging)</strong> interface is a logical Layer 3 interface attached to a bridge domain. It gives the vMX a routable IP address within a VLAN — equivalent to a Cisco SVI (<code>interface Vlan10</code>). With IRB interfaces on both VLANs, SW1 acts as the default gateway and routes traffic between VLAN 10 and VLAN 11.</p>
 <h2 id="step-1-add-irb-interfaces-to-sw1">Step 1: Add IRB interfaces to SW1</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -5077,43 +5077,55 @@
 <p>Expected: both bridge domains now show <code>IRB intfs: 1</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>default-switch          VLAN10                   2      1          300
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>default-switch          VLAN11                   1      1          300
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>default-switch          VLAN11                   2      1          300
 </code></pre></div>
-<h2 id="step-3-test-from-pc1-gateway">Step 3: Test from PC1 → gateway</h2>
-<p>From the VPCS console on PC1:</p>
+<h2 id="step-3-test-gateway-reachability-from-each-pc">Step 3: Test gateway reachability from each PC</h2>
+<p>From <strong>PC1</strong>:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ping 192.168.10.254
-</code></pre></div>
-<p>Expected: replies from SW1's IRB.10.</p>
+</code></pre></div></p>
+<p>From <strong>PC2</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ping 192.168.11.254
+</code></pre></div></p>
+<p>From <strong>PC3</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ping 192.168.10.254
+</code></pre></div></p>
+<p>From <strong>PC4</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ping 192.168.11.254
+</code></pre></div></p>
+<p>All four should receive replies from SW1's IRB interfaces.</p>
 <h2 id="step-4-test-inter-vlan-routing">Step 4: Test inter-VLAN routing</h2>
-<p>From PC1, ping PC2:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ping 192.168.11.1
+<p>From PC1 (VLAN 10), ping PC2 (VLAN 11):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ping 192.168.11.1
 </code></pre></div>
-<p>Expected: replies from PC2. SW1 routes the packet from VLAN 10 to VLAN 11 through its IRB interfaces.</p>
-<p>If the ping fails, check that PC2 has its gateway set correctly:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>show ip
+<p>From PC3 (VLAN 10), ping PC4 (VLAN 11):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ping 192.168.11.2
 </code></pre></div>
-<p>PC2 should show gateway <code>192.168.11.254</code>. If not, re-apply:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ip 192.168.11.1 192.168.11.254 24
+<p>Expected: replies in both cases. SW1 routes the packets between bridge domains through its IRB interfaces.</p>
+<h2 id="step-5-check-the-routing-table-on-sw1">Step 5: Check the routing table on SW1</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>show route
 </code></pre></div>
-<h2 id="step-5-check-the-routing-table">Step 5: Check the routing table</h2>
-<p>On SW1:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>show route
-</code></pre></div>
-<p>Expected: two directly connected routes for the IRB subnets:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>inet.0: 2 destinations, 2 routes
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  192.168.10.0/24     *[Direct/0] ...
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  192.168.11.0/24     *[Direct/0] ...
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>inet.0: 2 destinations, 2 routes
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  192.168.10.0/24     *[Direct/0] ...
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  192.168.11.0/24     *[Direct/0] ...
 </code></pre></div>
 <h2 id="how-it-works">How it works</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>PC1 (192.168.10.1) → SW1 ge-0/0/1.0 (bridge, VLAN10)
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>                   → SW1 irb.10 (L3 gateway 192.168.10.254)
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>                   → SW1 irb.11 (L3 gateway 192.168.11.254)
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>                   → SW1 ge-0/0/0.11 (bridge, VLAN11, trunk)
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>                   → SW2 ge-0/0/0.11 (bridge, VLAN11, trunk)
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>                   → SW2 ge-0/0/1.0 (bridge, VLAN11)
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>                   → PC2 (192.168.11.1)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>PC1 (192.168.10.1) → SW1 ge-0/0/1.0 (bridge, VLAN10)
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>                   → SW1 irb.10 (L3 gateway 192.168.10.254)
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>                   → SW1 irb.11 (L3 gateway 192.168.11.254)
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>                   → SW1 ge-0/0/2.0 (bridge, VLAN11)
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>                   → PC2 (192.168.11.1)
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>PC3 (192.168.10.2) → SW2 ge-0/0/1.0 (bridge, VLAN10)
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>                   → SW2 ge-0/0/0.10 (trunk, VLAN10)
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>                   → SW1 ge-0/0/0.10 (trunk, VLAN10)
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>                   → SW1 irb.10 → irb.11
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>                   → SW1 ge-0/0/0.11 (trunk, VLAN11)
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>                   → SW2 ge-0/0/0.11 (trunk, VLAN11)
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>                   → SW2 ge-0/0/2.0 (bridge, VLAN11)
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>                   → PC4 (192.168.11.2)
 </code></pre></div>
-<p>The packet crosses from the VLAN 10 bridge domain to the VLAN 11 bridge domain via the IRB interfaces on SW1 — this is inter-VLAN routing.</p>
+<p>All inter-VLAN routing passes through SW1's IRB interfaces, regardless of which switch the source and destination PCs are connected to.</p>
 
 
 

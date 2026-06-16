@@ -1540,10 +1540,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-configure-the-access-port-on-sw1-vlan-10-pc1" class="md-nav__link">
+  <a href="#step-3-configure-access-ports-on-sw1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Configure the access port on SW1 (VLAN 10 → PC1)
+        Step 3: Configure access ports on SW1
       
     </span>
   </a>
@@ -1551,10 +1551,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-configure-the-access-port-on-sw2-vlan-11-pc2" class="md-nav__link">
+  <a href="#step-4-configure-access-ports-on-sw2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Configure the access port on SW2 (VLAN 11 → PC2)
+        Step 4: Configure access ports on SW2
       
     </span>
   </a>
@@ -5098,24 +5098,26 @@
 </table>
 <h2 id="step-1-add-vpcs-nodes-in-gns3">Step 1: Add VPCS nodes in GNS3</h2>
 <ol>
-<li>In GNS3, drag two <strong>VPCS</strong> nodes onto the canvas</li>
-<li>Label them <code>PC1</code> and <code>PC2</code></li>
+<li>Drag four <strong>VPCS</strong> nodes onto the canvas and label them <code>PC1</code>, <code>PC2</code>, <code>PC3</code>, <code>PC4</code></li>
 <li>Connect PC1 to SW1 <strong>Adapter 3</strong> (ge-0/0/1)</li>
-<li>Connect PC2 to SW2 <strong>Adapter 3</strong> (ge-0/0/1)</li>
+<li>Connect PC2 to SW1 <strong>Adapter 4</strong> (ge-0/0/2)</li>
+<li>Connect PC3 to SW2 <strong>Adapter 3</strong> (ge-0/0/1)</li>
+<li>Connect PC4 to SW2 <strong>Adapter 4</strong> (ge-0/0/2)</li>
 <li>Do <strong>not</strong> connect the trunk yet — that is Part 2</li>
 </ol>
 <h2 id="step-2-define-bridge-domains-on-sw1">Step 2: Define bridge domains on SW1</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set bridge-domains VLAN10 vlan-id 10
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set bridge-domains VLAN10 description &quot;PC1 segment&quot;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set bridge-domains VLAN10 description &quot;VLAN 10 segment&quot;
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>set bridge-domains VLAN11 vlan-id 11
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set bridge-domains VLAN11 description &quot;PC2 segment&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set bridge-domains VLAN11 description &quot;VLAN 11 segment&quot;
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>commit
 </code></pre></div>
 <p>Repeat on <strong>SW2</strong> — both switches must define the same bridge domains for the trunk in Part 2 to work.</p>
-<h2 id="step-3-configure-the-access-port-on-sw1-vlan-10-pc1">Step 3: Configure the access port on SW1 (VLAN 10 → PC1)</h2>
+<h2 id="step-3-configure-access-ports-on-sw1">Step 3: Configure access ports on SW1</h2>
+<p>VLAN 10 access port for PC1 (ge-0/0/1):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set interfaces ge-0/0/1 encapsulation ethernet-bridge
@@ -5125,41 +5127,72 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>commit
 </code></pre></div>
-<h2 id="step-4-configure-the-access-port-on-sw2-vlan-11-pc2">Step 4: Configure the access port on SW2 (VLAN 11 → PC2)</h2>
+<p>VLAN 11 access port for PC2 (ge-0/0/2):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set interfaces ge-0/0/1 encapsulation ethernet-bridge
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>set interfaces ge-0/0/1 unit 0 family bridge vlan-id 11
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>set bridge-domains VLAN11 interface ge-0/0/1.0
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set interfaces ge-0/0/2 encapsulation ethernet-bridge
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set interfaces ge-0/0/2 unit 0 family bridge interface-mode access
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>set interfaces ge-0/0/2 unit 0 family bridge vlan-id 11
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>set bridge-domains VLAN11 interface ge-0/0/2.0
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>commit
 </code></pre></div>
+<h2 id="step-4-configure-access-ports-on-sw2">Step 4: Configure access ports on SW2</h2>
+<p>VLAN 10 access port for PC3 (ge-0/0/1):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set interfaces ge-0/0/1 encapsulation ethernet-bridge
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>set interfaces ge-0/0/1 unit 0 family bridge vlan-id 10
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>set bridge-domains VLAN10 interface ge-0/0/1.0
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>commit
+</code></pre></div>
+<p>VLAN 11 access port for PC4 (ge-0/0/2):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>configure
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>set interfaces ge-0/0/2 encapsulation ethernet-bridge
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>set interfaces ge-0/0/2 unit 0 family bridge interface-mode access
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>set interfaces ge-0/0/2 unit 0 family bridge vlan-id 11
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>set bridge-domains VLAN11 interface ge-0/0/2.0
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>commit
+</code></pre></div>
 <h2 id="step-5-assign-ips-to-vpcs-nodes">Step 5: Assign IPs to VPCS nodes</h2>
-<p>Open the console for PC1 (right-click &gt; Console in GNS3):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ip 192.168.10.1 192.168.10.254 24
-</code></pre></div>
-<p>Open the console for PC2:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>ip 192.168.11.1 192.168.11.254 24
-</code></pre></div>
-<p>The second argument (<code>192.168.10.254</code>) is the default gateway — it won't resolve until Part 3 when the IRB interface is added.</p>
+<p>Open each VPCS console (right-click &gt; Console in GNS3) and apply:</p>
+<p><strong>PC1</strong> (SW1, VLAN 10):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ip 192.168.10.1 192.168.10.254 24
+</code></pre></div></p>
+<p><strong>PC2</strong> (SW1, VLAN 11):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ip 192.168.11.1 192.168.11.254 24
+</code></pre></div></p>
+<p><strong>PC3</strong> (SW2, VLAN 10):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ip 192.168.10.2 192.168.10.254 24
+</code></pre></div></p>
+<p><strong>PC4</strong> (SW2, VLAN 11):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ip 192.168.11.2 192.168.11.254 24
+</code></pre></div></p>
+<p>The gateway addresses (<code>.254</code>) will not resolve until Part 3 when the IRB interface is added.</p>
 <h2 id="verify">Verify</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>show bridge domain
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>show bridge domain
 </code></pre></div>
 <p>Expected on SW1:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>default-switch          VLAN10                   1          -          300
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>default-switch          VLAN11                   0          -          300
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>default-switch          VLAN10                   1          -          300
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>default-switch          VLAN11                   1          -          300
 </code></pre></div>
-<p>VLAN10 shows 1 interface (ge-0/0/1.0). VLAN11 shows 0 because the PC2 access port is on SW2.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>show interfaces ge-0/0/1 terse
+<p>Each bridge domain shows 1 interface (its local access port). The trunk has not been added yet.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>show interfaces ge-0/0/1 terse
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>show interfaces ge-0/0/2 terse
 </code></pre></div>
-<p>Expected:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Interface               Admin Link Proto    Local                 Remote
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ge-0/0/1                up    up
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ge-0/0/1.0              up    up   Bridge
+<p>Expected on SW1:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Interface               Admin Link Proto    Local                 Remote
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>ge-0/0/1                up    up
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>ge-0/0/1.0              up    up   Bridge
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>ge-0/0/2                up    up
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>ge-0/0/2.0              up    up   Bridge
 </code></pre></div>
-<p>At this stage, PC1 and PC2 cannot communicate — the trunk between SW1 and SW2 is not yet configured.</p>
+<p>At this stage, no cross-switch communication is possible — the trunk is not yet configured.</p>
 
 
 

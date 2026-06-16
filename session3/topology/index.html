@@ -5031,8 +5031,10 @@
 <h2 id="diagram">Diagram</h2>
 <pre class="mermaid"><code>graph LR
   PC1([PC1&lt;br/&gt;VPCS&lt;br/&gt;192.168.10.1/24]) --- SW1
-  SW1([SW1&lt;br/&gt;vMX&lt;br/&gt;ge-0/0/1 access VLAN10]) ---|ge-0/0/0 trunk| SW2([SW2&lt;br/&gt;vMX&lt;br/&gt;ge-0/0/1 access VLAN11])
-  SW2 --- PC2([PC2&lt;br/&gt;VPCS&lt;br/&gt;192.168.11.1/24])</code></pre>
+  PC2([PC2&lt;br/&gt;VPCS&lt;br/&gt;192.168.11.1/24]) --- SW1
+  SW1([SW1&lt;br/&gt;vMX]) ---|ge-0/0/0 trunk| SW2([SW2&lt;br/&gt;vMX])
+  SW2 --- PC3([PC3&lt;br/&gt;VPCS&lt;br/&gt;192.168.10.2/24])
+  SW2 --- PC4([PC4&lt;br/&gt;VPCS&lt;br/&gt;192.168.11.2/24])</code></pre>
 <h2 id="device-summary">Device Summary</h2>
 <table>
 <thead>
@@ -5058,13 +5060,25 @@
 </tr>
 <tr>
 <td>PC1</td>
-<td>End host, VLAN 10</td>
+<td>End host, VLAN 10 (on SW1)</td>
 <td>VPCS</td>
 <td>Built-in GNS3</td>
 </tr>
 <tr>
 <td>PC2</td>
-<td>End host, VLAN 11</td>
+<td>End host, VLAN 11 (on SW1)</td>
+<td>VPCS</td>
+<td>Built-in GNS3</td>
+</tr>
+<tr>
+<td>PC3</td>
+<td>End host, VLAN 10 (on SW2)</td>
+<td>VPCS</td>
+<td>Built-in GNS3</td>
+</tr>
+<tr>
+<td>PC4</td>
+<td>End host, VLAN 11 (on SW2)</td>
 <td>VPCS</td>
 <td>Built-in GNS3</td>
 </tr>
@@ -5075,8 +5089,8 @@
 <thead>
 <tr>
 <th>Link</th>
-<th>SW1 Interface</th>
-<th>SW2/PC Interface</th>
+<th>SW Interface</th>
+<th>PC/SW Interface</th>
 <th>Type</th>
 </tr>
 </thead>
@@ -5094,22 +5108,31 @@
 <td>Access, VLAN 10 (untagged)</td>
 </tr>
 <tr>
-<td>SW2 — PC2</td>
+<td>SW1 — PC2</td>
+<td>ge-0/0/2 (Adapter 4)</td>
+<td>eth0</td>
+<td>Access, VLAN 11 (untagged)</td>
+</tr>
+<tr>
+<td>SW2 — PC3</td>
 <td>ge-0/0/1 (Adapter 3)</td>
+<td>eth0</td>
+<td>Access, VLAN 10 (untagged)</td>
+</tr>
+<tr>
+<td>SW2 — PC4</td>
+<td>ge-0/0/2 (Adapter 4)</td>
 <td>eth0</td>
 <td>Access, VLAN 11 (untagged)</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">VPCS adapter</p>
-<p>VPCS nodes only have a single interface (eth0). Connect it to any available adapter on SW1/SW2 using Adapter 3 (ge-0/0/1).</p>
-</div>
 <h2 id="notes">Notes</h2>
 <ul>
-<li>SW1 and SW2 both define VLAN 10 and VLAN 11 bridge domains — the trunk allows both VLANs to span both switches</li>
-<li>PC1 and PC2 are in different VLANs and cannot communicate at Layer 2</li>
-<li>Inter-VLAN routing is added in Part 3 using IRB interfaces on SW1</li>
+<li>PC1 and PC3 are both in VLAN 10 — they can communicate at Layer 2 across the trunk without routing</li>
+<li>PC2 and PC4 are both in VLAN 11 — same behaviour</li>
+<li>VLAN 10 and VLAN 11 are isolated from each other; cross-VLAN communication requires IRB (Part 3)</li>
+<li>SW1 holds the IRB interfaces that act as the default gateway for both VLANs</li>
 </ul>
 
 

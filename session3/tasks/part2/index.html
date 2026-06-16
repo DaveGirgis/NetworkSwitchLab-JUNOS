@@ -1568,10 +1568,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-test-vlan-10-reachability" class="md-nav__link">
+  <a href="#step-4-verify-the-trunk-is-up" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Test VLAN 10 reachability
+        Step 4: Verify the trunk is up
       
     </span>
   </a>
@@ -1579,10 +1579,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-verify-vlan-isolation" class="md-nav__link">
+  <a href="#step-5-test-same-vlan-communication-across-the-trunk" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5: Verify VLAN isolation
+        Step 5: Test same-VLAN communication across the trunk
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-confirm-vlan-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Confirm VLAN isolation
       
     </span>
   </a>
@@ -5066,7 +5077,7 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>commit
 </code></pre></div>
 <h2 id="step-3-configure-the-trunk-on-sw2">Step 3: Configure the trunk on SW2</h2>
-<p>Apply the same trunk config on SW2 (identical — both ends must match):</p>
+<p>Apply the same trunk config on SW2 (both ends must match):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set interfaces ge-0/0/0 flexible-vlan-tagging
@@ -5083,8 +5094,7 @@
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>commit
 </code></pre></div>
-<h2 id="step-4-test-vlan-10-reachability">Step 4: Test VLAN 10 reachability</h2>
-<p>From PC1, ping SW1's VLAN 10 IRB (not yet configured) — skip this for now. Instead, verify the trunk is up:</p>
+<h2 id="step-4-verify-the-trunk-is-up">Step 4: Verify the trunk is up</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show interfaces ge-0/0/0 terse
 </code></pre></div>
 <p>Expected on both switches:</p>
@@ -5095,20 +5105,32 @@
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show bridge domain
 </code></pre></div>
-<p>Expected on SW1:</p>
+<p>Expected on SW1 (and mirrored on SW2):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>default-switch          VLAN10                   2          -          300
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>default-switch          VLAN11                   1          -          300
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>default-switch          VLAN11                   2          -          300
 </code></pre></div>
-<p>VLAN10 now shows 2 interfaces: ge-0/0/1.0 (access to PC1) and ge-0/0/0.10 (trunk to SW2).</p>
-<h2 id="step-5-verify-vlan-isolation">Step 5: Verify VLAN isolation</h2>
-<p>VLAN 10 and VLAN 11 are separate bridge domains — traffic does not cross between them. PC1 (VLAN 10) and PC2 (VLAN 11) are isolated at Layer 2 even though they share the same trunk link.</p>
+<p>Each bridge domain now shows 2 interfaces: the local access port and the trunk subunit.</p>
+<h2 id="step-5-test-same-vlan-communication-across-the-trunk">Step 5: Test same-VLAN communication across the trunk</h2>
+<p>From PC1 (192.168.10.1), ping PC3 (192.168.10.2) — both are in VLAN 10:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ping 192.168.10.2
+</code></pre></div>
+<p>Expected: replies from PC3. The trunk is carrying VLAN 10 between the switches.</p>
+<p>From PC2 (192.168.11.1), ping PC4 (192.168.11.2) — both are in VLAN 11:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ping 192.168.11.2
+</code></pre></div>
+<p>Expected: replies from PC4.</p>
+<h2 id="step-6-confirm-vlan-isolation">Step 6: Confirm VLAN isolation</h2>
+<p>From PC1 (VLAN 10), attempt to ping PC2 (VLAN 11, 192.168.11.1):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ping 192.168.11.1
+</code></pre></div>
+<p>Expected: <strong>no reply</strong>. PC1 and PC2 are in different bridge domains — they cannot communicate at Layer 2 even though they are connected to the same physical switch.</p>
 <p>This is the core purpose of VLANs: <strong>traffic separation on shared infrastructure</strong>.</p>
-<p>Inter-VLAN communication requires a Layer 3 device (a router or IRB interface). That is configured in Part 3.</p>
+<p>Cross-VLAN communication requires a Layer 3 device. That is added in Part 3.</p>
 <div class="admonition note">
 <p class="admonition-title">MAC learning</p>
-<p>Once PC1 and PC2 generate traffic (e.g., pings after Part 3 adds IRB), you can watch MAC addresses populate:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>show bridge mac-table
+<p>After the pings succeed, you can view learned MAC addresses per VLAN:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>show bridge mac-table
 </code></pre></div></p>
 </div>
 

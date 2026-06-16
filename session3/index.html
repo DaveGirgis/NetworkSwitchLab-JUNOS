@@ -4950,14 +4950,16 @@
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
 <li>Sessions 1 and 2 complete — you can boot vMX nodes and configure interfaces</li>
-<li>GNS3 project with two vMX nodes and two VPCS nodes available</li>
+<li>GNS3 project with two vMX nodes and four VPCS nodes available</li>
 </ul>
 <h2 id="topology-overview">Topology Overview</h2>
 <pre class="mermaid"><code>graph LR
-  PC1([PC1&lt;br/&gt;192.168.10.1/24&lt;br/&gt;VLAN 10]) --- SW1([SW1&lt;br/&gt;vMX])
+  PC1([PC1&lt;br/&gt;192.168.10.1&lt;br/&gt;VLAN 10]) --- SW1([SW1&lt;br/&gt;vMX])
+  PC2([PC2&lt;br/&gt;192.168.11.1&lt;br/&gt;VLAN 11]) --- SW1
   SW1 ---|trunk VLAN 10+11| SW2([SW2&lt;br/&gt;vMX])
-  SW2 --- PC2([PC2&lt;br/&gt;192.168.11.1/24&lt;br/&gt;VLAN 11])</code></pre>
-<p>Two vMX routers act as Layer 2 switches using Junos <strong>bridge domains</strong>. A trunk link carries both VLANs between them. PC1 (VLAN 10) and PC2 (VLAN 11) are isolated by default — VLAN 10 traffic cannot cross into VLAN 11 without a router.</p>
+  SW2 --- PC3([PC3&lt;br/&gt;192.168.10.2&lt;br/&gt;VLAN 10])
+  SW2 --- PC4([PC4&lt;br/&gt;192.168.11.2&lt;br/&gt;VLAN 11])</code></pre>
+<p>Two vMX routers act as Layer 2 switches using Junos <strong>bridge domains</strong>. Each switch has one PC in VLAN 10 and one in VLAN 11. The trunk carries both VLANs between the switches — PC1 and PC3 share VLAN 10 and can communicate across the trunk; PC2 and PC4 share VLAN 11. VLAN 10 and VLAN 11 are isolated from each other at Layer 2.</p>
 <h2 id="session-parts">Session Parts</h2>
 <table>
 <thead>

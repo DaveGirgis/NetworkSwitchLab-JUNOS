@@ -5043,13 +5043,13 @@
 <td>10</td>
 <td>VLAN10</td>
 <td>192.168.10.0/24</td>
-<td>PC1 segment</td>
+<td>PC1 and PC3 segment</td>
 </tr>
 <tr>
 <td>11</td>
 <td>VLAN11</td>
 <td>192.168.11.0/24</td>
-<td>PC2 segment</td>
+<td>PC2 and PC4 segment</td>
 </tr>
 </tbody>
 </table>
@@ -5058,6 +5058,7 @@
 <thead>
 <tr>
 <th>Device</th>
+<th>Switch</th>
 <th>VLAN</th>
 <th>IP Address</th>
 <th>Default Gateway</th>
@@ -5066,14 +5067,30 @@
 <tbody>
 <tr>
 <td>PC1</td>
+<td>SW1</td>
 <td>10</td>
 <td>192.168.10.1/24</td>
 <td>192.168.10.254 (IRB, Part 3)</td>
 </tr>
 <tr>
 <td>PC2</td>
+<td>SW1</td>
 <td>11</td>
 <td>192.168.11.1/24</td>
+<td>192.168.11.254 (IRB, Part 3)</td>
+</tr>
+<tr>
+<td>PC3</td>
+<td>SW2</td>
+<td>10</td>
+<td>192.168.10.2/24</td>
+<td>192.168.10.254 (IRB, Part 3)</td>
+</tr>
+<tr>
+<td>PC4</td>
+<td>SW2</td>
+<td>11</td>
+<td>192.168.11.2/24</td>
 <td>192.168.11.254 (IRB, Part 3)</td>
 </tr>
 </tbody>
@@ -5127,6 +5144,12 @@
 <td>Access port, VLAN 10 → PC1</td>
 </tr>
 <tr>
+<td>SW1</td>
+<td>ge-0/0/2</td>
+<td>4</td>
+<td>Access port, VLAN 11 → PC2</td>
+</tr>
+<tr>
 <td>SW2</td>
 <td>ge-0/0/0</td>
 <td>2</td>
@@ -5136,7 +5159,13 @@
 <td>SW2</td>
 <td>ge-0/0/1</td>
 <td>3</td>
-<td>Access port, VLAN 11 → PC2</td>
+<td>Access port, VLAN 10 → PC3</td>
+</tr>
+<tr>
+<td>SW2</td>
+<td>ge-0/0/2</td>
+<td>4</td>
+<td>Access port, VLAN 11 → PC4</td>
 </tr>
 </tbody>
 </table>
