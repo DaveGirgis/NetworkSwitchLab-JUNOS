@@ -72,12 +72,16 @@ show bridge domain
 Expected on SW1 (and mirrored on SW2):
 
 ```text
-Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-default-switch          VLAN10                   2          -          300
-default-switch          VLAN11                   2          -          300
+Routing instance        Bridge domain            VLAN ID     Interfaces
+default-switch          VLAN10                   10
+                                                     ge-0/0/0.10
+                                                     ge-0/0/1.0
+default-switch          VLAN11                   11
+                                                     ge-0/0/0.11
+                                                     ge-0/0/2.0
 ```
 
-Each bridge domain now shows 2 interfaces: the local access port and the trunk subunit.
+Each bridge domain now shows two interfaces: the local access port and the trunk subunit.
 
 ## Step 5: Test same-VLAN communication across the trunk
 

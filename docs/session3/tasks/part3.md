@@ -34,12 +34,16 @@ irb.11                  up    up   inet     192.168.11.254/24
 show bridge domain
 ```
 
-Expected: both bridge domains now show `IRB intfs: 1`:
+Expected (vMX 14.1 does not display an IRB column — verify IRB with `show interfaces irb terse` instead):
 
 ```text
-Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-default-switch          VLAN10                   2      1          300
-default-switch          VLAN11                   2      1          300
+Routing instance        Bridge domain            VLAN ID     Interfaces
+default-switch          VLAN10                   10
+                                                     ge-0/0/0.10
+                                                     ge-0/0/1.0
+default-switch          VLAN11                   11
+                                                     ge-0/0/0.11
+                                                     ge-0/0/2.0
 ```
 
 ## Step 3: Test gateway reachability from each PC

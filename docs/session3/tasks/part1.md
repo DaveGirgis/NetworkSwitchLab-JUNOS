@@ -125,12 +125,14 @@ show bridge domain
 Expected on SW1:
 
 ```text
-Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-default-switch          VLAN10                   1          -          300
-default-switch          VLAN11                   1          -          300
+Routing instance        Bridge domain            VLAN ID     Interfaces
+default-switch          VLAN10                   10
+                                                     ge-0/0/1.0
+default-switch          VLAN11                   11
+                                                     ge-0/0/2.0
 ```
 
-Each bridge domain shows 1 interface (its local access port). The trunk has not been added yet.
+Each bridge domain shows its local access port. The trunk has not been added yet.
 
 ```junos
 show interfaces ge-0/0/1 terse

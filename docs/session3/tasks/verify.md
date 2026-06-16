@@ -44,7 +44,7 @@ Expected: `Network Services Mode: Enhanced-Ethernet`
 ```junos
 show bridge domain
 ```
-Expected: VLAN10 and VLAN11 each showing 2 interfaces and 1 IRB interface (after Part 3)
+Expected: VLAN10 and VLAN11 each listing ge-0/0/0.1x (trunk) and ge-0/0/1.0 or ge-0/0/2.0 (access port). vMX 14.1 does not display an IRB column — IRB is verified separately with `show interfaces irb terse`
 
 ```junos
 show bridge mac-table
