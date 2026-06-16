@@ -29,7 +29,7 @@
     
     
       
-        <title>Part 1 — Enable RSTP & Root Election - Junos SP Training Labs</title>
+        <title>Part 1 — Add Second Trunk - Junos SP Training Labs</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-1-enable-rstp-and-root-election" class="md-skip">
+        <a href="#part-1-add-second-trunk" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Part 1 — Enable RSTP & Root Election
+              Part 1 — Add Second Trunk
             
           </span>
         </div>
@@ -1892,7 +1892,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Add Second Trunk
+    Part 0 — Enable RSTP
   
 
     
@@ -1929,7 +1929,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — Enable RSTP & Root Election
+    Part 1 — Add Second Trunk
   
 
     
@@ -1947,7 +1947,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — Enable RSTP & Root Election
+    Part 1 — Add Second Trunk
   
 
     
@@ -1973,10 +1973,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#step-1-enable-rstp-on-sw1-and-set-as-root-bridge" class="md-nav__link">
+  <a href="#step-1-draw-the-second-trunk-in-gns3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1: Enable RSTP on SW1 and set as root bridge
+        Step 1: Draw the second trunk in GNS3
       
     </span>
   </a>
@@ -1984,10 +1984,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-enable-rstp-on-sw2" class="md-nav__link">
+  <a href="#step-2-configure-trunk-2-on-sw1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Enable RSTP on SW2
+        Step 2: Configure Trunk 2 on SW1
       
     </span>
   </a>
@@ -1995,10 +1995,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-verify-the-root-bridge-election" class="md-nav__link">
+  <a href="#step-3-configure-trunk-2-on-sw2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Verify the root bridge election
+        Step 3: Configure Trunk 2 on SW2
       
     </span>
   </a>
@@ -2006,10 +2006,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-verify-traffic-has-recovered" class="md-nav__link">
+  <a href="#step-4-verify-rstp-blocked-the-redundant-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Verify traffic has recovered
+        Step 4: Verify RSTP blocked the redundant path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-confirm-traffic-is-unaffected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Confirm traffic is unaffected
       
     </span>
   </a>
@@ -5495,55 +5506,76 @@
   
 
 
-<h1 id="part-1-enable-rstp-and-root-election">Part 1 — Enable RSTP and Root Election</h1>
-<p>RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) is enabled globally under <code>[edit protocols rstp]</code> on vMX 14.1 — not per bridge domain. The <strong>root bridge</strong> is elected based on bridge priority — the switch with the lowest priority wins. We set SW1 to priority 4096 so it always becomes root.</p>
-<h2 id="step-1-enable-rstp-on-sw1-and-set-as-root-bridge">Step 1: Enable RSTP on SW1 and set as root bridge</h2>
+<h1 id="part-1-add-second-trunk">Part 1 — Add Second Trunk</h1>
+<p>With RSTP already active, adding the second trunk creates a physical loop that RSTP will immediately detect and resolve by blocking one of the redundant paths. No broadcast storm will occur.</p>
+<h2 id="step-1-draw-the-second-trunk-in-gns3">Step 1: Draw the second trunk in GNS3</h2>
+<ol>
+<li>Click <strong>Add a link</strong></li>
+<li>Click <strong>SW1</strong> → select <strong>Adapter 5</strong> (ge-0/0/3)</li>
+<li>Click <strong>SW2</strong> → select <strong>Adapter 5</strong> (ge-0/0/3)</li>
+</ol>
+<p>The link appears in GNS3 but carries no traffic until configured on both switches.</p>
+<h2 id="step-2-configure-trunk-2-on-sw1">Step 2: Configure Trunk 2 on SW1</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols rstp bridge-priority 4096
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set interfaces ge-0/0/3 flexible-vlan-tagging
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>set interfaces ge-0/0/3 unit 10 vlan-id 10
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>set interfaces ge-0/0/3 unit 11 vlan-id 11
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>set bridge-domains VLAN10 interface ge-0/0/3.10
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>set bridge-domains VLAN11 interface ge-0/0/3.11
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>commit
 </code></pre></div>
-<h2 id="step-2-enable-rstp-on-sw2">Step 2: Enable RSTP on SW2</h2>
+<h2 id="step-3-configure-trunk-2-on-sw2">Step 3: Configure Trunk 2 on SW2</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols rstp bridge-priority 8k
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set interfaces ge-0/0/3 flexible-vlan-tagging
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>set interfaces ge-0/0/3 unit 10 vlan-id 10
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>set interfaces ge-0/0/3 unit 11 vlan-id 11
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>set bridge-domains VLAN10 interface ge-0/0/3.10
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>set bridge-domains VLAN11 interface ge-0/0/3.11
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>commit
 </code></pre></div>
-<p><code>8k</code> is Junos shorthand for 8192. On vMX 14.1, <code>bridge-priority</code> must be specified explicitly — <code>set protocols rstp</code> alone is not sufficient to activate RSTP. SW2's priority of 8192 is higher than SW1's 4096, so SW1 wins the root election.</p>
-<h2 id="step-3-verify-the-root-bridge-election">Step 3: Verify the root bridge election</h2>
-<p>On SW1:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show spanning-tree bridge
+<h2 id="step-4-verify-rstp-blocked-the-redundant-path">Step 4: Verify RSTP blocked the redundant path</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show spanning-tree interface
 </code></pre></div>
-<p>Expected on SW1 (root bridge):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>STP bridge parameters:
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  Context: default-switch
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  Enabled protocol: RSTP
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    Root ID       : 1000.MAC-of-SW1
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    Hello time    : 2 seconds
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    Maximum age   : 20 seconds
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    Forward delay : 15 seconds
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    Message age   : 0
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  This bridge is the root
+<p>Expected on SW2 — one trunk port is Alternate/Discarding:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Interface      Port ID    Designated    Port    State       Role
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>                          bridge ID     Cost
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>ge-0/0/0.10    128:1      1000.SW1mac   2000  Forwarding  Root
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>ge-0/0/3.10    128:4      8000.SW2mac   2000  Discarding  Alternate
 </code></pre></div>
-<p>On SW2:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show spanning-tree bridge
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show bridge domain
 </code></pre></div>
-<p>Expected on SW2:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>  Root ID       : 1000.MAC-of-SW1
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  This bridge is not the root
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    Root port     : ge-0/0/0.10 (or ge-0/0/3.10)
+<p>Expected: both bridge domains now list three interfaces (two trunk subunits + one access port):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Routing instance        Bridge domain            VLAN ID     Interfaces
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>default-switch          VLAN10                   10
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>                                                     ge-0/0/0.10
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                                                     ge-0/0/1.0
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                                                     ge-0/0/3.10
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>default-switch          VLAN11                   11
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                                                     ge-0/0/0.11
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                                                     ge-0/0/2.0
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                                                     ge-0/0/3.11
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Bridge priority in the Root ID</p>
-<p>The Root ID is a combination of priority and MAC address. With priority 4096 (hex 0x1000), SW1's Root ID will always be lower than SW2's 0x8000 regardless of MAC address — guaranteeing SW1 wins the election.</p>
-</div>
-<h2 id="step-4-verify-traffic-has-recovered">Step 4: Verify traffic has recovered</h2>
+<h2 id="step-5-confirm-traffic-is-unaffected">Step 5: Confirm traffic is unaffected</h2>
 <p>From PC1, ping PC3:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ping 192.168.10.2
 </code></pre></div>
-<p>RSTP should have converged and the ping should succeed. If the ping still fails, wait 10 seconds and try again — RSTP convergence on first enable can take a few seconds.</p>
+<p>Pings should succeed without interruption — RSTP converged before the loop was ever active.</p>
 
 
 

@@ -29,7 +29,7 @@
     
     
       
-        <title>Part 0 — Add Second Trunk - Junos SP Training Labs</title>
+        <title>Part 0 — Enable RSTP - Junos SP Training Labs</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-0-add-second-trunk" class="md-skip">
+        <a href="#part-0-enable-rstp" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Part 0 — Add Second Trunk
+              Part 0 — Enable RSTP
             
           </span>
         </div>
@@ -1901,7 +1901,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Add Second Trunk
+    Part 0 — Enable RSTP
   
 
     
@@ -1919,7 +1919,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Add Second Trunk
+    Part 0 — Enable RSTP
   
 
     
@@ -1945,10 +1945,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#step-1-draw-the-second-trunk-in-gns3" class="md-nav__link">
+  <a href="#step-1-enable-rstp-on-sw1-root-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1: Draw the second trunk in GNS3
+        Step 1: Enable RSTP on SW1 (root bridge)
       
     </span>
   </a>
@@ -1956,10 +1956,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-configure-trunk-2-on-sw1" class="md-nav__link">
+  <a href="#step-2-enable-rstp-on-sw2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Configure Trunk 2 on SW1
+        Step 2: Enable RSTP on SW2
       
     </span>
   </a>
@@ -1967,21 +1967,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-configure-trunk-2-on-sw2" class="md-nav__link">
+  <a href="#step-3-verify-rstp-is-active" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Configure Trunk 2 on SW2
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#step-4-observe-the-loop-briefly" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 4: Observe the loop (briefly)
+        Step 3: Verify RSTP is active
       
     </span>
   </a>
@@ -2011,7 +2000,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — Enable RSTP & Root Election
+    Part 1 — Add Second Trunk
   
 
     
@@ -5495,61 +5484,38 @@
   
 
 
-<h1 id="part-0-add-second-trunk">Part 0 — Add Second Trunk</h1>
-<p>This part adds a second trunk link between SW1 and SW2, creating a Layer 2 loop. <strong>Do not enable RSTP yet</strong> — the loop will be active briefly while you observe what happens without STP protection. Keep this step short.</p>
-<div class="admonition danger">
-<p class="admonition-title">Broadcast storm risk</p>
-<p>As soon as the second trunk is connected and configured without STP, any broadcast (including ARP from a ping) will loop indefinitely. Your VPCS nodes may become unreachable and the vMX CPU may spike. If this happens, stop and disconnect the second trunk link from GNS3 immediately, then proceed to Part 1 before reconnecting.</p>
-</div>
-<h2 id="step-1-draw-the-second-trunk-in-gns3">Step 1: Draw the second trunk in GNS3</h2>
-<ol>
-<li>Click <strong>Add a link</strong></li>
-<li>Click <strong>SW1</strong> → select <strong>Adapter 5</strong> (ge-0/0/3)</li>
-<li>Click <strong>SW2</strong> → select <strong>Adapter 5</strong> (ge-0/0/3)</li>
-</ol>
-<p>The link will appear in GNS3 but traffic will not flow until the trunk is configured on both switches.</p>
-<h2 id="step-2-configure-trunk-2-on-sw1">Step 2: Configure Trunk 2 on SW1</h2>
+<h1 id="part-0-enable-rstp">Part 0 — Enable RSTP</h1>
+<p>RSTP is enabled before adding the second trunk so the loop is never active without protection. This is the correct production approach — always enable spanning tree before introducing a redundant Layer 2 path.</p>
+<h2 id="step-1-enable-rstp-on-sw1-root-bridge">Step 1: Enable RSTP on SW1 (root bridge)</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set interfaces ge-0/0/3 flexible-vlan-tagging
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>set interfaces ge-0/0/3 unit 10 vlan-id 10
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>set interfaces ge-0/0/3 unit 11 vlan-id 11
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>set bridge-domains VLAN10 interface ge-0/0/3.10
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>set bridge-domains VLAN11 interface ge-0/0/3.11
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>commit
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols rstp bridge-priority 4096
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
 </code></pre></div>
-<h2 id="step-3-configure-trunk-2-on-sw2">Step 3: Configure Trunk 2 on SW2</h2>
+<h2 id="step-2-enable-rstp-on-sw2">Step 2: Enable RSTP on SW2</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set interfaces ge-0/0/3 flexible-vlan-tagging
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>set interfaces ge-0/0/3 unit 10 vlan-id 10
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>set interfaces ge-0/0/3 unit 11 vlan-id 11
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>set bridge-domains VLAN10 interface ge-0/0/3.10
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>set bridge-domains VLAN11 interface ge-0/0/3.11
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>commit
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols rstp bridge-priority 8k
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
 </code></pre></div>
-<h2 id="step-4-observe-the-loop-briefly">Step 4: Observe the loop (briefly)</h2>
-<p>With both trunks active and no STP, send one ping from PC1:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ping 192.168.10.2
+<p><code>8k</code> is Junos shorthand for 8192. SW2's priority of 8192 is higher than SW1's 4096, so SW1 will win the root election once both trunks are active.</p>
+<h2 id="step-3-verify-rstp-is-active">Step 3: Verify RSTP is active</h2>
+<p>On both switches:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show spanning-tree bridge
 </code></pre></div>
-<p>You may see the ping hang or fail as ARP traffic loops. Watch the vMX console for CPU warnings. This demonstrates why STP is necessary — proceed immediately to Part 1.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show bridge domain
+<p>Expected on SW1:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>STP bridge parameters:
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  Context: default-switch
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  Enabled protocol: RSTP
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  This bridge is the root
 </code></pre></div>
-<p>Expected: both bridge domains now show three interfaces each (ge-0/0/0.1x, ge-0/0/1.0 or ge-0/0/2.0, and ge-0/0/3.1x).</p>
+<p>Expected on SW2:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>  Enabled protocol: RSTP
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  This bridge is not the root
+</code></pre></div>
+<p>Confirm RSTP is running on both switches before proceeding to Part 1.</p>
 
 
 
