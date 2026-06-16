@@ -1,17 +1,11 @@
 # Part 1 — Enable RSTP and Root Election
 
-RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) is enabled per bridge domain in Junos. The **root bridge** is elected based on bridge priority — the switch with the lowest priority wins. We set SW1 to priority 4096 so it always becomes root.
-
-!!! warning "Command verification needed"
-    STP configuration syntax for vMX 14.1 bridge domains is flagged as uncertain. Apply the commands below and report any commit errors so the guide can be corrected.
+RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) is enabled globally under `[edit protocols rstp]` on vMX 14.1 — not per bridge domain. The **root bridge** is elected based on bridge priority — the switch with the lowest priority wins. We set SW1 to priority 4096 so it always becomes root.
 
 ## Step 1: Enable RSTP on SW1 and set as root bridge
 
 ```junos
 configure
-
-set bridge-domains VLAN10 protocols rstp
-set bridge-domains VLAN11 protocols rstp
 
 set protocols rstp bridge-priority 4096
 
@@ -23,8 +17,7 @@ commit
 ```junos
 configure
 
-set bridge-domains VLAN10 protocols rstp
-set bridge-domains VLAN11 protocols rstp
+set protocols rstp
 
 commit
 ```
@@ -68,7 +61,7 @@ Expected on SW2:
 ```
 
 !!! note "Bridge priority in the Root ID"
-    The Root ID shown is a combination of priority and MAC address. With priority 4096 (hex 0x1000), SW1's Root ID will always be lower than SW2's 0x8000 regardless of MAC address — guaranteeing SW1 wins the election.
+    The Root ID is a combination of priority and MAC address. With priority 4096 (hex 0x1000), SW1's Root ID will always be lower than SW2's 0x8000 regardless of MAC address — guaranteeing SW1 wins the election.
 
 ## Step 4: Verify traffic has recovered
 
@@ -78,4 +71,4 @@ From PC1, ping PC3:
 ping 192.168.10.2
 ```
 
-RSTP should have converged and the ping should succeed. If the ping still fails, wait 10 seconds and try again — RSTP convergence on first boot can take a few seconds.
+RSTP should have converged and the ping should succeed. If the ping still fails, wait 10 seconds and try again — RSTP convergence on first enable can take a few seconds.

@@ -47,5 +47,5 @@ STP blocks one of the two trunk links, preventing the loop while keeping the red
 | [Part 3](tasks/part3.md) | RSTP failover test |
 | [Verification](tasks/verify.md) | Checklist |
 
-!!! warning "STP command verification"
-    STP configuration syntax for vMX 14.1 bridge domains may differ from standard MX documentation. Commands in this session are based on best available information — verify each step on the device and report any errors so the guide can be corrected.
+!!! note "vMX 14.1 STP scope"
+    On vMX 14.1, RSTP is configured globally under `[edit protocols rstp]` — there is no per-bridge-domain STP stanza. A single RSTP instance covers all bridge domains.

@@ -17,19 +17,24 @@
 
 **Symptom:** The command returns empty output or `no spanning tree instances found`.
 
-**Cause:** RSTP was not successfully enabled, likely due to a syntax issue with `set bridge-domains VLAN10 protocols rstp` on this vMX code version.
+**Cause:** RSTP was not successfully committed, or `set protocols rstp` was not applied.
 
 **Fix:**
-
-Try enabling RSTP at the global protocols level instead:
 
 ```junos
 configure
 set protocols rstp
 commit
+show spanning-tree bridge
 ```
 
-Then check again. If still empty, the vMX 14.1 VCP-only image may require a different approach — report the exact error to the course maintainer for a guide correction.
+Confirm the `[edit protocols rstp]` stanza exists in the configuration:
+
+```junos
+show configuration protocols rstp
+```
+
+If the stanza is missing, re-apply and commit.
 
 ---
 

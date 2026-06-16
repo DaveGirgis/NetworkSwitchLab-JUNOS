@@ -11,17 +11,13 @@
 
 ## STP Configuration Hierarchy
 
-### Enable RSTP per bridge domain
-```junos
-[edit bridge-domains VLAN10]
-  protocols rstp;
-```
-
-### Set bridge priority (global)
+### Enable RSTP globally (vMX 14.1)
 ```junos
 [edit protocols rstp]
-  bridge-priority 4096;
+  bridge-priority 4096;   /* omit on non-root bridges to use default 32768 */
 ```
+
+Note: `protocols rstp` is configured globally — there is no `protocols` sub-stanza under `bridge-domains` on vMX 14.1.
 
 ### Mark an interface as edge (access ports)
 ```junos
