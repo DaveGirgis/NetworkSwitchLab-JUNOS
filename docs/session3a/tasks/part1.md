@@ -27,6 +27,8 @@ set interfaces ge-0/0/3 unit 11 vlan-id 11
 set bridge-domains VLAN10 interface ge-0/0/3.10
 set bridge-domains VLAN11 interface ge-0/0/3.11
 
+set protocols rstp interface ge-0/0/3
+
 commit
 ```
 
@@ -46,6 +48,8 @@ set interfaces ge-0/0/3 unit 11 vlan-id 11
 
 set bridge-domains VLAN10 interface ge-0/0/3.10
 set bridge-domains VLAN11 interface ge-0/0/3.11
+
+set protocols rstp interface ge-0/0/3
 
 commit
 ```

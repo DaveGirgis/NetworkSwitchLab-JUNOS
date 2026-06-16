@@ -8,6 +8,7 @@ RSTP is enabled before adding the second trunk so the loop is never active witho
 configure
 
 set protocols rstp bridge-priority 4096
+set protocols rstp interface ge-0/0/0
 
 commit
 ```
@@ -18,6 +19,7 @@ commit
 configure
 
 set protocols rstp bridge-priority 8k
+set protocols rstp interface ge-0/0/0
 
 commit
 ```
