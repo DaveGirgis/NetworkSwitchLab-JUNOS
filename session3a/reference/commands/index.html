@@ -5577,11 +5577,15 @@
 <h3 id="enable-rstp-globally-vmx-141">Enable RSTP globally (vMX 14.1)</h3>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[edit protocols rstp]
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  bridge-priority 4096;   /* SW1 root — lower value = preferred */
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  interface ge-0/0/0;     /* enable RSTP on Trunk 1 */
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  interface ge-0/0/3;     /* enable RSTP on Trunk 2 */
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[edit protocols rstp]
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  bridge-priority 8192;   /* SW2 non-root — use 8k shorthand in set mode */
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  interface ge-0/0/0;
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  interface ge-0/0/3;
 </code></pre></div></p>
-<p>Note: on vMX 14.1, <code>bridge-priority</code> must be specified explicitly — <code>set protocols rstp</code> alone does not activate RSTP. <code>protocols rstp</code> is global; there is no per-bridge-domain STP stanza.</p>
+<p>Note: on vMX 14.1, <code>bridge-priority</code> must be specified explicitly and each trunk interface must be added individually with <code>set protocols rstp interface &lt;name&gt;</code>. <code>protocols rstp</code> is global; there is no per-bridge-domain STP stanza.</p>
 <h3 id="mark-an-interface-as-edge-access-ports">Mark an interface as edge (access ports)</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[edit protocols rstp]
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  interface ge-0/0/1 {
