@@ -45,7 +45,6 @@ configure
 set interfaces ge-0/0/1 encapsulation ethernet-bridge
 set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
 set interfaces ge-0/0/1 unit 0 family bridge vlan-id 10
-set bridge-domains VLAN10 interface ge-0/0/1.0
 
 commit
 ```
@@ -58,10 +57,12 @@ configure
 set interfaces ge-0/0/2 encapsulation ethernet-bridge
 set interfaces ge-0/0/2 unit 0 family bridge interface-mode access
 set interfaces ge-0/0/2 unit 0 family bridge vlan-id 11
-set bridge-domains VLAN11 interface ge-0/0/2.0
 
 commit
 ```
+
+!!! note "No explicit bridge-domain interface statement for access ports"
+    When `interface-mode access` is set with a `vlan-id`, Junos automatically associates the interface with the bridge domain that matches that VLAN ID. Adding `set bridge-domains VLAN10 interface ge-0/0/1.0` explicitly will cause a commit error. The explicit interface statement is only required for trunk subunits (Part 2).
 
 ## Step 4: Configure access ports on SW2
 
@@ -73,7 +74,6 @@ configure
 set interfaces ge-0/0/1 encapsulation ethernet-bridge
 set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
 set interfaces ge-0/0/1 unit 0 family bridge vlan-id 10
-set bridge-domains VLAN10 interface ge-0/0/1.0
 
 commit
 ```
@@ -86,7 +86,6 @@ configure
 set interfaces ge-0/0/2 encapsulation ethernet-bridge
 set interfaces ge-0/0/2 unit 0 family bridge interface-mode access
 set interfaces ge-0/0/2 unit 0 family bridge vlan-id 11
-set bridge-domains VLAN11 interface ge-0/0/2.0
 
 commit
 ```
