@@ -26,6 +26,7 @@ graph LR
 | [Session 1](session1/index.md) | GNS3 Platform & Junos CLI | vMX setup, operational/config modes, commit/rollback |
 | [Session 2](session2/index.md) | Interfaces & Static Routing | ge-0/0/X config, family inet, loopbacks, static routes |
 | [Session 3](session3/index.md) | Bridging & VLANs | Bridge domains, 802.1Q trunks, access ports, IRB inter-VLAN routing |
+| [Session 3a](session3a/index.md) | Spanning Tree Protocol *(self-directed)* | RSTP, root election, port roles, failover |
 | [Session 4](session4/index.md) | OSPF Single-Area | Area 0, neighbor adjacency, LSAs, passive interfaces |
 | [Session 5](session5/index.md) | IS-IS | Level 1/2, NET addressing, redistribution |
 | [Session 6](session6/index.md) | BGP | eBGP, iBGP, route reflectors, routing policies |
