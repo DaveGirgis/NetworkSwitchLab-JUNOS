@@ -22,7 +22,7 @@ No new IP addresses are introduced in this session. PC addresses and IRB gateway
 
 | Parameter | SW1 | SW2 |
 |-----------|-----|-----|
-| Bridge priority | 4096 (root) | 32768 (default) |
+| Bridge priority | 4096 (root) | 8192 (`8k`) |
 | Hello time | 2s (default) | 2s (default) |
 | Max age | 20s (default) | 20s (default) |
 | Forward delay | 15s (default) | 15s (default) |

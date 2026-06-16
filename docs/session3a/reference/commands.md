@@ -14,10 +14,14 @@
 ### Enable RSTP globally (vMX 14.1)
 ```junos
 [edit protocols rstp]
-  bridge-priority 4096;   /* omit on non-root bridges to use default 32768 */
+  bridge-priority 4096;   /* SW1 root — lower value = preferred */
+```
+```junos
+[edit protocols rstp]
+  bridge-priority 8192;   /* SW2 non-root — use 8k shorthand in set mode */
 ```
 
-Note: `protocols rstp` is configured globally — there is no `protocols` sub-stanza under `bridge-domains` on vMX 14.1.
+Note: on vMX 14.1, `bridge-priority` must be specified explicitly — `set protocols rstp` alone does not activate RSTP. `protocols rstp` is global; there is no per-bridge-domain STP stanza.
 
 ### Mark an interface as edge (access ports)
 ```junos

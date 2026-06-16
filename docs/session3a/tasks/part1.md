@@ -12,17 +12,17 @@ set protocols rstp bridge-priority 4096
 commit
 ```
 
-## Step 2: Enable RSTP on SW2 (default priority)
+## Step 2: Enable RSTP on SW2
 
 ```junos
 configure
 
-set protocols rstp
+set protocols rstp bridge-priority 8k
 
 commit
 ```
 
-SW2 uses the default bridge priority of 32768 — higher than SW1's 4096, so SW1 wins the root election.
+`8k` is Junos shorthand for 8192. On vMX 14.1, `bridge-priority` must be specified explicitly — `set protocols rstp` alone is not sufficient to activate RSTP. SW2's priority of 8192 is higher than SW1's 4096, so SW1 wins the root election.
 
 ## Step 3: Verify the root bridge election
 
