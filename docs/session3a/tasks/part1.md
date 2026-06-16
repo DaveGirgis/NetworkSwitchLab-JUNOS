@@ -1,69 +1,89 @@
-# Part 1 — Enable RSTP and Root Election
+# Part 1 — Add Second Trunk
 
-RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) is enabled globally under `[edit protocols rstp]` on vMX 14.1 — not per bridge domain. The **root bridge** is elected based on bridge priority — the switch with the lowest priority wins. We set SW1 to priority 4096 so it always becomes root.
+With RSTP already active, adding the second trunk creates a physical loop that RSTP will immediately detect and resolve by blocking one of the redundant paths. No broadcast storm will occur.
 
-## Step 1: Enable RSTP on SW1 and set as root bridge
+## Step 1: Draw the second trunk in GNS3
 
-```junos
-configure
+1. Click **Add a link**
+2. Click **SW1** → select **Adapter 5** (ge-0/0/3)
+3. Click **SW2** → select **Adapter 5** (ge-0/0/3)
 
-set protocols rstp bridge-priority 4096
+The link appears in GNS3 but carries no traffic until configured on both switches.
 
-commit
-```
-
-## Step 2: Enable RSTP on SW2
+## Step 2: Configure Trunk 2 on SW1
 
 ```junos
 configure
 
-set protocols rstp bridge-priority 8k
+set interfaces ge-0/0/3 flexible-vlan-tagging
+set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
+
+set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
+set interfaces ge-0/0/3 unit 10 vlan-id 10
+
+set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
+set interfaces ge-0/0/3 unit 11 vlan-id 11
+
+set bridge-domains VLAN10 interface ge-0/0/3.10
+set bridge-domains VLAN11 interface ge-0/0/3.11
 
 commit
 ```
 
-`8k` is Junos shorthand for 8192. On vMX 14.1, `bridge-priority` must be specified explicitly — `set protocols rstp` alone is not sufficient to activate RSTP. SW2's priority of 8192 is higher than SW1's 4096, so SW1 wins the root election.
-
-## Step 3: Verify the root bridge election
-
-On SW1:
+## Step 3: Configure Trunk 2 on SW2
 
 ```junos
-show spanning-tree bridge
+configure
+
+set interfaces ge-0/0/3 flexible-vlan-tagging
+set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
+
+set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
+set interfaces ge-0/0/3 unit 10 vlan-id 10
+
+set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
+set interfaces ge-0/0/3 unit 11 vlan-id 11
+
+set bridge-domains VLAN10 interface ge-0/0/3.10
+set bridge-domains VLAN11 interface ge-0/0/3.11
+
+commit
 ```
 
-Expected on SW1 (root bridge):
-
-```text
-STP bridge parameters:
-  Context: default-switch
-  Enabled protocol: RSTP
-    Root ID       : 1000.MAC-of-SW1
-    Hello time    : 2 seconds
-    Maximum age   : 20 seconds
-    Forward delay : 15 seconds
-    Message age   : 0
-  This bridge is the root
-```
-
-On SW2:
+## Step 4: Verify RSTP blocked the redundant path
 
 ```junos
-show spanning-tree bridge
+show spanning-tree interface
 ```
 
-Expected on SW2:
+Expected on SW2 — one trunk port is Alternate/Discarding:
 
 ```text
-  Root ID       : 1000.MAC-of-SW1
-  This bridge is not the root
-    Root port     : ge-0/0/0.10 (or ge-0/0/3.10)
+Interface      Port ID    Designated    Port    State       Role
+                          bridge ID     Cost
+ge-0/0/0.10    128:1      1000.SW1mac   2000  Forwarding  Root
+ge-0/0/3.10    128:4      8000.SW2mac   2000  Discarding  Alternate
 ```
 
-!!! note "Bridge priority in the Root ID"
-    The Root ID is a combination of priority and MAC address. With priority 4096 (hex 0x1000), SW1's Root ID will always be lower than SW2's 0x8000 regardless of MAC address — guaranteeing SW1 wins the election.
+```junos
+show bridge domain
+```
 
-## Step 4: Verify traffic has recovered
+Expected: both bridge domains now list three interfaces (two trunk subunits + one access port):
+
+```text
+Routing instance        Bridge domain            VLAN ID     Interfaces
+default-switch          VLAN10                   10
+                                                     ge-0/0/0.10
+                                                     ge-0/0/1.0
+                                                     ge-0/0/3.10
+default-switch          VLAN11                   11
+                                                     ge-0/0/0.11
+                                                     ge-0/0/2.0
+                                                     ge-0/0/3.11
+```
+
+## Step 5: Confirm traffic is unaffected
 
 From PC1, ping PC3:
 
@@ -71,4 +91,4 @@ From PC1, ping PC3:
 ping 192.168.10.2
 ```
 
-RSTP should have converged and the ping should succeed. If the ping still fails, wait 10 seconds and try again — RSTP convergence on first enable can take a few seconds.
+Pings should succeed without interruption — RSTP converged before the loop was ever active.

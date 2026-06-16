@@ -41,8 +41,8 @@ STP blocks one of the two trunk links, preventing the loop while keeping the red
 
 | Part | Topic |
 |------|-------|
-| [Part 0](tasks/part0.md) | Add second trunk — create the loop |
-| [Part 1](tasks/part1.md) | Enable RSTP and observe root election |
+| [Part 0](tasks/part0.md) | Enable RSTP on both switches |
+| [Part 1](tasks/part1.md) | Add second trunk — RSTP blocks the loop |
 | [Part 2](tasks/part2.md) | Port roles and states |
 | [Part 3](tasks/part3.md) | RSTP failover test |
 | [Verification](tasks/verify.md) | Checklist |

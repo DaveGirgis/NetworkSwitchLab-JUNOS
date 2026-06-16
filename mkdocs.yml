@@ -92,8 +92,8 @@ nav:
     - Topology: session3a/topology.md
     - Addressing: session3a/addressing.md
     - Tasks:
-      - Part 0 — Add Second Trunk: session3a/tasks/part0.md
-      - Part 1 — Enable RSTP & Root Election: session3a/tasks/part1.md
+      - Part 0 — Enable RSTP: session3a/tasks/part0.md
+      - Part 1 — Add Second Trunk: session3a/tasks/part1.md
       - Part 2 — Port Roles & States: session3a/tasks/part2.md
       - Part 3 — RSTP Failover Test: session3a/tasks/part3.md
       - Verification: session3a/tasks/verify.md

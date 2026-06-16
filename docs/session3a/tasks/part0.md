@@ -1,70 +1,51 @@
-# Part 0 — Add Second Trunk
+# Part 0 — Enable RSTP
 
-This part adds a second trunk link between SW1 and SW2, creating a Layer 2 loop. **Do not enable RSTP yet** — the loop will be active briefly while you observe what happens without STP protection. Keep this step short.
+RSTP is enabled before adding the second trunk so the loop is never active without protection. This is the correct production approach — always enable spanning tree before introducing a redundant Layer 2 path.
 
-!!! danger "Broadcast storm risk"
-    As soon as the second trunk is connected and configured without STP, any broadcast (including ARP from a ping) will loop indefinitely. Your VPCS nodes may become unreachable and the vMX CPU may spike. If this happens, stop and disconnect the second trunk link from GNS3 immediately, then proceed to Part 1 before reconnecting.
-
-## Step 1: Draw the second trunk in GNS3
-
-1. Click **Add a link**
-2. Click **SW1** → select **Adapter 5** (ge-0/0/3)
-3. Click **SW2** → select **Adapter 5** (ge-0/0/3)
-
-The link will appear in GNS3 but traffic will not flow until the trunk is configured on both switches.
-
-## Step 2: Configure Trunk 2 on SW1
+## Step 1: Enable RSTP on SW1 (root bridge)
 
 ```junos
 configure
 
-set interfaces ge-0/0/3 flexible-vlan-tagging
-set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
-
-set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
-set interfaces ge-0/0/3 unit 10 vlan-id 10
-
-set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
-set interfaces ge-0/0/3 unit 11 vlan-id 11
-
-set bridge-domains VLAN10 interface ge-0/0/3.10
-set bridge-domains VLAN11 interface ge-0/0/3.11
+set protocols rstp bridge-priority 4096
 
 commit
 ```
 
-## Step 3: Configure Trunk 2 on SW2
+## Step 2: Enable RSTP on SW2
 
 ```junos
 configure
 
-set interfaces ge-0/0/3 flexible-vlan-tagging
-set interfaces ge-0/0/3 encapsulation flexible-ethernet-services
-
-set interfaces ge-0/0/3 unit 10 encapsulation vlan-bridge
-set interfaces ge-0/0/3 unit 10 vlan-id 10
-
-set interfaces ge-0/0/3 unit 11 encapsulation vlan-bridge
-set interfaces ge-0/0/3 unit 11 vlan-id 11
-
-set bridge-domains VLAN10 interface ge-0/0/3.10
-set bridge-domains VLAN11 interface ge-0/0/3.11
+set protocols rstp bridge-priority 8k
 
 commit
 ```
 
-## Step 4: Observe the loop (briefly)
+`8k` is Junos shorthand for 8192. SW2's priority of 8192 is higher than SW1's 4096, so SW1 will win the root election once both trunks are active.
 
-With both trunks active and no STP, send one ping from PC1:
+## Step 3: Verify RSTP is active
+
+On both switches:
+
+```junos
+show spanning-tree bridge
+```
+
+Expected on SW1:
 
 ```text
-ping 192.168.10.2
+STP bridge parameters:
+  Context: default-switch
+  Enabled protocol: RSTP
+  This bridge is the root
 ```
 
-You may see the ping hang or fail as ARP traffic loops. Watch the vMX console for CPU warnings. This demonstrates why STP is necessary — proceed immediately to Part 1.
+Expected on SW2:
 
-```junos
-show bridge domain
+```text
+  Enabled protocol: RSTP
+  This bridge is not the root
 ```
 
-Expected: both bridge domains now show three interfaces each (ge-0/0/0.1x, ge-0/0/1.0 or ge-0/0/2.0, and ge-0/0/3.1x).
+Confirm RSTP is running on both switches before proceeding to Part 1.
