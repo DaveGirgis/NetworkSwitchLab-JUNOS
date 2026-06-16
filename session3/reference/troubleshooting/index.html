@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="JNCIS-SP Lab Series — vJunos-router in GNS3">
+        <meta name="description" content="JNCIS-SP Lab Series — vMX in GNS3">
       
       
         <meta name="author" content="Network Training Lab">
@@ -490,7 +490,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Installation & vJunos Image
+    Part 0 — Installation & vMX Image
   
 
     
@@ -1263,7 +1263,7 @@
   <span class="md-ellipsis">
     
   
-    Session 3 — OSPF Single-Area
+    Session 3 — Bridging & VLANs
   
 
     
@@ -1285,7 +1285,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 3 — OSPF Single-Area
+    Session 3 — Bridging & VLANs
   
 
           </label>
@@ -1424,7 +1424,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Enable Enhanced-Ethernet Mode
   
 
     
@@ -1452,7 +1452,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — OSPF Configuration
+    Part 1 — Bridge Domains & Access Ports
   
 
     
@@ -1480,7 +1480,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — OSPF Tuning
+    Part 2 — Trunk Configuration
   
 
     
@@ -1508,7 +1508,7 @@
   <span class="md-ellipsis">
     
   
-    Part 3 — Route Summarization
+    Part 3 — IRB for Inter-VLAN Routing
   
 
     
@@ -1710,10 +1710,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ospf-neighbor-stuck-in-init-state" class="md-nav__link">
+  <a href="#bridge-domain-not-appearing-after-commit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        OSPF Neighbor Stuck in Init State
+        Bridge Domain Not Appearing After Commit
       
     </span>
   </a>
@@ -1721,10 +1721,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ospf-neighbor-stuck-in-exstart-exchange" class="md-nav__link">
+  <a href="#interface-shows-proto-instead-of-bridge" class="md-nav__link">
     <span class="md-ellipsis">
       
-        OSPF Neighbor Stuck in ExStart / Exchange
+        Interface Shows Proto: - Instead of Bridge
       
     </span>
   </a>
@@ -1732,10 +1732,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ospf-forms-adjacency-but-routes-are-missing" class="md-nav__link">
+  <a href="#trunk-subunits-not-coming-up" class="md-nav__link">
     <span class="md-ellipsis">
       
-        OSPF Forms Adjacency but Routes Are Missing
+        Trunk Subunits Not Coming Up
       
     </span>
   </a>
@@ -1743,10 +1743,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ospf-adjacency-flaps" class="md-nav__link">
+  <a href="#pc-ping-to-gateway-fails" class="md-nav__link">
     <span class="md-ellipsis">
       
-        OSPF Adjacency Flaps
+        PC Ping to Gateway Fails
       
     </span>
   </a>
@@ -1754,10 +1754,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#show-ospf-neighbor-returns-empty" class="md-nav__link">
+  <a href="#inter-vlan-ping-fails-pc1-pc2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        show ospf neighbor Returns Empty
+        Inter-VLAN Ping Fails (PC1 → PC2)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show-bridge-mac-table-is-empty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show bridge mac-table is Empty
       
     </span>
   </a>
@@ -1833,7 +1844,7 @@
   <span class="md-ellipsis">
     
   
-    Session 4 — IS-IS
+    Session 4 — OSPF Single-Area
   
 
     
@@ -1855,7 +1866,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 4 — IS-IS
+    Session 4 — OSPF Single-Area
   
 
           </label>
@@ -2022,7 +2033,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — IS-IS Level 1 & 2
+    Part 1 — OSPF Configuration
   
 
     
@@ -2050,7 +2061,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — Route Leaking
+    Part 2 — OSPF Tuning
   
 
     
@@ -2078,7 +2089,7 @@
   <span class="md-ellipsis">
     
   
-    Part 3 — IS-IS vs OSPF Redistribution
+    Part 3 — Route Summarization
   
 
     
@@ -2299,7 +2310,7 @@
   <span class="md-ellipsis">
     
   
-    Session 5 — BGP
+    Session 5 — IS-IS
   
 
     
@@ -2321,7 +2332,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 5 — BGP
+    Session 5 — IS-IS
   
 
           </label>
@@ -2488,7 +2499,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — IS-IS Level 1 & 2
   
 
     
@@ -2516,7 +2527,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
+    Part 2 — Route Leaking
   
 
     
@@ -2544,7 +2555,7 @@
   <span class="md-ellipsis">
     
   
-    Part 3 — Routing Policies
+    Part 3 — IS-IS vs OSPF Redistribution
   
 
     
@@ -2765,7 +2776,7 @@
   <span class="md-ellipsis">
     
   
-    Session 6 — MPLS & LDP
+    Session 6 — BGP
   
 
     
@@ -2787,7 +2798,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 6 — MPLS & LDP
+    Session 6 — BGP
   
 
           </label>
@@ -2954,7 +2965,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — MPLS Enable & LDP
+    Part 1 — eBGP Peering
   
 
     
@@ -2982,7 +2993,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — Label Distribution
+    Part 2 — iBGP & Route Reflectors
   
 
     
@@ -3010,7 +3021,7 @@
   <span class="md-ellipsis">
     
   
-    Part 3 — RSVP-TE Intro
+    Part 3 — Routing Policies
   
 
     
@@ -3224,14 +3235,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../session6a/" class="md-nav__link ">
+            <a href="../../../session7/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 6a — Layer 2 Services (Self-Directed)
+    Session 7 — MPLS & LDP
   
 
     
@@ -3253,443 +3264,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 6a — Layer 2 Services (Self-Directed)
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/topology/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Topology
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/addressing/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Addressing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Tasks
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Tasks
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/tasks/part0/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 0 — Base Config
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/tasks/part1/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 1 — L2circuit (Pseudowire)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/tasks/part2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 2 — VPLS
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/tasks/verify/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verification
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/reference/commands/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Command Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../session6a/reference/troubleshooting/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Troubleshooting
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../../session7/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Session 7 — BGP/MPLS L3 VPN
-  
-
-    
-  </span>
-  
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Session 7 — BGP/MPLS L3 VPN
+    Session 7 — MPLS & LDP
   
 
           </label>
@@ -3782,10 +3357,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
         
           
-          <label class="md-nav__link" for="__nav_9_4" id="__nav_9_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
             
   
   
@@ -3803,8 +3378,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3856,7 +3431,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — VRF & Route Distinguishers
+    Part 1 — MPLS Enable & LDP
   
 
     
@@ -3884,7 +3459,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — MP-BGP & Route Targets
+    Part 2 — Label Distribution
   
 
     
@@ -3912,7 +3487,7 @@
   <span class="md-ellipsis">
     
   
-    Part 3 — PE-CE Routing
+    Part 3 — RSVP-TE Intro
   
 
     
@@ -3985,10 +3560,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_5" >
         
           
-          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8_5" id="__nav_8_5_label" tabindex="0">
             
   
   
@@ -4006,8 +3581,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4122,6 +3697,442 @@
       
         
         
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../session7a/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session 7a — Layer 2 Services (Self-Directed)
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Session 7a — Layer 2 Services (Self-Directed)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/addressing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_4" id="__nav_9_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/tasks/part0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Base Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/tasks/part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — L2circuit (Pseudowire)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/tasks/part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — VPLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/tasks/verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/reference/commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7a/reference/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
@@ -4133,7 +4144,7 @@
   <span class="md-ellipsis">
     
   
-    Session 8 — Capstone Troubleshooting Lab
+    Session 8 — BGP/MPLS L3 VPN
   
 
     
@@ -4155,7 +4166,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 8 — Capstone Troubleshooting Lab
+    Session 8 — BGP/MPLS L3 VPN
   
 
           </label>
@@ -4294,7 +4305,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Project Import
+    Part 0 — Base Config
   
 
     
@@ -4322,7 +4333,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — Fault 1 (IGP)
+    Part 1 — VRF & Route Distinguishers
   
 
     
@@ -4350,7 +4361,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — Fault 2 (BGP)
+    Part 2 — MP-BGP & Route Targets
   
 
     
@@ -4378,7 +4389,7 @@
   <span class="md-ellipsis">
     
   
-    Part 3 — Fault 3 (MPLS VPN)
+    Part 3 — PE-CE Routing
   
 
     
@@ -4554,6 +4565,472 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../session9/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session 9 — Capstone Troubleshooting Lab
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Session 9 — Capstone Troubleshooting Lab
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/addressing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_11_4" id="__nav_11_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/tasks/part0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Project Import
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/tasks/part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — Fault 1 (IGP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/tasks/part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — Fault 2 (BGP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/tasks/part3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3 — Fault 3 (MPLS VPN)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/tasks/verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_11_5" id="__nav_11_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/reference/commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session9/reference/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -4575,48 +5052,61 @@
 
 
 <h1 id="session-3-troubleshooting">Session 3 — Troubleshooting</h1>
-<h2 id="ospf-neighbor-stuck-in-init-state">OSPF Neighbor Stuck in <code>Init</code> State</h2>
-<p><strong>Symptom:</strong> <code>show ospf neighbor</code> shows state <code>Init</code> indefinitely.</p>
-<p><strong>Cause:</strong> The remote router is sending Hellos but is not including this router's IP in its Hello packet neighbor list — usually because it has not yet received a Hello from this side.</p>
+<h2 id="bridge-domain-not-appearing-after-commit">Bridge Domain Not Appearing After Commit</h2>
+<p><strong>Symptom:</strong> <code>show bridge domain</code> returns nothing or "no bridge domains found" after configuring.</p>
+<p><strong>Cause:</strong> The vMX is still in <code>enhanced-ip</code> mode. Bridge domains only function in <code>enhanced-ethernet</code> mode.</p>
 <p><strong>Fix:</strong>
-1. Confirm both sides have OSPF configured on the same interface with the same area
-2. Check for a firewall filter on the interface blocking UDP/OSPF — <code>show firewall</code>
-3. Confirm the interface is not passive on the remote side
-4. Run <code>show ospf interface ge-0/0/0.0</code> — interface should show area <code>0.0.0.0</code>, type <code>P2P</code></p>
+1. Check the current mode: <code>show chassis network-services</code>
+2. If it shows <code>Enhanced-IP</code>, the mode change did not take effect
+3. Enter config mode, re-apply <code>set chassis network-services enhanced-ethernet</code>, commit, and reboot</p>
 <hr />
-<h2 id="ospf-neighbor-stuck-in-exstart-exchange">OSPF Neighbor Stuck in <code>ExStart</code> / <code>Exchange</code></h2>
-<p><strong>Symptom:</strong> State cycles between <code>ExStart</code> and <code>Exchange</code> and never reaches <code>Full</code>.</p>
-<p><strong>Cause:</strong> MTU mismatch between neighbors. vJunos-router defaults to 1500 MTU, but if you have mismatched settings, OSPF DD packet exchange fails.</p>
-<p><strong>Fix:</strong> Verify MTU on both sides:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show interfaces ge-0/0/0 detail | match MTU
-</code></pre></div>
-<p>Both should show <code>1500</code>. As a workaround in the lab:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>set protocols ospf area 0.0.0.0 interface ge-0/0/0.0 ignore-mtu-mismatch
-</code></pre></div>
+<h2 id="interface-shows-proto-instead-of-bridge">Interface Shows <code>Proto: -</code> Instead of <code>Bridge</code></h2>
+<p><strong>Symptom:</strong> <code>show interfaces ge-0/0/1 terse</code> shows <code>ge-0/0/1.0 up up -</code> with no protocol.</p>
+<p><strong>Cause:</strong> <code>family bridge</code> was not configured on the unit, or the interface was not added to a bridge domain.</p>
+<p><strong>Fix:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set interfaces ge-0/0/1 encapsulation ethernet-bridge
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set interfaces ge-0/0/1 unit 0 family bridge vlan-id 10
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>set bridge-domains VLAN10 interface ge-0/0/1.0
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>commit
+</code></pre></div></p>
 <hr />
-<h2 id="ospf-forms-adjacency-but-routes-are-missing">OSPF Forms Adjacency but Routes Are Missing</h2>
-<p><strong>Symptom:</strong> <code>show ospf neighbor</code> shows <code>Full</code> but <code>show route protocol ospf</code> is missing some prefixes.</p>
-<p><strong>Cause / Fix:</strong>
-1. Check <code>show ospf database</code> — does the LSDB contain all four Router LSAs?
-2. If an LSA is missing, the router that should have generated it may not have OSPF enabled — verify with <code>show ospf interface</code> on that router
-3. Loopback not advertised: confirm <code>lo0.0</code> is in OSPF with <code>passive</code> — not just missing from OSPF entirely</p>
+<h2 id="trunk-subunits-not-coming-up">Trunk Subunits Not Coming Up</h2>
+<p><strong>Symptom:</strong> <code>ge-0/0/0.10</code> and <code>ge-0/0/0.11</code> show <code>down down</code> after configuring the trunk.</p>
+<p><strong>Cause / Fix:</strong></p>
+<ol>
+<li>Confirm <code>flexible-vlan-tagging</code> and <code>encapsulation flexible-ethernet-services</code> are set on the <strong>physical</strong> interface (ge-0/0/0), not on a unit</li>
+<li>Confirm the physical link is up: <code>show interfaces ge-0/0/0 terse</code> — the parent line should show <code>up up</code></li>
+<li>Confirm the GNS3 link is connected on <strong>Adapter 2</strong> (ge-0/0/0) on both SW1 and SW2</li>
+<li>Confirm both ends have matching VLAN IDs configured on the trunk subunits</li>
+</ol>
 <hr />
-<h2 id="ospf-adjacency-flaps">OSPF Adjacency Flaps</h2>
-<p><strong>Symptom:</strong> Neighbor repeatedly drops and re-forms.</p>
-<p><strong>Cause / Fix:</strong>
-1. Run <code>show ospf statistics</code> — look for <code>Dead timer</code> expiry events
-2. Timer mismatch: both sides must have identical Hello and Dead intervals
-3. CPU overload on vJunos-router: if the GNS3 VM is overloaded, Hello packets may be delayed. Reduce to two nodes at a time if needed.</p>
+<h2 id="pc-ping-to-gateway-fails">PC Ping to Gateway Fails</h2>
+<p><strong>Symptom:</strong> PC1 cannot ping 192.168.10.254 after Part 3.</p>
+<p><strong>Cause / Fix:</strong></p>
+<ol>
+<li>Confirm IRB interface is up: <code>show interfaces irb terse</code> — irb.10 must show <code>up up inet</code></li>
+<li>Confirm <code>set bridge-domains VLAN10 routing-interface irb.10</code> was committed</li>
+<li>Confirm PC1's access port (ge-0/0/1.0) is in the VLAN10 bridge domain: <code>show bridge domain VLAN10</code></li>
+<li>Confirm PC1's IP and gateway are set correctly from the VPCS console: <code>show ip</code></li>
+</ol>
 <hr />
-<h2 id="show-ospf-neighbor-returns-empty"><code>show ospf neighbor</code> Returns Empty</h2>
-<p><strong>Symptom:</strong> No neighbors listed at all.</p>
-<p><strong>Fix:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show protocols ospf
-</code></pre></div>
-<p>If OSPF is not configured, the output will be empty or show no interfaces. Verify your configuration:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show configuration protocols ospf
-</code></pre></div>
-<p>This should show the area and interface stanzas. If empty, OSPF was not committed correctly.</p>
+<h2 id="inter-vlan-ping-fails-pc1-pc2">Inter-VLAN Ping Fails (PC1 → PC2)</h2>
+<p><strong>Symptom:</strong> PC1 can ping its gateway (192.168.10.254) but cannot reach PC2 (192.168.11.1).</p>
+<p><strong>Cause / Fix:</strong></p>
+<ol>
+<li>Confirm irb.11 is up and has address 192.168.11.254/24</li>
+<li>Confirm PC2's gateway is set to 192.168.11.254 (not 192.168.10.254)</li>
+<li>Confirm SW1 has both irb.10 and irb.11 bound to their bridge domains</li>
+<li>Check the routing table: <code>show route</code> — should show both 192.168.10.0/24 and 192.168.11.0/24</li>
+</ol>
+<hr />
+<h2 id="show-bridge-mac-table-is-empty"><code>show bridge mac-table</code> is Empty</h2>
+<p><strong>Symptom:</strong> No MAC addresses appear even after pinging.</p>
+<p><strong>Cause:</strong> In VCP-only mode, software forwarding may not populate the MAC table in all code paths.</p>
+<p><strong>Impact:</strong> Low — routing and bridging may still work. The MAC table is a diagnostic aid, not a requirement for forwarding in this lab.</p>
+<p><strong>Workaround:</strong> Generate traffic (several pings), then check again. If still empty, proceed — verify connectivity directly with pings rather than relying on the MAC table.</p>
 
 
 

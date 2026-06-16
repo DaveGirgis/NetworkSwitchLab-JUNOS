@@ -6,37 +6,37 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="JNCIS-SP Lab Series — vJunos-router in GNS3">
+        <meta name="description" content="JNCIS-SP Lab Series — vMX in GNS3">
       
       
         <meta name="author" content="Network Training Lab">
       
       
-        <link rel="canonical" href="https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/addressing/">
+        <link rel="canonical" href="https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/tasks/part1/">
       
       
-        <link rel="prev" href="../topology/">
+        <link rel="prev" href="../part0/">
       
       
-        <link rel="next" href="../tasks/part0/">
+        <link rel="next" href="../part2/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Addressing - Junos SP Training Labs</title>
+        <title>Part 1 — Fault 1 (IGP) - Junos SP Training Labs</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6a-addressing" class="md-skip">
+        <a href="#part-1-fault-1-igp" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Junos SP Training Labs" class="md-header__button md-logo" aria-label="Junos SP Training Labs" data-md-component="logo">
+    <a href="../../.." title="Junos SP Training Labs" class="md-header__button md-logo" aria-label="Junos SP Training Labs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Addressing
+              Part 1 — Fault 1 (IGP)
             
           </span>
         </div>
@@ -234,7 +234,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Junos SP Training Labs" class="md-nav__button md-logo" aria-label="Junos SP Training Labs" data-md-component="logo">
+    <a href="../../.." title="Junos SP Training Labs" class="md-nav__button md-logo" aria-label="Junos SP Training Labs" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -264,7 +264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -322,7 +322,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session1/" class="md-nav__link ">
+            <a href="../../../session1/" class="md-nav__link ">
               
   
   
@@ -366,7 +366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/topology/" class="md-nav__link">
+      <a href="../../../session1/topology/" class="md-nav__link">
         
   
   
@@ -394,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/addressing/" class="md-nav__link">
+      <a href="../../../session1/addressing/" class="md-nav__link">
         
   
   
@@ -483,14 +483,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/tasks/part0/" class="md-nav__link">
+      <a href="../../../session1/tasks/part0/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 0 — Installation & vJunos Image
+    Part 0 — Installation & vMX Image
   
 
     
@@ -511,7 +511,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/tasks/part1/" class="md-nav__link">
+      <a href="../../../session1/tasks/part1/" class="md-nav__link">
         
   
   
@@ -539,7 +539,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/tasks/part2/" class="md-nav__link">
+      <a href="../../../session1/tasks/part2/" class="md-nav__link">
         
   
   
@@ -567,7 +567,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/tasks/part3/" class="md-nav__link">
+      <a href="../../../session1/tasks/part3/" class="md-nav__link">
         
   
   
@@ -595,7 +595,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/tasks/verify/" class="md-nav__link">
+      <a href="../../../session1/tasks/verify/" class="md-nav__link">
         
   
   
@@ -686,7 +686,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/reference/commands/" class="md-nav__link">
+      <a href="../../../session1/reference/commands/" class="md-nav__link">
         
   
   
@@ -714,7 +714,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session1/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session1/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -788,7 +788,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session2/" class="md-nav__link ">
+            <a href="../../../session2/" class="md-nav__link ">
               
   
   
@@ -832,7 +832,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/topology/" class="md-nav__link">
+      <a href="../../../session2/topology/" class="md-nav__link">
         
   
   
@@ -860,7 +860,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/addressing/" class="md-nav__link">
+      <a href="../../../session2/addressing/" class="md-nav__link">
         
   
   
@@ -949,7 +949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/tasks/part0/" class="md-nav__link">
+      <a href="../../../session2/tasks/part0/" class="md-nav__link">
         
   
   
@@ -977,7 +977,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/tasks/part1/" class="md-nav__link">
+      <a href="../../../session2/tasks/part1/" class="md-nav__link">
         
   
   
@@ -1005,7 +1005,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/tasks/part2/" class="md-nav__link">
+      <a href="../../../session2/tasks/part2/" class="md-nav__link">
         
   
   
@@ -1033,7 +1033,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/tasks/part3/" class="md-nav__link">
+      <a href="../../../session2/tasks/part3/" class="md-nav__link">
         
   
   
@@ -1061,7 +1061,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/tasks/verify/" class="md-nav__link">
+      <a href="../../../session2/tasks/verify/" class="md-nav__link">
         
   
   
@@ -1152,7 +1152,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/reference/commands/" class="md-nav__link">
+      <a href="../../../session2/reference/commands/" class="md-nav__link">
         
   
   
@@ -1180,7 +1180,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session2/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session2/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -1254,14 +1254,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session3/" class="md-nav__link ">
+            <a href="../../../session3/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 3 — OSPF Single-Area
+    Session 3 — Bridging & VLANs
   
 
     
@@ -1283,7 +1283,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 3 — OSPF Single-Area
+    Session 3 — Bridging & VLANs
   
 
           </label>
@@ -1298,7 +1298,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/topology/" class="md-nav__link">
+      <a href="../../../session3/topology/" class="md-nav__link">
         
   
   
@@ -1326,7 +1326,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/addressing/" class="md-nav__link">
+      <a href="../../../session3/addressing/" class="md-nav__link">
         
   
   
@@ -1415,14 +1415,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/tasks/part0/" class="md-nav__link">
+      <a href="../../../session3/tasks/part0/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Enable Enhanced-Ethernet Mode
   
 
     
@@ -1443,14 +1443,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/tasks/part1/" class="md-nav__link">
+      <a href="../../../session3/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — OSPF Configuration
+    Part 1 — Bridge Domains & Access Ports
   
 
     
@@ -1471,14 +1471,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/tasks/part2/" class="md-nav__link">
+      <a href="../../../session3/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — OSPF Tuning
+    Part 2 — Trunk Configuration
   
 
     
@@ -1499,14 +1499,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/tasks/part3/" class="md-nav__link">
+      <a href="../../../session3/tasks/part3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 3 — Route Summarization
+    Part 3 — IRB for Inter-VLAN Routing
   
 
     
@@ -1527,7 +1527,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/tasks/verify/" class="md-nav__link">
+      <a href="../../../session3/tasks/verify/" class="md-nav__link">
         
   
   
@@ -1618,7 +1618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/reference/commands/" class="md-nav__link">
+      <a href="../../../session3/reference/commands/" class="md-nav__link">
         
   
   
@@ -1646,7 +1646,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session3/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session3/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -1720,14 +1720,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session4/" class="md-nav__link ">
+            <a href="../../../session4/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 4 — IS-IS
+    Session 4 — OSPF Single-Area
   
 
     
@@ -1749,7 +1749,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 4 — IS-IS
+    Session 4 — OSPF Single-Area
   
 
           </label>
@@ -1764,7 +1764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/topology/" class="md-nav__link">
+      <a href="../../../session4/topology/" class="md-nav__link">
         
   
   
@@ -1792,7 +1792,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/addressing/" class="md-nav__link">
+      <a href="../../../session4/addressing/" class="md-nav__link">
         
   
   
@@ -1881,7 +1881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/tasks/part0/" class="md-nav__link">
+      <a href="../../../session4/tasks/part0/" class="md-nav__link">
         
   
   
@@ -1909,14 +1909,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/tasks/part1/" class="md-nav__link">
+      <a href="../../../session4/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — IS-IS Level 1 & 2
+    Part 1 — OSPF Configuration
   
 
     
@@ -1937,14 +1937,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/tasks/part2/" class="md-nav__link">
+      <a href="../../../session4/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — Route Leaking
+    Part 2 — OSPF Tuning
   
 
     
@@ -1965,14 +1965,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/tasks/part3/" class="md-nav__link">
+      <a href="../../../session4/tasks/part3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 3 — IS-IS vs OSPF Redistribution
+    Part 3 — Route Summarization
   
 
     
@@ -1993,7 +1993,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/tasks/verify/" class="md-nav__link">
+      <a href="../../../session4/tasks/verify/" class="md-nav__link">
         
   
   
@@ -2084,7 +2084,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/reference/commands/" class="md-nav__link">
+      <a href="../../../session4/reference/commands/" class="md-nav__link">
         
   
   
@@ -2112,7 +2112,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session4/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session4/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -2186,14 +2186,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session5/" class="md-nav__link ">
+            <a href="../../../session5/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 5 — BGP
+    Session 5 — IS-IS
   
 
     
@@ -2215,7 +2215,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 5 — BGP
+    Session 5 — IS-IS
   
 
           </label>
@@ -2230,7 +2230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/topology/" class="md-nav__link">
+      <a href="../../../session5/topology/" class="md-nav__link">
         
   
   
@@ -2258,7 +2258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/addressing/" class="md-nav__link">
+      <a href="../../../session5/addressing/" class="md-nav__link">
         
   
   
@@ -2347,7 +2347,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/tasks/part0/" class="md-nav__link">
+      <a href="../../../session5/tasks/part0/" class="md-nav__link">
         
   
   
@@ -2375,14 +2375,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/tasks/part1/" class="md-nav__link">
+      <a href="../../../session5/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — IS-IS Level 1 & 2
   
 
     
@@ -2403,14 +2403,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/tasks/part2/" class="md-nav__link">
+      <a href="../../../session5/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
+    Part 2 — Route Leaking
   
 
     
@@ -2431,14 +2431,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/tasks/part3/" class="md-nav__link">
+      <a href="../../../session5/tasks/part3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 3 — Routing Policies
+    Part 3 — IS-IS vs OSPF Redistribution
   
 
     
@@ -2459,7 +2459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/tasks/verify/" class="md-nav__link">
+      <a href="../../../session5/tasks/verify/" class="md-nav__link">
         
   
   
@@ -2550,7 +2550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/reference/commands/" class="md-nav__link">
+      <a href="../../../session5/reference/commands/" class="md-nav__link">
         
   
   
@@ -2578,7 +2578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session5/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session5/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -2652,14 +2652,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session6/" class="md-nav__link ">
+            <a href="../../../session6/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 6 — MPLS & LDP
+    Session 6 — BGP
   
 
     
@@ -2681,7 +2681,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 6 — MPLS & LDP
+    Session 6 — BGP
   
 
           </label>
@@ -2696,7 +2696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/topology/" class="md-nav__link">
+      <a href="../../../session6/topology/" class="md-nav__link">
         
   
   
@@ -2724,7 +2724,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/addressing/" class="md-nav__link">
+      <a href="../../../session6/addressing/" class="md-nav__link">
         
   
   
@@ -2813,7 +2813,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/tasks/part0/" class="md-nav__link">
+      <a href="../../../session6/tasks/part0/" class="md-nav__link">
         
   
   
@@ -2841,14 +2841,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/tasks/part1/" class="md-nav__link">
+      <a href="../../../session6/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — MPLS Enable & LDP
+    Part 1 — eBGP Peering
   
 
     
@@ -2869,14 +2869,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/tasks/part2/" class="md-nav__link">
+      <a href="../../../session6/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — Label Distribution
+    Part 2 — iBGP & Route Reflectors
   
 
     
@@ -2897,14 +2897,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/tasks/part3/" class="md-nav__link">
+      <a href="../../../session6/tasks/part3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 3 — RSVP-TE Intro
+    Part 3 — Routing Policies
   
 
     
@@ -2925,7 +2925,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/tasks/verify/" class="md-nav__link">
+      <a href="../../../session6/tasks/verify/" class="md-nav__link">
         
   
   
@@ -3016,7 +3016,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/reference/commands/" class="md-nav__link">
+      <a href="../../../session6/reference/commands/" class="md-nav__link">
         
   
   
@@ -3044,7 +3044,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session6/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session6/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -3084,8 +3084,6 @@
       
   
   
-    
-  
   
   
     
@@ -3112,22 +3110,22 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../session7/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 6a — Layer 2 Services (Self-Directed)
+    Session 7 — MPLS & LDP
   
 
     
@@ -3144,12 +3142,12 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 6a — Layer 2 Services (Self-Directed)
+    Session 7 — MPLS & LDP
   
 
           </label>
@@ -3164,7 +3162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../topology/" class="md-nav__link">
+      <a href="../../../session7/topology/" class="md-nav__link">
         
   
   
@@ -3189,19 +3187,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../session7/addressing/" class="md-nav__link">
         
   
   
@@ -3217,7 +3206,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -3231,6 +3219,8 @@
   
     
     
+      
+        
       
         
       
@@ -3289,7 +3279,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/part0/" class="md-nav__link">
+      <a href="../../../session7/tasks/part0/" class="md-nav__link">
         
   
   
@@ -3317,14 +3307,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/part1/" class="md-nav__link">
+      <a href="../../../session7/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — L2circuit (Pseudowire)
+    Part 1 — MPLS Enable & LDP
   
 
     
@@ -3345,14 +3335,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/part2/" class="md-nav__link">
+      <a href="../../../session7/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — VPLS
+    Part 2 — Label Distribution
   
 
     
@@ -3373,7 +3363,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../tasks/verify/" class="md-nav__link">
+      <a href="../../../session7/tasks/part3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3 — RSVP-TE Intro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../session7/tasks/verify/" class="md-nav__link">
         
   
   
@@ -3464,7 +3482,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/commands/" class="md-nav__link">
+      <a href="../../../session7/reference/commands/" class="md-nav__link">
         
   
   
@@ -3492,7 +3510,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session7/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -3566,14 +3584,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session7/" class="md-nav__link ">
+            <a href="../../../session7a/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 7 — BGP/MPLS L3 VPN
+    Session 7a — Layer 2 Services (Self-Directed)
   
 
     
@@ -3595,7 +3613,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 7 — BGP/MPLS L3 VPN
+    Session 7a — Layer 2 Services (Self-Directed)
   
 
           </label>
@@ -3610,7 +3628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/topology/" class="md-nav__link">
+      <a href="../../../session7a/topology/" class="md-nav__link">
         
   
   
@@ -3638,7 +3656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/addressing/" class="md-nav__link">
+      <a href="../../../session7a/addressing/" class="md-nav__link">
         
   
   
@@ -3667,8 +3685,6 @@
   
     
     
-      
-        
       
         
       
@@ -3727,7 +3743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/tasks/part0/" class="md-nav__link">
+      <a href="../../../session7a/tasks/part0/" class="md-nav__link">
         
   
   
@@ -3755,14 +3771,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/tasks/part1/" class="md-nav__link">
+      <a href="../../../session7a/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — VRF & Route Distinguishers
+    Part 1 — L2circuit (Pseudowire)
   
 
     
@@ -3783,14 +3799,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/tasks/part2/" class="md-nav__link">
+      <a href="../../../session7a/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — MP-BGP & Route Targets
+    Part 2 — VPLS
   
 
     
@@ -3811,35 +3827,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/tasks/part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — PE-CE Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../session7/tasks/verify/" class="md-nav__link">
+      <a href="../../../session7a/tasks/verify/" class="md-nav__link">
         
   
   
@@ -3930,7 +3918,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/reference/commands/" class="md-nav__link">
+      <a href="../../../session7a/reference/commands/" class="md-nav__link">
         
   
   
@@ -3958,7 +3946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session7/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session7a/reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -4032,14 +4020,14 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../session8/" class="md-nav__link ">
+            <a href="../../../session8/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
     
   
-    Session 8 — Capstone Troubleshooting Lab
+    Session 8 — BGP/MPLS L3 VPN
   
 
     
@@ -4061,7 +4049,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Session 8 — Capstone Troubleshooting Lab
+    Session 8 — BGP/MPLS L3 VPN
   
 
           </label>
@@ -4076,7 +4064,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/topology/" class="md-nav__link">
+      <a href="../../../session8/topology/" class="md-nav__link">
         
   
   
@@ -4104,7 +4092,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/addressing/" class="md-nav__link">
+      <a href="../../../session8/addressing/" class="md-nav__link">
         
   
   
@@ -4193,14 +4181,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/tasks/part0/" class="md-nav__link">
+      <a href="../../../session8/tasks/part0/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 0 — Project Import
+    Part 0 — Base Config
   
 
     
@@ -4221,14 +4209,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/tasks/part1/" class="md-nav__link">
+      <a href="../../../session8/tasks/part1/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 1 — Fault 1 (IGP)
+    Part 1 — VRF & Route Distinguishers
   
 
     
@@ -4249,14 +4237,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/tasks/part2/" class="md-nav__link">
+      <a href="../../../session8/tasks/part2/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 2 — Fault 2 (BGP)
+    Part 2 — MP-BGP & Route Targets
   
 
     
@@ -4277,14 +4265,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/tasks/part3/" class="md-nav__link">
+      <a href="../../../session8/tasks/part3/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Part 3 — Fault 3 (MPLS VPN)
+    Part 3 — PE-CE Routing
   
 
     
@@ -4305,7 +4293,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/tasks/verify/" class="md-nav__link">
+      <a href="../../../session8/tasks/verify/" class="md-nav__link">
         
   
   
@@ -4396,7 +4384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/reference/commands/" class="md-nav__link">
+      <a href="../../../session8/reference/commands/" class="md-nav__link">
         
   
   
@@ -4424,7 +4412,487 @@
   
   
     <li class="md-nav__item">
-      <a href="../../session8/reference/troubleshooting/" class="md-nav__link">
+      <a href="../../../session8/reference/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session 9 — Capstone Troubleshooting Lab
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_11" id="__nav_11_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Session 9 — Capstone Troubleshooting Lab
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../addressing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11_4" id="__nav_11_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tasks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tasks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Project Import
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — Fault 1 (IGP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — Fault 2 (BGP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3 — Fault 3 (MPLS VPN)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_11_5" id="__nav_11_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/commands/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/troubleshooting/" class="md-nav__link">
         
   
   
@@ -4480,7 +4948,7 @@
   
 
 
-<h1 id="session-6a-addressing">Session 6a — Addressing</h1>
+<h1 id="part-1-fault-1-igp">Part 1 — Fault 1 (IGP)</h1>
 <div class="admonition note">
 <p class="admonition-title">Coming soon</p>
 </div>
@@ -4539,10 +5007,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "content.code.copy", "content.code.annotate", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>

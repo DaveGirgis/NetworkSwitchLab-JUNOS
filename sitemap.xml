@@ -245,42 +245,6 @@
          <lastmod>2026-06-16</lastmod>
     </url>
     <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/addressing/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/topology/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/reference/commands/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/reference/troubleshooting/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/tasks/part0/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/tasks/part1/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/tasks/part2/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6a/tasks/verify/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
          <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7/</loc>
          <lastmod>2026-06-16</lastmod>
     </url>
@@ -321,6 +285,42 @@
          <lastmod>2026-06-16</lastmod>
     </url>
     <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/addressing/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/topology/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/reference/commands/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/reference/troubleshooting/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/tasks/part0/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/tasks/part1/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/tasks/part2/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session7a/tasks/verify/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
          <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session8/</loc>
          <lastmod>2026-06-16</lastmod>
     </url>
@@ -358,6 +358,46 @@
     </url>
     <url>
          <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session8/tasks/verify/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/addressing/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/topology/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/reference/commands/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/reference/troubleshooting/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/tasks/part0/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/tasks/part1/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/tasks/part2/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/tasks/part3/</loc>
+         <lastmod>2026-06-16</lastmod>
+    </url>
+    <url>
+         <loc>https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session9/tasks/verify/</loc>
          <lastmod>2026-06-16</lastmod>
     </url>
 </urlset>
