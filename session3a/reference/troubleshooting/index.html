@@ -5519,14 +5519,17 @@
 <hr />
 <h2 id="show-spanning-tree-bridge-returns-nothing"><code>show spanning-tree bridge</code> Returns Nothing</h2>
 <p><strong>Symptom:</strong> The command returns empty output or <code>no spanning tree instances found</code>.</p>
-<p><strong>Cause:</strong> RSTP was not successfully enabled, likely due to a syntax issue with <code>set bridge-domains VLAN10 protocols rstp</code> on this vMX code version.</p>
+<p><strong>Cause:</strong> RSTP was not successfully committed, or <code>set protocols rstp</code> was not applied.</p>
 <p><strong>Fix:</strong></p>
-<p>Try enabling RSTP at the global protocols level instead:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set protocols rstp
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>commit
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>show spanning-tree bridge
 </code></pre></div>
-<p>Then check again. If still empty, the vMX 14.1 VCP-only image may require a different approach — report the exact error to the course maintainer for a guide correction.</p>
+<p>Confirm the <code>[edit protocols rstp]</code> stanza exists in the configuration:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show configuration protocols rstp
+</code></pre></div>
+<p>If the stanza is missing, re-apply and commit.</p>
 <hr />
 <h2 id="broadcast-storm-after-adding-second-trunk">Broadcast Storm After Adding Second Trunk</h2>
 <p><strong>Symptom:</strong> After adding the second trunk (Part 0), pings hang and the vMX becomes sluggish. <code>show system processes</code> shows high CPU.</p>
@@ -5552,10 +5555,10 @@
 <p><strong>Symptom:</strong> <code>show spanning-tree interface</code> shows access ports going through Discarding → Learning → Forwarding states on each link flap.</p>
 <p><strong>Cause:</strong> Edge port configuration was not applied.</p>
 <p><strong>Fix:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>set protocols rstp interface ge-0/0/1 edge
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols rstp interface ge-0/0/2 edge
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>commit
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>set protocols rstp interface ge-0/0/1 edge
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set protocols rstp interface ge-0/0/2 edge
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>commit
 </code></pre></div>
 <p>Apply on both switches. Edge ports skip the STP state machine entirely and go directly to Forwarding.</p>
 

@@ -5496,28 +5496,20 @@
 
 
 <h1 id="part-1-enable-rstp-and-root-election">Part 1 — Enable RSTP and Root Election</h1>
-<p>RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) is enabled per bridge domain in Junos. The <strong>root bridge</strong> is elected based on bridge priority — the switch with the lowest priority wins. We set SW1 to priority 4096 so it always becomes root.</p>
-<div class="admonition warning">
-<p class="admonition-title">Command verification needed</p>
-<p>STP configuration syntax for vMX 14.1 bridge domains is flagged as uncertain. Apply the commands below and report any commit errors so the guide can be corrected.</p>
-</div>
+<p>RSTP (Rapid Spanning Tree Protocol, IEEE 802.1w) is enabled globally under <code>[edit protocols rstp]</code> on vMX 14.1 — not per bridge domain. The <strong>root bridge</strong> is elected based on bridge priority — the switch with the lowest priority wins. We set SW1 to priority 4096 so it always becomes root.</p>
 <h2 id="step-1-enable-rstp-on-sw1-and-set-as-root-bridge">Step 1: Enable RSTP on SW1 and set as root bridge</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set bridge-domains VLAN10 protocols rstp
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set bridge-domains VLAN11 protocols rstp
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set protocols rstp bridge-priority 4096
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>commit
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols rstp bridge-priority 4096
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
 </code></pre></div>
 <h2 id="step-2-enable-rstp-on-sw2-default-priority">Step 2: Enable RSTP on SW2 (default priority)</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set bridge-domains VLAN10 protocols rstp
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set bridge-domains VLAN11 protocols rstp
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>commit
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols rstp
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
 </code></pre></div>
 <p>SW2 uses the default bridge priority of 32768 — higher than SW1's 4096, so SW1 wins the root election.</p>
 <h2 id="step-3-verify-the-root-bridge-election">Step 3: Verify the root bridge election</h2>
@@ -5545,13 +5537,13 @@
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Bridge priority in the Root ID</p>
-<p>The Root ID shown is a combination of priority and MAC address. With priority 4096 (hex 0x1000), SW1's Root ID will always be lower than SW2's 0x8000 regardless of MAC address — guaranteeing SW1 wins the election.</p>
+<p>The Root ID is a combination of priority and MAC address. With priority 4096 (hex 0x1000), SW1's Root ID will always be lower than SW2's 0x8000 regardless of MAC address — guaranteeing SW1 wins the election.</p>
 </div>
 <h2 id="step-4-verify-traffic-has-recovered">Step 4: Verify traffic has recovered</h2>
 <p>From PC1, ping PC3:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ping 192.168.10.2
 </code></pre></div>
-<p>RSTP should have converged and the ping should succeed. If the ping still fails, wait 10 seconds and try again — RSTP convergence on first boot can take a few seconds.</p>
+<p>RSTP should have converged and the ping should succeed. If the ping still fails, wait 10 seconds and try again — RSTP convergence on first enable can take a few seconds.</p>
 
 
 
