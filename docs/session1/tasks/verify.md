@@ -26,9 +26,9 @@ show version
 Expected: `Model: vmx`, Junos version 14.1R4.8
 
 ```junos
-show system information
+show version | match Hostname
 ```
-Expected: hostname `R1` (or `R2`), uptime since boot
+Expected: `Hostname: R1` (or `R2`)
 
 ```junos
 show interfaces terse

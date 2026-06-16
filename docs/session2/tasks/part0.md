@@ -1,6 +1,6 @@
 # Part 0 — Base Configuration
 
-Apply this base configuration to both routers. It sets the hostname and root password if you are starting from a fresh vJunos-router boot.
+Apply this base configuration to both routers. It sets the hostname and root password if you are starting from a fresh vMX boot.
 
 ## R1 — Base Config
 
@@ -40,11 +40,11 @@ R2>
 If you completed Session 1 and saved your project, the hostnames are already set. Verify with:
 
 ```junos
-show system information | match "Host name"
+show version | match Hostname
 ```
 
 Expected:
 
 ```text
-Host name: R1
+Hostname: R1
 ```

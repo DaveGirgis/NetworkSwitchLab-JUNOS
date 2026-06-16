@@ -14,7 +14,7 @@
 | Command | Description |
 |---------|-------------|
 | `show version` | Junos version, model, uptime |
-| `show system information` | Hostname, model, chassis serial |
+| `show version \| match Hostname` | Configured hostname |
 | `show system uptime` | Boot time and current uptime |
 | `show interfaces terse` | All interfaces — state and IP summary |
 | `show interfaces ge-0/0/0` | Detailed stats for one interface |
