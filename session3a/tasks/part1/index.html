@@ -1984,10 +1984,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-enable-rstp-on-sw2-default-priority" class="md-nav__link">
+  <a href="#step-2-enable-rstp-on-sw2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Enable RSTP on SW2 (default priority)
+        Step 2: Enable RSTP on SW2
       
     </span>
   </a>
@@ -5504,14 +5504,14 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
 </code></pre></div>
-<h2 id="step-2-enable-rstp-on-sw2-default-priority">Step 2: Enable RSTP on SW2 (default priority)</h2>
+<h2 id="step-2-enable-rstp-on-sw2">Step 2: Enable RSTP on SW2</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols rstp
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols rstp bridge-priority 8k
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
 </code></pre></div>
-<p>SW2 uses the default bridge priority of 32768 — higher than SW1's 4096, so SW1 wins the root election.</p>
+<p><code>8k</code> is Junos shorthand for 8192. On vMX 14.1, <code>bridge-priority</code> must be specified explicitly — <code>set protocols rstp</code> alone is not sufficient to activate RSTP. SW2's priority of 8192 is higher than SW1's 4096, so SW1 wins the root election.</p>
 <h2 id="step-3-verify-the-root-bridge-election">Step 3: Verify the root bridge election</h2>
 <p>On SW1:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show spanning-tree bridge
