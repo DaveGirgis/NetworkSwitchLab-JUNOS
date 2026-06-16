@@ -1,8 +1,8 @@
-﻿# Session 8 — Capstone Troubleshooting Lab
+﻿# Session 7 — BGP/MPLS L3 VPN
 
 !!! note "Coming soon"
-    Complete all previous sessions first.
+    Complete Sessions 1–6 first.
 
 ## Preview
 
-You will receive a broken provider network with three distinct faults spanning IGP, BGP, and MPLS layers. Your task is to diagnose and fix each fault using only show commands and logical deduction.
+You will configure VRFs on PE1 and PE2, establish MP-BGP between the PEs, and verify that Customer A's routes are exchanged across the provider backbone without leaking into the global routing table.

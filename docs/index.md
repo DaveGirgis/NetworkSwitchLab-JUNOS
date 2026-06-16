@@ -25,13 +25,14 @@ graph LR
 |---------|-------|------------|
 | [Session 1](session1/index.md) | GNS3 Platform & Junos CLI | vMX setup, operational/config modes, commit/rollback |
 | [Session 2](session2/index.md) | Interfaces & Static Routing | ge-0/0/X config, family inet, loopbacks, static routes |
-| [Session 3](session3/index.md) | OSPF Single-Area | Area 0, neighbor adjacency, LSAs, passive interfaces |
-| [Session 4](session4/index.md) | IS-IS | Level 1/2, NET addressing, redistribution |
-| [Session 5](session5/index.md) | BGP | eBGP, iBGP, route reflectors, routing policies |
-| [Session 6](session6/index.md) | MPLS & LDP | Label switching, LDP neighbor, RSVP-TE intro |
-| [Session 6a](session6a/index.md) | Layer 2 Services *(self-directed)* | L2circuit, VPLS |
-| [Session 7](session7/index.md) | BGP/MPLS L3 VPN | VRF, route distinguisher, route target, MP-BGP |
-| [Session 8](session8/index.md) | Capstone Troubleshooting | Multi-fault diagnosis across all layers |
+| [Session 3](session3/index.md) | Bridging & VLANs | Bridge domains, 802.1Q trunks, access ports, IRB inter-VLAN routing |
+| [Session 4](session4/index.md) | OSPF Single-Area | Area 0, neighbor adjacency, LSAs, passive interfaces |
+| [Session 5](session5/index.md) | IS-IS | Level 1/2, NET addressing, redistribution |
+| [Session 6](session6/index.md) | BGP | eBGP, iBGP, route reflectors, routing policies |
+| [Session 7](session7/index.md) | MPLS & LDP | Label switching, LDP neighbor, RSVP-TE intro |
+| [Session 7a](session7a/index.md) | Layer 2 Services *(self-directed)* | L2circuit, VPLS |
+| [Session 8](session8/index.md) | BGP/MPLS L3 VPN | VRF, route distinguisher, route target, MP-BGP |
+| [Session 9](session9/index.md) | Capstone Troubleshooting | Multi-fault diagnosis across all layers |
 
 ---
 

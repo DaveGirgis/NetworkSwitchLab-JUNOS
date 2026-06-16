@@ -1,3 +1,3 @@
-﻿# Part 3 — RSVP-TE Intro
+﻿# Part 3 — Routing Policies
 
 !!! note "Coming soon"

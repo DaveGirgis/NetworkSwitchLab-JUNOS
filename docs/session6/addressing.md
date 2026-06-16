@@ -1,3 +1,3 @@
-﻿# Session 6 — Addressing
+﻿# Session 5 — Addressing
 
 !!! note "Coming soon"

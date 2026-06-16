@@ -19,11 +19,12 @@ Dev server runs at `http://localhost:8000` via `mkdocs serve`. Changes commit di
 
 ## Session Progress
 
-Nine sessions are planned:
+Ten sessions are planned:
 - Session 1 (GNS3 + CLI) — complete ✅
 - Session 2 (Interfaces + Static Routing) — complete ✅
-- Session 3 (OSPF) — complete ✅
-- Sessions 4–8 — pending 🔜
+- Session 3 (Bridging & VLANs) — complete ✅
+- Session 4 (OSPF) — complete ✅ (renumbered from Session 3)
+- Sessions 5–9 — pending 🔜
 
 ---
 

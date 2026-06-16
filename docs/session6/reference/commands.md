@@ -1,3 +1,3 @@
-﻿# Session 6 — Command Reference
+﻿# Session 5 — Command Reference
 
 !!! note "Coming soon"

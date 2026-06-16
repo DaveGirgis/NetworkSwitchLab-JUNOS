@@ -1,99 +1,107 @@
-# Part 1 — Interface Addressing
+# Part 1 — Bridge Domains and Access Ports
 
-Configure all interfaces according to the [Addressing Table](../addressing.md). Complete all four routers before moving to Part 2.
+A **bridge domain** in Junos is the equivalent of a VLAN on a traditional switch. It defines a Layer 2 forwarding domain identified by a VLAN ID. Interfaces added to a bridge domain forward traffic at Layer 2 within that domain only.
 
-## PE1
+## Concepts
+
+| Term | Junos equivalent | Cisco equivalent |
+|------|-----------------|-----------------|
+| VLAN / broadcast domain | Bridge domain | VLAN |
+| Access port (untagged) | `interface-mode access` under `family bridge` | `switchport mode access` |
+| Trunk port (tagged) | `flexible-vlan-tagging` + `encapsulation vlan-bridge` | `switchport mode trunk` |
+| SVI / VLAN interface | IRB (Integrated Routing and Bridging) | `interface vlan X` |
+
+## Step 1: Add VPCS nodes in GNS3
+
+1. In GNS3, drag two **VPCS** nodes onto the canvas
+2. Label them `PC1` and `PC2`
+3. Connect PC1 to SW1 **Adapter 3** (ge-0/0/1)
+4. Connect PC2 to SW2 **Adapter 3** (ge-0/0/1)
+5. Do **not** connect the trunk yet — that is Part 2
+
+## Step 2: Define bridge domains on SW1
 
 ```junos
-PE1> configure
+configure
 
-set interfaces ge-0/0/0 unit 0 family inet address 10.1.12.1/30
-set interfaces lo0 unit 0 family inet address 10.0.0.1/32
-set routing-options router-id 10.0.0.1
+set bridge-domains VLAN10 vlan-id 10
+set bridge-domains VLAN10 description "PC1 segment"
+set bridge-domains VLAN11 vlan-id 11
+set bridge-domains VLAN11 description "PC2 segment"
 
 commit
 ```
 
-## P1
+Repeat on **SW2** — both switches must define the same bridge domains for the trunk in Part 2 to work.
+
+## Step 3: Configure the access port on SW1 (VLAN 10 → PC1)
 
 ```junos
-P1> configure
+configure
 
-set interfaces ge-0/0/0 unit 0 family inet address 10.1.12.2/30
-set interfaces ge-0/0/1 unit 0 family inet address 10.1.23.1/30
-set interfaces lo0 unit 0 family inet address 10.0.0.2/32
-set routing-options router-id 10.0.0.2
+set interfaces ge-0/0/1 encapsulation ethernet-bridge
+set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
+set interfaces ge-0/0/1 unit 0 family bridge vlan-id 10
+set bridge-domains VLAN10 interface ge-0/0/1.0
 
 commit
 ```
 
-## P2
+## Step 4: Configure the access port on SW2 (VLAN 11 → PC2)
 
 ```junos
-P2> configure
+configure
 
-set interfaces ge-0/0/0 unit 0 family inet address 10.1.23.2/30
-set interfaces ge-0/0/1 unit 0 family inet address 10.1.34.1/30
-set interfaces lo0 unit 0 family inet address 10.0.0.3/32
-set routing-options router-id 10.0.0.3
+set interfaces ge-0/0/1 encapsulation ethernet-bridge
+set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
+set interfaces ge-0/0/1 unit 0 family bridge vlan-id 11
+set bridge-domains VLAN11 interface ge-0/0/1.0
 
 commit
 ```
 
-## PE2
+## Step 5: Assign IPs to VPCS nodes
 
-```junos
-PE2> configure
+Open the console for PC1 (right-click > Console in GNS3):
 
-set interfaces ge-0/0/0 unit 0 family inet address 10.1.34.2/30
-set interfaces lo0 unit 0 family inet address 10.0.0.4/32
-set routing-options router-id 10.0.0.4
-
-commit
+```text
+ip 192.168.10.1 192.168.10.254 24
 ```
 
-## Verify Interface Addressing
+Open the console for PC2:
 
-Run `show interfaces terse` on each router and confirm all expected interfaces show `up up`:
+```text
+ip 192.168.11.1 192.168.11.254 24
+```
+
+The second argument (`192.168.10.254`) is the default gateway — it won't resolve until Part 3 when the IRB interface is added.
+
+## Verify
 
 ```junos
-PE1> show interfaces terse
+show bridge domain
+```
+
+Expected on SW1:
+
+```text
+Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
+default-switch          VLAN10                   1          -          300
+default-switch          VLAN11                   0          -          300
+```
+
+VLAN10 shows 1 interface (ge-0/0/1.0). VLAN11 shows 0 because the PC2 access port is on SW2.
+
+```junos
+show interfaces ge-0/0/1 terse
+```
+
+Expected:
+
+```text
 Interface               Admin Link Proto    Local                 Remote
-ge-0/0/0                up    up
-ge-0/0/0.0              up    up   inet     10.1.12.1/30
-lo0                     up    up
-lo0.0                   up    up   inet     10.0.0.1/32
-                                            127.0.0.1/8
-```
-
-```junos
-P1> show interfaces terse
-Interface               Admin Link Proto    Local                 Remote
-ge-0/0/0                up    up
-ge-0/0/0.0              up    up   inet     10.1.12.2/30
 ge-0/0/1                up    up
-ge-0/0/1.0              up    up   inet     10.1.23.1/30
-lo0                     up    up
-lo0.0                   up    up   inet     10.0.0.2/32
-                                            127.0.0.1/8
+ge-0/0/1.0              up    up   Bridge
 ```
 
-## Verify Direct Connectivity
-
-```junos
-PE1> ping 10.1.12.2 count 3
-```
-Expected: 3/3 replies from P1's ge-0/0/0
-
-```junos
-P1> ping 10.1.23.2 count 3
-```
-Expected: 3/3 replies from P2's ge-0/0/0
-
-```junos
-P2> ping 10.1.34.2 count 3
-```
-Expected: 3/3 replies from PE2's ge-0/0/0
-
-!!! warning "Verify all links before configuring OSPF"
-    OSPF will not form adjacencies across a link that is not layer-3 reachable. Fix all interface/link issues now — troubleshooting OSPF is significantly harder when interface problems are also present.
+At this stage, PC1 and PC2 cannot communicate — the trunk between SW1 and SW2 is not yet configured.

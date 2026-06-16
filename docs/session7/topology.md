@@ -1,3 +1,3 @@
-﻿# Session 7 — Topology
+﻿# Session 6 — Topology
 
-!!! note "Coming soon"
+Same as Session 5. MPLS operates on the provider backbone links.

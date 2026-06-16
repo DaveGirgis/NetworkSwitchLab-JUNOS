@@ -1,3 +1,3 @@
-﻿# Part 1 — MPLS Enable & LDP
+﻿# Part 1 — eBGP Peering
 
 !!! note "Coming soon"

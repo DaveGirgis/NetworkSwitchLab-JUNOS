@@ -1,3 +1,3 @@
-﻿# Session 6 — Troubleshooting
+﻿# Session 5 — Troubleshooting
 
 !!! note "Coming soon"

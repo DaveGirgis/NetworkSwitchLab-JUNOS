@@ -1,3 +1,3 @@
-﻿# Session 5 — Addressing
+﻿# Session 4 — Addressing
 
-!!! note "Coming soon"
+Same addressing as Session 3. IS-IS adds **NET** (Network Entity Title) addresses — covered in the session tasks.

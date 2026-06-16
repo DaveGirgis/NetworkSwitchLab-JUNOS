@@ -1,3 +1,3 @@
-﻿# Part 3 — PE-CE Routing
+﻿# Part 3 — RSVP-TE Intro
 
 !!! note "Coming soon"

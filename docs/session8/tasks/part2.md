@@ -1,3 +1,3 @@
-﻿# Part 2 — Fault 2 (BGP)
+﻿# Part 2 — MP-BGP & Route Targets
 
 !!! note "Coming soon"

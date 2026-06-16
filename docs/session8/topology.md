@@ -1,3 +1,3 @@
-﻿# Session 8 — Topology
+﻿# Session 7 — Topology
 
 !!! note "Coming soon"

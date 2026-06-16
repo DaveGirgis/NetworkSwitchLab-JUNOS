@@ -1,8 +1,8 @@
-﻿# Session 5 — BGP
+﻿# Session 4 — IS-IS
 
 !!! note "Coming soon"
-    Complete Sessions 1–4 first.
+    This session is under development. Complete Sessions 1–3 first.
 
 ## Preview
 
-You will configure eBGP between the provider and customer ASes, then set up iBGP with route reflectors across the provider backbone.
+You will replace OSPF with IS-IS as the IGP for the provider backbone. IS-IS is the preferred IGP for large ISPs and is required for the JNCIS-SP exam.

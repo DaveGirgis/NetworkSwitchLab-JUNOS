@@ -1,3 +1,3 @@
-﻿# Session 6 — Topology
+﻿# Session 5 — Topology
 
-Same as Session 5. MPLS operates on the provider backbone links.
+Expanded topology adding CE1 and CE2 nodes. Detailed topology coming soon.

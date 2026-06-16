@@ -1,8 +1,8 @@
-﻿# Session 7 — BGP/MPLS L3 VPN
+﻿# Session 6 — MPLS & LDP
 
 !!! note "Coming soon"
-    Complete Sessions 1–6 first.
+    Complete Sessions 1–5 first.
 
 ## Preview
 
-You will configure VRFs on PE1 and PE2, establish MP-BGP between the PEs, and verify that Customer A's routes are exchanged across the provider backbone without leaking into the global routing table.
+You will enable MPLS on all provider interfaces and configure LDP to distribute labels. After this session, the provider backbone will forward packets using labels instead of IP lookups.

@@ -1,35 +1,56 @@
 # Session 3 — Verification Checklist
 
-## Topology
+Complete these checks before moving to Session 4.
 
-- [ ] Four vJunos-router nodes (PE1, P1, P2, PE2) are running in GNS3
-- [ ] All three links show green (up) on the GNS3 canvas
+## Platform
 
-## Interfaces
+- [ ] Both SW1 and SW2 show `Network Services Mode: Enhanced-Ethernet` (`show chassis network-services`)
+- [ ] Both switches have VLAN10 and VLAN11 bridge domains defined (`show bridge domain`)
 
-- [ ] `PE1> show interfaces terse` — `ge-0/0/0.0` is `up up`, address `10.1.12.1/30`; `lo0.0` is `up up`, address `10.0.0.1/32`
-- [ ] `P1> show interfaces terse` — `ge-0/0/0.0` is `10.1.12.2/30`, `ge-0/0/1.0` is `10.1.23.1/30`, `lo0.0` is `10.0.0.2/32`
-- [ ] `P2> show interfaces terse` — `ge-0/0/0.0` is `10.1.23.2/30`, `ge-0/0/1.0` is `10.1.34.1/30`, `lo0.0` is `10.0.0.3/32`
-- [ ] `PE2> show interfaces terse` — `ge-0/0/0.0` is `10.1.34.2/30`, `lo0.0` is `10.0.0.4/32`
+## Access Ports
 
-## OSPF Adjacency
+- [ ] SW1 ge-0/0/1.0 is in VLAN10 bridge domain and shows `up up Bridge`
+- [ ] SW2 ge-0/0/1.0 is in VLAN11 bridge domain and shows `up up Bridge`
+- [ ] PC1 has IP 192.168.10.1/24 with gateway 192.168.10.254
+- [ ] PC2 has IP 192.168.11.1/24 with gateway 192.168.11.254
 
-- [ ] `PE1> show ospf neighbor` — one neighbor: `10.0.0.2` in state `Full`
-- [ ] `P1> show ospf neighbor` — two neighbors: `10.0.0.1` and `10.0.0.3` both `Full`
-- [ ] `P2> show ospf neighbor` — two neighbors: `10.0.0.2` and `10.0.0.4` both `Full`
-- [ ] `PE2> show ospf neighbor` — one neighbor: `10.0.0.3` in state `Full`
+## Trunk
 
-## Routing Table
+- [ ] SW1 and SW2 ge-0/0/0 trunk is up with subunits .10 and .11 showing `up up Bridge`
+- [ ] VLAN10 bridge domain shows 2 interfaces on SW1 (access + trunk)
+- [ ] VLAN11 bridge domain shows 1 interface on SW1 (trunk only) and 2 on SW2 (trunk + access)
 
-- [ ] `PE1> show route protocol ospf` — shows routes to `10.0.0.2/32`, `10.0.0.3/32`, `10.0.0.4/32` and the remote /30 subnets
-- [ ] `PE2> show route protocol ospf` — shows routes to `10.0.0.1/32`, `10.0.0.2/32`, `10.0.0.3/32` and the remote /30 subnets
+## IRB / Inter-VLAN Routing
 
-## End-to-End Connectivity
+- [ ] SW1 irb.10 shows `192.168.10.254/24` and is `up up`
+- [ ] SW1 irb.11 shows `192.168.11.254/24` and is `up up`
+- [ ] PC1 can ping its gateway (192.168.10.254)
+- [ ] PC2 can ping its gateway (192.168.11.254)
+- [ ] PC1 can ping PC2 (192.168.11.1) — inter-VLAN routing works
 
-- [ ] `PE1> ping 10.0.0.4 count 5` — 5/5 replies
-- [ ] `PE2> ping 10.0.0.1 count 5` — 5/5 replies
-- [ ] `PE1> traceroute 10.0.0.4` — path shows P1 (`10.1.12.2` or `10.0.0.2`) then P2 (`10.1.23.2` or `10.0.0.3`) before reaching PE2
+## Quick Commands
 
-## OSPF Database
+```junos
+show chassis network-services
+```
+Expected: `Network Services Mode: Enhanced-Ethernet`
 
-- [ ] `PE1> show ospf database` — 4 Router LSAs present (one per router), no Network LSAs
+```junos
+show bridge domain
+```
+Expected: VLAN10 and VLAN11 listed with correct interface counts and IRB interfaces
+
+```junos
+show bridge mac-table
+```
+Expected: MAC addresses for PC1 and PC2 in their respective bridge domains after traffic is generated
+
+```junos
+show interfaces irb terse
+```
+Expected: irb.10 and irb.11 both `up up inet`
+
+```junos
+show route
+```
+Expected: 192.168.10.0/24 and 192.168.11.0/24 as Direct routes via irb.10 and irb.11

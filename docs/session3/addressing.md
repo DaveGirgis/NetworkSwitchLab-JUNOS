@@ -1,35 +1,34 @@
-# Session 3 — Addressing Table
+# Session 3 — Addressing
 
-## Loopback Addresses
+## VLAN Assignment
 
-| Device | Interface | Address |
-|--------|-----------|---------|
-| PE1 | lo0.0 | 10.0.0.1/32 |
-| P1 | lo0.0 | 10.0.0.2/32 |
-| P2 | lo0.0 | 10.0.0.3/32 |
-| PE2 | lo0.0 | 10.0.0.4/32 |
+| VLAN ID | Name | Subnet | Purpose |
+|---------|------|--------|---------|
+| 10 | VLAN10 | 192.168.10.0/24 | PC1 segment |
+| 11 | VLAN11 | 192.168.11.0/24 | PC2 segment |
 
-## Point-to-Point Link Addresses
+## Host Addresses
 
-| Link | Device | Interface | Address |
-|------|--------|-----------|---------|
-| PE1 — P1 | PE1 | ge-0/0/0 | 10.1.12.1/30 |
-| PE1 — P1 | P1 | ge-0/0/0 | 10.1.12.2/30 |
-| P1 — P2 | P1 | ge-0/0/1 | 10.1.23.1/30 |
-| P1 — P2 | P2 | ge-0/0/0 | 10.1.23.2/30 |
-| P2 — PE2 | P2 | ge-0/0/1 | 10.1.34.1/30 |
-| P2 — PE2 | PE2 | ge-0/0/0 | 10.1.34.2/30 |
+| Device | VLAN | IP Address | Default Gateway |
+|--------|------|-----------|-----------------|
+| PC1 | 10 | 192.168.10.1/24 | 192.168.10.254 (IRB, Part 3) |
+| PC2 | 11 | 192.168.11.1/24 | 192.168.11.254 (IRB, Part 3) |
 
-## OSPF Parameters
+## IRB Addresses (Part 3)
 
-| Parameter | Value |
-|-----------|-------|
-| Process | Not named in Junos (one process per protocol instance) |
-| Area | 0.0.0.0 (backbone) |
-| Router IDs | PE1=10.0.0.1, P1=10.0.0.2, P2=10.0.0.3, PE2=10.0.0.4 |
-| Interface type | p2p on all transit links |
-| Hello interval | 10s (default) |
-| Dead interval | 40s (default) |
+| Interface | Device | IP Address | VLAN |
+|-----------|--------|-----------|------|
+| irb.10 | SW1 | 192.168.10.254/24 | 10 |
+| irb.11 | SW1 | 192.168.11.254/24 | 11 |
 
-!!! note "Junos OSPF area notation"
-    Junos accepts both `area 0` and `area 0.0.0.0` — they are equivalent. This lab uses `area 0.0.0.0` for clarity.
+## Interface Roles
+
+| Device | Interface | Adapter | Role |
+|--------|-----------|---------|------|
+| SW1 | ge-0/0/0 | 2 | Trunk to SW2 (VLANs 10, 11) |
+| SW1 | ge-0/0/1 | 3 | Access port, VLAN 10 → PC1 |
+| SW2 | ge-0/0/0 | 2 | Trunk to SW1 (VLANs 10, 11) |
+| SW2 | ge-0/0/1 | 3 | Access port, VLAN 11 → PC2 |
+
+!!! note "No routing addresses on switch interfaces"
+    In Parts 1 and 2 the vMX interfaces carry only bridged traffic — no `family inet` addresses are needed. IP addresses are added only in Part 3 via IRB interfaces.

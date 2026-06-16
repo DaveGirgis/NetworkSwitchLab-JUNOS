@@ -1,3 +1,3 @@
-﻿# Part 2 — MP-BGP & Route Targets
+﻿# Part 2 — Label Distribution
 
 !!! note "Coming soon"

@@ -1,3 +1,3 @@
-﻿# Part 1 — Fault 1 (IGP)
+﻿# Part 1 — VRF & Route Distinguishers
 
 !!! note "Coming soon"

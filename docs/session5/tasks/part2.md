@@ -1,3 +1,3 @@
-﻿# Part 2 — iBGP & Route Reflectors
+﻿# Part 2 — Route Leaking
 
 !!! note "Coming soon"

@@ -1,3 +1,3 @@
-﻿# Part 3 — Fault 3 (MPLS VPN)
+﻿# Part 3 — PE-CE Routing
 
 !!! note "Coming soon"

@@ -1,8 +1,8 @@
-﻿# Session 6 — MPLS & LDP
+﻿# Session 5 — BGP
 
 !!! note "Coming soon"
-    Complete Sessions 1–5 first.
+    Complete Sessions 1–4 first.
 
 ## Preview
 
-You will enable MPLS on all provider interfaces and configure LDP to distribute labels. After this session, the provider backbone will forward packets using labels instead of IP lookups.
+You will configure eBGP between the provider and customer ASes, then set up iBGP with route reflectors across the provider backbone.

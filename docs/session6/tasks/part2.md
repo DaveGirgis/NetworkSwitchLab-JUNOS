@@ -1,3 +1,3 @@
-﻿# Part 2 — Label Distribution
+﻿# Part 2 — iBGP & Route Reflectors
 
 !!! note "Coming soon"

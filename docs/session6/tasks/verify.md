@@ -1,3 +1,3 @@
-﻿# Session 6 — Verification
+﻿# Session 5 — Verification
 
 !!! note "Coming soon"
