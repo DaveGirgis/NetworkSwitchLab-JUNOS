@@ -4,15 +4,15 @@
 
 ```mermaid
 graph LR
-  R1([R1<br/>vJunos-router]) ---|ge-0/0/0| R2([R2<br/>vJunos-router])
+  R1([R1<br/>vMX-14.1]) ---|ge-0/0/0| R2([R2<br/>vMX-14.1])
 ```
 
 ## Device Summary
 
 | Device | Role | Image |
 |--------|------|-------|
-| R1 | Router | vJunos-router (Junos 23.2R1+) |
-| R2 | Router | vJunos-router (Junos 23.2R1+) |
+| R1 | Router | vMX (Junos 14.1R4.8) |
+| R2 | Router | vMX (Junos 14.1R4.8) |
 
 ## Link Summary
 

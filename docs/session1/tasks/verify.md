@@ -5,13 +5,13 @@ Complete these checks before moving to Session 2.
 ## Platform
 
 - [ ] GNS3 and GNS3 VM are the same version and communicate successfully
-- [ ] vJunos-router template is created with 4 adapters and 4096 MB RAM
+- [ ] vMX-14.1 template is created with 6 adapters and 2048 MB RAM
 - [ ] Both R1 and R2 boot successfully (Junos `root@` prompt appears)
 
 ## CLI Fundamentals
 
 - [ ] You can switch between operational mode (`>`) and configuration mode (`#`)
-- [ ] `show version` shows Junos 23.2R1 (or later) and model `vjunos-router`
+- [ ] `show version` shows Junos 14.1R4.8 and model `vmx`
 - [ ] R1 hostname is set to `R1`, R2 hostname is set to `R2`
 - [ ] Root password is configured on both routers
 - [ ] You have used `show | compare` to review a change before committing
@@ -23,7 +23,7 @@ Run these on each router and confirm the output matches expectations:
 ```junos
 show version
 ```
-Expected: `Model: vjunos-router`, Junos version 23.2R1+
+Expected: `Model: vmx`, Junos version 14.1R4.8
 
 ```junos
 show system information
@@ -33,4 +33,4 @@ Expected: hostname `R1` (or `R2`), uptime since boot
 ```junos
 show interfaces terse
 ```
-Expected: `ge-0/0/0` through `ge-0/0/3` listed, all `down` (no IP yet)
+Expected: `em0`, `em1`, `lo0` listed. `ge-0/0/x` interfaces only appear after an IP address is configured — query them directly with `show interfaces ge-0/0/0 terse`
