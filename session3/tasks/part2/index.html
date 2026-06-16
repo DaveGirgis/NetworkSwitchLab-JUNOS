@@ -5106,11 +5106,15 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show bridge domain
 </code></pre></div>
 <p>Expected on SW1 (and mirrored on SW2):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>default-switch          VLAN10                   2          -          300
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>default-switch          VLAN11                   2          -          300
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Routing instance        Bridge domain            VLAN ID     Interfaces
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>default-switch          VLAN10                   10
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>                                                     ge-0/0/0.10
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                                                     ge-0/0/1.0
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>default-switch          VLAN11                   11
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                                                     ge-0/0/0.11
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                                                     ge-0/0/2.0
 </code></pre></div>
-<p>Each bridge domain now shows 2 interfaces: the local access port and the trunk subunit.</p>
+<p>Each bridge domain now shows two interfaces: the local access port and the trunk subunit.</p>
 <h2 id="step-5-test-same-vlan-communication-across-the-trunk">Step 5: Test same-VLAN communication across the trunk</h2>
 <p>From PC1 (192.168.10.1), ping PC3 (192.168.10.2) — both are in VLAN 10:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ping 192.168.10.2

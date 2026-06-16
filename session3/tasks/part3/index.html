@@ -5074,10 +5074,14 @@
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show bridge domain
 </code></pre></div>
-<p>Expected: both bridge domains now show <code>IRB intfs: 1</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>default-switch          VLAN10                   2      1          300
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>default-switch          VLAN11                   2      1          300
+<p>Expected (vMX 14.1 does not display an IRB column — verify IRB with <code>show interfaces irb terse</code> instead):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Routing instance        Bridge domain            VLAN ID     Interfaces
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>default-switch          VLAN10                   10
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>                                                     ge-0/0/0.10
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>                                                     ge-0/0/1.0
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>default-switch          VLAN11                   11
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>                                                     ge-0/0/0.11
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>                                                     ge-0/0/2.0
 </code></pre></div>
 <h2 id="step-3-test-gateway-reachability-from-each-pc">Step 3: Test gateway reachability from each PC</h2>
 <p>From <strong>PC1</strong>:

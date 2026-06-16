@@ -5080,7 +5080,7 @@
 Expected: <code>Network Services Mode: Enhanced-Ethernet</code></p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show bridge domain
 </code></pre></div>
-Expected: VLAN10 and VLAN11 each showing 2 interfaces and 1 IRB interface (after Part 3)</p>
+Expected: VLAN10 and VLAN11 each listing ge-0/0/0.1x (trunk) and ge-0/0/1.0 or ge-0/0/2.0 (access port). vMX 14.1 does not display an IRB column — IRB is verified separately with <code>show interfaces irb terse</code></p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bridge mac-table
 </code></pre></div>
 Expected: MAC addresses for all four PCs in their respective bridge domains after traffic is generated</p>

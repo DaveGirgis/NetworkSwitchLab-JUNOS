@@ -5177,11 +5177,13 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>show bridge domain
 </code></pre></div>
 <p>Expected on SW1:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>default-switch          VLAN10                   1          -          300
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>default-switch          VLAN11                   1          -          300
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Routing instance        Bridge domain            VLAN ID     Interfaces
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>default-switch          VLAN10                   10
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>                                                     ge-0/0/1.0
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>default-switch          VLAN11                   11
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>                                                     ge-0/0/2.0
 </code></pre></div>
-<p>Each bridge domain shows 1 interface (its local access port). The trunk has not been added yet.</p>
+<p>Each bridge domain shows its local access port. The trunk has not been added yet.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>show interfaces ge-0/0/1 terse
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>show interfaces ge-0/0/2 terse
 </code></pre></div>
