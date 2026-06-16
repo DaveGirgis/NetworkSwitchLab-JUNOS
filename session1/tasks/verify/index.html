@@ -4573,9 +4573,9 @@
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show version
 </code></pre></div>
 Expected: <code>Model: vmx</code>, Junos version 14.1R4.8</p>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show system information
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show version | match Hostname
 </code></pre></div>
-Expected: hostname <code>R1</code> (or <code>R2</code>), uptime since boot</p>
+Expected: <code>Hostname: R1</code> (or <code>R2</code>)</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show interfaces terse
 </code></pre></div>
 Expected: <code>em0</code>, <code>em1</code>, <code>lo0</code> listed. <code>ge-0/0/x</code> interfaces only appear after an IP address is configured — query them directly with <code>show interfaces ge-0/0/0 terse</code></p>

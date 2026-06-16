@@ -4553,7 +4553,7 @@
 
 
 <h1 id="part-0-base-configuration">Part 0 — Base Configuration</h1>
-<p>Apply this base configuration to both routers. It sets the hostname and root password if you are starting from a fresh vJunos-router boot.</p>
+<p>Apply this base configuration to both routers. It sets the hostname and root password if you are starting from a fresh vMX boot.</p>
 <h2 id="r1-base-config">R1 — Base Config</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -4580,10 +4580,10 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>R2&gt;
 </code></pre></div>
 <p>If you completed Session 1 and saved your project, the hostnames are already set. Verify with:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show system information | match &quot;Host name&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show version | match Hostname
 </code></pre></div>
 <p>Expected:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Host name: R1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Hostname: R1
 </code></pre></div>
 
 
