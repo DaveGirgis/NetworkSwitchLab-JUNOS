@@ -13,11 +13,12 @@ A **bridge domain** in Junos is the equivalent of a VLAN on a traditional switch
 
 ## Step 1: Add VPCS nodes in GNS3
 
-1. In GNS3, drag two **VPCS** nodes onto the canvas
-2. Label them `PC1` and `PC2`
-3. Connect PC1 to SW1 **Adapter 3** (ge-0/0/1)
-4. Connect PC2 to SW2 **Adapter 3** (ge-0/0/1)
-5. Do **not** connect the trunk yet — that is Part 2
+1. Drag four **VPCS** nodes onto the canvas and label them `PC1`, `PC2`, `PC3`, `PC4`
+2. Connect PC1 to SW1 **Adapter 3** (ge-0/0/1)
+3. Connect PC2 to SW1 **Adapter 4** (ge-0/0/2)
+4. Connect PC3 to SW2 **Adapter 3** (ge-0/0/1)
+5. Connect PC4 to SW2 **Adapter 4** (ge-0/0/2)
+6. Do **not** connect the trunk yet — that is Part 2
 
 ## Step 2: Define bridge domains on SW1
 
@@ -25,16 +26,18 @@ A **bridge domain** in Junos is the equivalent of a VLAN on a traditional switch
 configure
 
 set bridge-domains VLAN10 vlan-id 10
-set bridge-domains VLAN10 description "PC1 segment"
+set bridge-domains VLAN10 description "VLAN 10 segment"
 set bridge-domains VLAN11 vlan-id 11
-set bridge-domains VLAN11 description "PC2 segment"
+set bridge-domains VLAN11 description "VLAN 11 segment"
 
 commit
 ```
 
 Repeat on **SW2** — both switches must define the same bridge domains for the trunk in Part 2 to work.
 
-## Step 3: Configure the access port on SW1 (VLAN 10 → PC1)
+## Step 3: Configure access ports on SW1
+
+VLAN 10 access port for PC1 (ge-0/0/1):
 
 ```junos
 configure
@@ -47,34 +50,72 @@ set bridge-domains VLAN10 interface ge-0/0/1.0
 commit
 ```
 
-## Step 4: Configure the access port on SW2 (VLAN 11 → PC2)
+VLAN 11 access port for PC2 (ge-0/0/2):
+
+```junos
+configure
+
+set interfaces ge-0/0/2 encapsulation ethernet-bridge
+set interfaces ge-0/0/2 unit 0 family bridge interface-mode access
+set interfaces ge-0/0/2 unit 0 family bridge vlan-id 11
+set bridge-domains VLAN11 interface ge-0/0/2.0
+
+commit
+```
+
+## Step 4: Configure access ports on SW2
+
+VLAN 10 access port for PC3 (ge-0/0/1):
 
 ```junos
 configure
 
 set interfaces ge-0/0/1 encapsulation ethernet-bridge
 set interfaces ge-0/0/1 unit 0 family bridge interface-mode access
-set interfaces ge-0/0/1 unit 0 family bridge vlan-id 11
-set bridge-domains VLAN11 interface ge-0/0/1.0
+set interfaces ge-0/0/1 unit 0 family bridge vlan-id 10
+set bridge-domains VLAN10 interface ge-0/0/1.0
+
+commit
+```
+
+VLAN 11 access port for PC4 (ge-0/0/2):
+
+```junos
+configure
+
+set interfaces ge-0/0/2 encapsulation ethernet-bridge
+set interfaces ge-0/0/2 unit 0 family bridge interface-mode access
+set interfaces ge-0/0/2 unit 0 family bridge vlan-id 11
+set bridge-domains VLAN11 interface ge-0/0/2.0
 
 commit
 ```
 
 ## Step 5: Assign IPs to VPCS nodes
 
-Open the console for PC1 (right-click > Console in GNS3):
+Open each VPCS console (right-click > Console in GNS3) and apply:
 
+**PC1** (SW1, VLAN 10):
 ```text
 ip 192.168.10.1 192.168.10.254 24
 ```
 
-Open the console for PC2:
-
+**PC2** (SW1, VLAN 11):
 ```text
 ip 192.168.11.1 192.168.11.254 24
 ```
 
-The second argument (`192.168.10.254`) is the default gateway — it won't resolve until Part 3 when the IRB interface is added.
+**PC3** (SW2, VLAN 10):
+```text
+ip 192.168.10.2 192.168.10.254 24
+```
+
+**PC4** (SW2, VLAN 11):
+```text
+ip 192.168.11.2 192.168.11.254 24
+```
+
+The gateway addresses (`.254`) will not resolve until Part 3 when the IRB interface is added.
 
 ## Verify
 
@@ -87,21 +128,24 @@ Expected on SW1:
 ```text
 Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
 default-switch          VLAN10                   1          -          300
-default-switch          VLAN11                   0          -          300
+default-switch          VLAN11                   1          -          300
 ```
 
-VLAN10 shows 1 interface (ge-0/0/1.0). VLAN11 shows 0 because the PC2 access port is on SW2.
+Each bridge domain shows 1 interface (its local access port). The trunk has not been added yet.
 
 ```junos
 show interfaces ge-0/0/1 terse
+show interfaces ge-0/0/2 terse
 ```
 
-Expected:
+Expected on SW1:
 
 ```text
 Interface               Admin Link Proto    Local                 Remote
 ge-0/0/1                up    up
 ge-0/0/1.0              up    up   Bridge
+ge-0/0/2                up    up
+ge-0/0/2.0              up    up   Bridge
 ```
 
-At this stage, PC1 and PC2 cannot communicate — the trunk between SW1 and SW2 is not yet configured.
+At this stage, no cross-switch communication is possible — the trunk is not yet configured.

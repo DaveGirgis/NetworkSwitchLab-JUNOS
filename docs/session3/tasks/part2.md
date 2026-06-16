@@ -30,7 +30,7 @@ commit
 
 ## Step 3: Configure the trunk on SW2
 
-Apply the same trunk config on SW2 (identical — both ends must match):
+Apply the same trunk config on SW2 (both ends must match):
 
 ```junos
 configure
@@ -50,9 +50,7 @@ set bridge-domains VLAN11 interface ge-0/0/0.11
 commit
 ```
 
-## Step 4: Test VLAN 10 reachability
-
-From PC1, ping SW1's VLAN 10 IRB (not yet configured) — skip this for now. Instead, verify the trunk is up:
+## Step 4: Verify the trunk is up
 
 ```junos
 show interfaces ge-0/0/0 terse
@@ -71,26 +69,50 @@ ge-0/0/0.11             up    up   Bridge
 show bridge domain
 ```
 
-Expected on SW1:
+Expected on SW1 (and mirrored on SW2):
 
 ```text
 Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
 default-switch          VLAN10                   2          -          300
-default-switch          VLAN11                   1          -          300
+default-switch          VLAN11                   2          -          300
 ```
 
-VLAN10 now shows 2 interfaces: ge-0/0/1.0 (access to PC1) and ge-0/0/0.10 (trunk to SW2).
+Each bridge domain now shows 2 interfaces: the local access port and the trunk subunit.
 
-## Step 5: Verify VLAN isolation
+## Step 5: Test same-VLAN communication across the trunk
 
-VLAN 10 and VLAN 11 are separate bridge domains — traffic does not cross between them. PC1 (VLAN 10) and PC2 (VLAN 11) are isolated at Layer 2 even though they share the same trunk link.
+From PC1 (192.168.10.1), ping PC3 (192.168.10.2) — both are in VLAN 10:
+
+```text
+ping 192.168.10.2
+```
+
+Expected: replies from PC3. The trunk is carrying VLAN 10 between the switches.
+
+From PC2 (192.168.11.1), ping PC4 (192.168.11.2) — both are in VLAN 11:
+
+```text
+ping 192.168.11.2
+```
+
+Expected: replies from PC4.
+
+## Step 6: Confirm VLAN isolation
+
+From PC1 (VLAN 10), attempt to ping PC2 (VLAN 11, 192.168.11.1):
+
+```text
+ping 192.168.11.1
+```
+
+Expected: **no reply**. PC1 and PC2 are in different bridge domains — they cannot communicate at Layer 2 even though they are connected to the same physical switch.
 
 This is the core purpose of VLANs: **traffic separation on shared infrastructure**.
 
-Inter-VLAN communication requires a Layer 3 device (a router or IRB interface). That is configured in Part 3.
+Cross-VLAN communication requires a Layer 3 device. That is added in Part 3.
 
 !!! note "MAC learning"
-    Once PC1 and PC2 generate traffic (e.g., pings after Part 3 adds IRB), you can watch MAC addresses populate:
+    After the pings succeed, you can view learned MAC addresses per VLAN:
     ```junos
     show bridge mac-table
     ```

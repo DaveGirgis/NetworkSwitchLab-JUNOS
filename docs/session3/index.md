@@ -14,18 +14,20 @@ By the end of this session you will be able to:
 ## Prerequisites
 
 - Sessions 1 and 2 complete — you can boot vMX nodes and configure interfaces
-- GNS3 project with two vMX nodes and two VPCS nodes available
+- GNS3 project with two vMX nodes and four VPCS nodes available
 
 ## Topology Overview
 
 ```mermaid
 graph LR
-  PC1([PC1<br/>192.168.10.1/24<br/>VLAN 10]) --- SW1([SW1<br/>vMX])
+  PC1([PC1<br/>192.168.10.1<br/>VLAN 10]) --- SW1([SW1<br/>vMX])
+  PC2([PC2<br/>192.168.11.1<br/>VLAN 11]) --- SW1
   SW1 ---|trunk VLAN 10+11| SW2([SW2<br/>vMX])
-  SW2 --- PC2([PC2<br/>192.168.11.1/24<br/>VLAN 11])
+  SW2 --- PC3([PC3<br/>192.168.10.2<br/>VLAN 10])
+  SW2 --- PC4([PC4<br/>192.168.11.2<br/>VLAN 11])
 ```
 
-Two vMX routers act as Layer 2 switches using Junos **bridge domains**. A trunk link carries both VLANs between them. PC1 (VLAN 10) and PC2 (VLAN 11) are isolated by default — VLAN 10 traffic cannot cross into VLAN 11 without a router.
+Two vMX routers act as Layer 2 switches using Junos **bridge domains**. Each switch has one PC in VLAN 10 and one in VLAN 11. The trunk carries both VLANs between the switches — PC1 and PC3 share VLAN 10 and can communicate across the trunk; PC2 and PC4 share VLAN 11. VLAN 10 and VLAN 11 are isolated from each other at Layer 2.
 
 ## Session Parts
 

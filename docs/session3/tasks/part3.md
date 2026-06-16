@@ -1,6 +1,6 @@
 # Part 3 — IRB for Inter-VLAN Routing
 
-An **IRB (Integrated Routing and Bridging)** interface is a logical Layer 3 interface attached to a bridge domain. It gives the vMX a routable IP address within a VLAN — equivalent to a Cisco SVI (`interface Vlan10`). With IRB interfaces on both VLANs, SW1 can route between them.
+An **IRB (Integrated Routing and Bridging)** interface is a logical Layer 3 interface attached to a bridge domain. It gives the vMX a routable IP address within a VLAN — equivalent to a Cisco SVI (`interface Vlan10`). With IRB interfaces on both VLANs, SW1 acts as the default gateway and routes traffic between VLAN 10 and VLAN 11.
 
 ## Step 1: Add IRB interfaces to SW1
 
@@ -39,50 +39,56 @@ Expected: both bridge domains now show `IRB intfs: 1`:
 ```text
 Routing instance        Bridge domain            Intfs  IRB intfs  MAC ageing
 default-switch          VLAN10                   2      1          300
-default-switch          VLAN11                   1      1          300
+default-switch          VLAN11                   2      1          300
 ```
 
-## Step 3: Test from PC1 → gateway
+## Step 3: Test gateway reachability from each PC
 
-From the VPCS console on PC1:
-
+From **PC1**:
 ```text
 ping 192.168.10.254
 ```
 
-Expected: replies from SW1's IRB.10.
+From **PC2**:
+```text
+ping 192.168.11.254
+```
+
+From **PC3**:
+```text
+ping 192.168.10.254
+```
+
+From **PC4**:
+```text
+ping 192.168.11.254
+```
+
+All four should receive replies from SW1's IRB interfaces.
 
 ## Step 4: Test inter-VLAN routing
 
-From PC1, ping PC2:
+From PC1 (VLAN 10), ping PC2 (VLAN 11):
 
 ```text
 ping 192.168.11.1
 ```
 
-Expected: replies from PC2. SW1 routes the packet from VLAN 10 to VLAN 11 through its IRB interfaces.
-
-If the ping fails, check that PC2 has its gateway set correctly:
+From PC3 (VLAN 10), ping PC4 (VLAN 11):
 
 ```text
-show ip
+ping 192.168.11.2
 ```
 
-PC2 should show gateway `192.168.11.254`. If not, re-apply:
+Expected: replies in both cases. SW1 routes the packets between bridge domains through its IRB interfaces.
 
-```text
-ip 192.168.11.1 192.168.11.254 24
-```
-
-## Step 5: Check the routing table
-
-On SW1:
+## Step 5: Check the routing table on SW1
 
 ```junos
 show route
 ```
 
-Expected: two directly connected routes for the IRB subnets:
+Expected:
 
 ```text
 inet.0: 2 destinations, 2 routes
@@ -96,10 +102,17 @@ inet.0: 2 destinations, 2 routes
 PC1 (192.168.10.1) → SW1 ge-0/0/1.0 (bridge, VLAN10)
                    → SW1 irb.10 (L3 gateway 192.168.10.254)
                    → SW1 irb.11 (L3 gateway 192.168.11.254)
-                   → SW1 ge-0/0/0.11 (bridge, VLAN11, trunk)
-                   → SW2 ge-0/0/0.11 (bridge, VLAN11, trunk)
-                   → SW2 ge-0/0/1.0 (bridge, VLAN11)
+                   → SW1 ge-0/0/2.0 (bridge, VLAN11)
                    → PC2 (192.168.11.1)
+
+PC3 (192.168.10.2) → SW2 ge-0/0/1.0 (bridge, VLAN10)
+                   → SW2 ge-0/0/0.10 (trunk, VLAN10)
+                   → SW1 ge-0/0/0.10 (trunk, VLAN10)
+                   → SW1 irb.10 → irb.11
+                   → SW1 ge-0/0/0.11 (trunk, VLAN11)
+                   → SW2 ge-0/0/0.11 (trunk, VLAN11)
+                   → SW2 ge-0/0/2.0 (bridge, VLAN11)
+                   → PC4 (192.168.11.2)
 ```
 
-The packet crosses from the VLAN 10 bridge domain to the VLAN 11 bridge domain via the IRB interfaces on SW1 — this is inter-VLAN routing.
+All inter-VLAN routing passes through SW1's IRB interfaces, regardless of which switch the source and destination PCs are connected to.

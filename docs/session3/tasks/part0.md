@@ -12,6 +12,9 @@ On SW1:
 ```junos
 configure
 set system host-name SW1
+set system root-authentication plain-text-password
+New password: lab123
+Retype new password: lab123
 commit
 ```
 
@@ -20,6 +23,9 @@ On SW2:
 ```junos
 configure
 set system host-name SW2
+set system root-authentication plain-text-password
+New password: lab123
+Retype new password: lab123
 commit
 ```
 
