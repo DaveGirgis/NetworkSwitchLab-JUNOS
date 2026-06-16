@@ -4557,13 +4557,13 @@
 <h2 id="platform">Platform</h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> GNS3 and GNS3 VM are the same version and communicate successfully</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> vJunos-router template is created with 4 adapters and 4096 MB RAM</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> vMX-14.1 template is created with 6 adapters and 2048 MB RAM</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Both R1 and R2 boot successfully (Junos <code>root@</code> prompt appears)</li>
 </ul>
 <h2 id="cli-fundamentals">CLI Fundamentals</h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> You can switch between operational mode (<code>&gt;</code>) and configuration mode (<code>#</code>)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>show version</code> shows Junos 23.2R1 (or later) and model <code>vjunos-router</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>show version</code> shows Junos 14.1R4.8 and model <code>vmx</code></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> R1 hostname is set to <code>R1</code>, R2 hostname is set to <code>R2</code></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Root password is configured on both routers</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> You have used <code>show | compare</code> to review a change before committing</li>
@@ -4572,13 +4572,13 @@
 <p>Run these on each router and confirm the output matches expectations:</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show version
 </code></pre></div>
-Expected: <code>Model: vjunos-router</code>, Junos version 23.2R1+</p>
+Expected: <code>Model: vmx</code>, Junos version 14.1R4.8</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show system information
 </code></pre></div>
 Expected: hostname <code>R1</code> (or <code>R2</code>), uptime since boot</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show interfaces terse
 </code></pre></div>
-Expected: <code>ge-0/0/0</code> through <code>ge-0/0/3</code> listed, all <code>down</code> (no IP yet)</p>
+Expected: <code>em0</code>, <code>em1</code>, <code>lo0</code> listed. <code>ge-0/0/x</code> interfaces only appear after an IP address is configured — query them directly with <code>show interfaces ge-0/0/0 terse</code></p>
 
 
 

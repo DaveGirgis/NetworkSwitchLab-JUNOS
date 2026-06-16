@@ -4474,7 +4474,7 @@
 <h2 id="objectives">Objectives</h2>
 <p>By the end of this session you will be able to:</p>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Download and import the vJunos-router QEMU image into GNS3</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Download and import the vMX 14.1 QEMU image into GNS3</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Create a two-router GNS3 project and boot both nodes successfully</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Navigate Junos operational mode and configuration mode</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Apply, verify, and roll back a basic configuration</li>
@@ -4484,12 +4484,12 @@
 <ul>
 <li>GNS3 2.2.44+ and GNS3 VM installed</li>
 <li>Virtualization enabled in BIOS (VT-x / AMD-V)</li>
-<li>~10 GB free disk space for the vJunos image</li>
+<li>~3 GB free disk space for the vMX image</li>
 <li>Juniper account (free) to download the image</li>
 </ul>
 <h2 id="topology-overview">Topology Overview</h2>
 <pre class="mermaid"><code>graph LR
-  R1([R1&lt;br/&gt;vJunos-router]) ---|ge-0/0/0| R2([R2&lt;br/&gt;vJunos-router])</code></pre>
+  R1([R1&lt;br/&gt;vMX-14.1]) ---|ge-0/0/0| R2([R2&lt;br/&gt;vMX-14.1])</code></pre>
 <p>Two routers connected back-to-back. No routing protocol yet — the goal is platform familiarity.</p>
 <h2 id="session-parts">Session Parts</h2>
 <table>
@@ -4502,7 +4502,7 @@
 <tbody>
 <tr>
 <td><a href="tasks/part0/">Part 0</a></td>
-<td>Download &amp; import the vJunos-router image</td>
+<td>Download &amp; import the vMX-14.1 image</td>
 </tr>
 <tr>
 <td><a href="tasks/part1/">Part 1</a></td>
