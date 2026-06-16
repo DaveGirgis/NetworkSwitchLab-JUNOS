@@ -9,6 +9,8 @@ configure
 
 set protocols rstp bridge-priority 4096
 set protocols rstp interface ge-0/0/0
+set protocols rstp interface ge-0/0/1 edge
+set protocols rstp interface ge-0/0/2 edge
 
 commit
 ```
@@ -20,6 +22,8 @@ configure
 
 set protocols rstp bridge-priority 8k
 set protocols rstp interface ge-0/0/0
+set protocols rstp interface ge-0/0/1 edge
+set protocols rstp interface ge-0/0/2 edge
 
 commit
 ```

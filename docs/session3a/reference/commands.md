@@ -15,8 +15,14 @@
 ```junos
 [edit protocols rstp]
   bridge-priority 4096;   /* SW1 root — lower value = preferred */
-  interface ge-0/0/0;     /* enable RSTP on Trunk 1 */
-  interface ge-0/0/3;     /* enable RSTP on Trunk 2 */
+  interface ge-0/0/0;     /* Trunk 1 — participates in STP topology */
+  interface ge-0/0/3;     /* Trunk 2 — participates in STP topology */
+  interface ge-0/0/1 {
+    edge;                 /* access port — skip state machine, forward immediately */
+  }
+  interface ge-0/0/2 {
+    edge;
+  }
 ```
 ```junos
 [edit protocols rstp]
