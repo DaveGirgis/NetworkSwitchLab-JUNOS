@@ -2,6 +2,17 @@
 
 Apply this base configuration to both routers. It sets the hostname and root password if you are starting from a fresh vMX boot.
 
+## CLI Setup
+
+Before pasting any configuration, run these two commands at the operational prompt (`>`):
+
+```junos
+set cli screen-length 0
+set cli complete-on-space off
+```
+
+Re-run these at the start of every console session — they do not persist across reconnects.
+
 ## R1 — Base Config
 
 ```junos

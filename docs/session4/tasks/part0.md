@@ -21,7 +21,18 @@ Click **Start all nodes**. Wait 3–5 minutes for all four nodes to fully boot b
 !!! warning "RAM requirement"
     Four vMX-14.1 nodes require **8 GB** of RAM in the GNS3 VM (2048 MB each). If the GNS3 VM has less than 8 GB, start the nodes two at a time and configure them in pairs.
 
-## Step 4: Apply Base Config
+## Step 4: CLI Setup
+
+Before pasting any configuration, run these two commands at the operational prompt (`>`) on each router:
+
+```junos
+set cli screen-length 0
+set cli complete-on-space off
+```
+
+Re-run these at the start of every console session — they do not persist across reconnects.
+
+## Step 5: Apply Base Config
 
 Open a console on each node and apply the base configuration.
 

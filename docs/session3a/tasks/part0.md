@@ -2,6 +2,17 @@
 
 RSTP is enabled before adding the second trunk so the loop is never active without protection. This is the correct production approach — always enable spanning tree before introducing a redundant Layer 2 path.
 
+## CLI Setup
+
+Before pasting any configuration, run these two commands at the operational prompt (`>`) on each switch:
+
+```junos
+set cli screen-length 0
+set cli complete-on-space off
+```
+
+Re-run these at the start of every console session — they do not persist across reconnects.
+
 ## Step 1: Enable RSTP on SW1 (root bridge)
 
 ```junos

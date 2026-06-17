@@ -5,6 +5,17 @@ vMX supports bridge domains only in `enhanced-ethernet` network-services mode. T
 !!! danger "Reboot required"
     Changing `network-services` is a chassis-level change. The router must be rebooted immediately after committing — there is no way to apply it live. This is expected behaviour.
 
+## CLI Setup
+
+Before pasting any configuration, run these two commands at the operational prompt (`>`) on each switch:
+
+```junos
+set cli screen-length 0
+set cli complete-on-space off
+```
+
+Re-run these at the start of every console session — they do not persist across reconnects.
+
 ## Step 1: Set hostnames
 
 On SW1:

@@ -100,3 +100,17 @@ request system reboot
 ```
 
 Confirm with `yes`. After the second boot the warning will not appear again.
+
+## Step 6: CLI Setup
+
+After the second boot, log back in (`root` / `cli`) and run these two preferences before entering configuration mode:
+
+```junos
+set cli screen-length 0
+set cli complete-on-space off
+```
+
+`screen-length 0` disables the `--More--` pager so `show` output never pauses mid-screen. `complete-on-space off` prevents the spacebar from triggering keyword completion when pasting multi-word commands.
+
+!!! note "These do not persist across reconnects"
+    Re-run both commands at the start of every console session. They apply to the current session only.
