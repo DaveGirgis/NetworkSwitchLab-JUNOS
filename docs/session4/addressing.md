@@ -1,4 +1,4 @@
-# Session 3 — Addressing Table
+# Session 4 — Addressing Table
 
 ## Loopback Addresses
 

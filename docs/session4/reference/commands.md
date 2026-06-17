@@ -1,4 +1,4 @@
-# Session 3 — Command Reference
+# Session 4 — Command Reference
 
 ## OSPF Configuration
 
@@ -39,8 +39,8 @@
 | 5 | AS External | ASBR | Entire OSPF domain |
 | 7 | NSSA External | ASBR in NSSA | Within NSSA |
 
-## Session 3 Wrap-Up
+## Session 4 Wrap-Up
 
 OSPF is now the IGP for your provider backbone. Every router knows all four loopbacks and all transit subnets. This dynamic knowledge is what makes OSPF critical: when a link fails, OSPF reconverges in seconds and installs an alternate path automatically.
 
-In Session 4 you will replace OSPF with **IS-IS** — the IGP used by most large ISPs. The configuration is different but the outcome is the same: full loopback reachability across the backbone.
+In Session 5 you will replace OSPF with **IS-IS** — the IGP used by most large ISPs. The configuration is different but the outcome is the same: full loopback reachability across the backbone.

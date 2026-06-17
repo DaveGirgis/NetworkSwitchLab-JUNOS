@@ -1,8 +1,8 @@
-# Session 3 — Verification Checklist
+# Session 4 — Verification Checklist
 
 ## Topology
 
-- [ ] Four vJunos-router nodes (PE1, P1, P2, PE2) are running in GNS3
+- [ ] Four vMX-14.1 nodes (PE1, P1, P2, PE2) are running in GNS3
 - [ ] All three links show green (up) on the GNS3 canvas
 
 ## Interfaces

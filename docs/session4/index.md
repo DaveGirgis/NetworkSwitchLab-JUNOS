@@ -1,4 +1,4 @@
-# Session 3 — OSPF Single-Area
+# Session 4 — OSPF Single-Area
 
 ## Objectives
 
@@ -9,11 +9,11 @@ By the end of this session you will be able to:
 - [ ] Verify OSPF neighbor adjacency on all links
 - [ ] Explain LSA types 1 and 2 and read the OSPF LSDB
 - [ ] Configure passive interfaces to suppress OSPF hellos on loopbacks
-- [ ] Summarize routes at the OSPF ABR (preview for Session 4)
+- [ ] Summarize routes at the OSPF ABR (preview for Session 5)
 
 ## Prerequisites
 
-- Sessions 1 and 2 complete — comfortable with Junos CLI and interface configuration
+- Sessions 1–3 complete — comfortable with Junos CLI, interface configuration, and Layer 2 switching
 - Understand IP addressing and subnetting (/30 point-to-point links)
 
 ## Topology Overview
@@ -25,7 +25,7 @@ graph LR
   P2 ---|"10.1.34.0/30"| PE2([PE2<br/>10.0.0.4])
 ```
 
-This is the full provider backbone used in Sessions 3–8. It has four routers: two **Provider Edge (PE)** routers that connect to customers, and two **Provider (P)** routers that form the transit core.
+This is the full provider backbone used in Sessions 4–9. It has four routers: two **Provider Edge (PE)** routers that connect to customers, and two **Provider (P)** routers that form the transit core.
 
 ## Session Parts
 

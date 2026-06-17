@@ -1,4 +1,4 @@
-# Session 3 — Topology
+# Session 4 — Topology
 
 ## Diagram
 
@@ -28,17 +28,17 @@ graph LR
 
 ## GNS3 Project Setup
 
-Create a new GNS3 project `JNCIS-SP-Core` with four vJunos-router nodes. Draw the links as follows:
+Create a new GNS3 project `JNCIS-SP-Core` with four vMX-14.1 nodes. Draw the links as follows:
 
 | Link | Node A Port | Node B Port |
 |------|-------------|-------------|
-| PE1 — P1 | Adapter 0 (ge-0/0/0) | Adapter 0 (ge-0/0/0) |
-| P1 — P2 | Adapter 1 (ge-0/0/1) | Adapter 0 (ge-0/0/0) |
-| P2 — PE2 | Adapter 1 (ge-0/0/1) | Adapter 0 (ge-0/0/0) |
+| PE1 — P1 | Adapter 2 (ge-0/0/0) | Adapter 2 (ge-0/0/0) |
+| P1 — P2 | Adapter 3 (ge-0/0/1) | Adapter 2 (ge-0/0/0) |
+| P2 — PE2 | Adapter 3 (ge-0/0/1) | Adapter 2 (ge-0/0/0) |
 
 !!! warning "GNS3 adapter numbering"
-    In GNS3, Adapter 0 = `ge-0/0/0`, Adapter 1 = `ge-0/0/1`, Adapter 2 = `ge-0/0/2`, Adapter 3 = `ge-0/0/3`. Always verify the mapping by running `show interfaces terse` after connecting links — the link light on the GNS3 canvas should turn green, and the interface should show `up up`.
+    On vMX-14.1, Adapter 0 = em0 (management), Adapter 1 = em1 (internal), Adapter 2 = `ge-0/0/0`, Adapter 3 = `ge-0/0/1`, Adapter 4 = `ge-0/0/2`, Adapter 5 = `ge-0/0/3`. Always connect topology links on Adapter 2 or higher. Always verify the mapping by running `show interfaces terse` after connecting links — the link light on the GNS3 canvas should turn green, and the interface should show `up up`.
 
 ## Notes
 
-This four-router topology is the foundation for all remaining sessions (3–8). Save this GNS3 project as `JNCIS-SP-Core` and reuse it — you will add OSPF in Session 3, then BGP on top in Session 5, then MPLS in Session 6, and VPNs in Session 7. Each session builds on the previous committed state.
+This four-router topology is the foundation for all remaining sessions (4–9). Save this GNS3 project as `JNCIS-SP-Core` and reuse it — you will add OSPF in Session 4, then BGP on top in Session 5, then MPLS in Session 6, and VPNs in Session 7. Each session builds on the previous committed state.

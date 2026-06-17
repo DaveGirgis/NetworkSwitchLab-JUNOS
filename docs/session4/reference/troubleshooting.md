@@ -1,4 +1,4 @@
-# Session 3 — Troubleshooting
+# Session 4 — Troubleshooting
 
 ## OSPF Neighbor Stuck in `Init` State
 
@@ -18,7 +18,7 @@
 
 **Symptom:** State cycles between `ExStart` and `Exchange` and never reaches `Full`.
 
-**Cause:** MTU mismatch between neighbors. vJunos-router defaults to 1500 MTU, but if you have mismatched settings, OSPF DD packet exchange fails.
+**Cause:** MTU mismatch between neighbors. vMX-14.1 defaults to 1500 MTU, but if you have mismatched settings, OSPF DD packet exchange fails.
 
 **Fix:** Verify MTU on both sides:
 
@@ -52,7 +52,7 @@ set protocols ospf area 0.0.0.0 interface ge-0/0/0.0 ignore-mtu-mismatch
 **Cause / Fix:**
 1. Run `show ospf statistics` — look for `Dead timer` expiry events
 2. Timer mismatch: both sides must have identical Hello and Dead intervals
-3. CPU overload on vJunos-router: if the GNS3 VM is overloaded, Hello packets may be delayed. Reduce to two nodes at a time if needed.
+3. CPU overload on vMX-14.1: if the GNS3 VM is overloaded, Hello packets may be delayed. Reduce to two nodes at a time if needed.
 
 ---
 
