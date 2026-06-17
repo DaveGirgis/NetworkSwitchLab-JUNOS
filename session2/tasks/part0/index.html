@@ -1013,6 +1013,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#cli-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#r1-base-config" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5486,36 +5497,42 @@
 
 <h1 id="part-0-base-configuration">Part 0 — Base Configuration</h1>
 <p>Apply this base configuration to both routers. It sets the hostname and root password if you are starting from a fresh vMX boot.</p>
-<h2 id="r1-base-config">R1 — Base Config</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set system host-name R1
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set system root-authentication plain-text-password
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>New password: lab123
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Retype new password: lab123
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>commit
+<h2 id="cli-setup">CLI Setup</h2>
+<p>Before pasting any configuration, run these two commands at the operational prompt (<code>&gt;</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>set cli screen-length 0
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set cli complete-on-space off
 </code></pre></div>
-<h2 id="r2-base-config">R2 — Base Config</h2>
+<p>Re-run these at the start of every console session — they do not persist across reconnects.</p>
+<h2 id="r1-base-config">R1 — Base Config</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set system host-name R2
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set system host-name R1
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set system root-authentication plain-text-password
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>New password: lab123
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Retype new password: lab123
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>commit
 </code></pre></div>
+<h2 id="r2-base-config">R2 — Base Config</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set system host-name R2
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set system root-authentication plain-text-password
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>New password: lab123
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>Retype new password: lab123
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>commit
+</code></pre></div>
 <h2 id="verify">Verify</h2>
 <p>On each router, confirm the hostname appears in the prompt:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>R1&gt;
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>R2&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>R1&gt;
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>R2&gt;
 </code></pre></div>
 <p>If you completed Session 1 and saved your project, the hostnames are already set. Verify with:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show version | match Hostname
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show version | match Hostname
 </code></pre></div>
 <p>Expected:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Hostname: R1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Hostname: R1
 </code></pre></div>
 
 

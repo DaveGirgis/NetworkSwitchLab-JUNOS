@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-3-ospf-single-area" class="md-skip">
+        <a href="#session-4-ospf-single-area" class="md-skip">
           Skip to content
         </a>
       
@@ -5402,7 +5402,7 @@
   
 
 
-<h1 id="session-3-ospf-single-area">Session 3 — OSPF Single-Area</h1>
+<h1 id="session-4-ospf-single-area">Session 4 — OSPF Single-Area</h1>
 <h2 id="objectives">Objectives</h2>
 <p>By the end of this session you will be able to:</p>
 <ul class="task-list">
@@ -5411,11 +5411,11 @@
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Verify OSPF neighbor adjacency on all links</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain LSA types 1 and 2 and read the OSPF LSDB</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Configure passive interfaces to suppress OSPF hellos on loopbacks</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Summarize routes at the OSPF ABR (preview for Session 4)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Summarize routes at the OSPF ABR (preview for Session 5)</li>
 </ul>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
-<li>Sessions 1 and 2 complete — comfortable with Junos CLI and interface configuration</li>
+<li>Sessions 1–3 complete — comfortable with Junos CLI, interface configuration, and Layer 2 switching</li>
 <li>Understand IP addressing and subnetting (/30 point-to-point links)</li>
 </ul>
 <h2 id="topology-overview">Topology Overview</h2>
@@ -5423,7 +5423,7 @@
   PE1([PE1&lt;br/&gt;10.0.0.1]) ---|"10.1.12.0/30"| P1([P1&lt;br/&gt;10.0.0.2])
   P1 ---|"10.1.23.0/30"| P2([P2&lt;br/&gt;10.0.0.3])
   P2 ---|"10.1.34.0/30"| PE2([PE2&lt;br/&gt;10.0.0.4])</code></pre>
-<p>This is the full provider backbone used in Sessions 3–8. It has four routers: two <strong>Provider Edge (PE)</strong> routers that connect to customers, and two <strong>Provider (P)</strong> routers that form the transit core.</p>
+<p>This is the full provider backbone used in Sessions 4–9. It has four routers: two <strong>Provider Edge (PE)</strong> routers that connect to customers, and two <strong>Provider (P)</strong> routers that form the transit core.</p>
 <h2 id="session-parts">Session Parts</h2>
 <table>
 <thead>

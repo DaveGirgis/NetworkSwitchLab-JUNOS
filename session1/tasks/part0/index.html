@@ -601,6 +601,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#step-6-cli-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: CLI Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5657,6 +5668,16 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>request system reboot
 </code></pre></div>
 <p>Confirm with <code>yes</code>. After the second boot the warning will not appear again.</p>
+<h2 id="step-6-cli-setup">Step 6: CLI Setup</h2>
+<p>After the second boot, log back in (<code>root</code> / <code>cli</code>) and run these two preferences before entering configuration mode:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>set cli screen-length 0
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>set cli complete-on-space off
+</code></pre></div>
+<p><code>screen-length 0</code> disables the <code>--More--</code> pager so <code>show</code> output never pauses mid-screen. <code>complete-on-space off</code> prevents the spacebar from triggering keyword completion when pasting multi-word commands.</p>
+<div class="admonition note">
+<p class="admonition-title">These do not persist across reconnects</p>
+<p>Re-run both commands at the start of every console session. They apply to the current session only.</p>
+</div>
 
 
 

@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-3-troubleshooting" class="md-skip">
+        <a href="#session-4-troubleshooting" class="md-skip">
           Skip to content
         </a>
       
@@ -5506,7 +5506,7 @@
   
 
 
-<h1 id="session-3-troubleshooting">Session 3 — Troubleshooting</h1>
+<h1 id="session-4-troubleshooting">Session 4 — Troubleshooting</h1>
 <h2 id="ospf-neighbor-stuck-in-init-state">OSPF Neighbor Stuck in <code>Init</code> State</h2>
 <p><strong>Symptom:</strong> <code>show ospf neighbor</code> shows state <code>Init</code> indefinitely.</p>
 <p><strong>Cause:</strong> The remote router is sending Hellos but is not including this router's IP in its Hello packet neighbor list — usually because it has not yet received a Hello from this side.</p>
@@ -5518,7 +5518,7 @@
 <hr />
 <h2 id="ospf-neighbor-stuck-in-exstart-exchange">OSPF Neighbor Stuck in <code>ExStart</code> / <code>Exchange</code></h2>
 <p><strong>Symptom:</strong> State cycles between <code>ExStart</code> and <code>Exchange</code> and never reaches <code>Full</code>.</p>
-<p><strong>Cause:</strong> MTU mismatch between neighbors. vJunos-router defaults to 1500 MTU, but if you have mismatched settings, OSPF DD packet exchange fails.</p>
+<p><strong>Cause:</strong> MTU mismatch between neighbors. vMX-14.1 defaults to 1500 MTU, but if you have mismatched settings, OSPF DD packet exchange fails.</p>
 <p><strong>Fix:</strong> Verify MTU on both sides:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show interfaces ge-0/0/0 detail | match MTU
 </code></pre></div>
@@ -5538,7 +5538,7 @@
 <p><strong>Cause / Fix:</strong>
 1. Run <code>show ospf statistics</code> — look for <code>Dead timer</code> expiry events
 2. Timer mismatch: both sides must have identical Hello and Dead intervals
-3. CPU overload on vJunos-router: if the GNS3 VM is overloaded, Hello packets may be delayed. Reduce to two nodes at a time if needed.</p>
+3. CPU overload on vMX-14.1: if the GNS3 VM is overloaded, Hello packets may be delayed. Reduce to two nodes at a time if needed.</p>
 <hr />
 <h2 id="show-ospf-neighbor-returns-empty"><code>show ospf neighbor</code> Returns Empty</h2>
 <p><strong>Symptom:</strong> No neighbors listed at all.</p>
