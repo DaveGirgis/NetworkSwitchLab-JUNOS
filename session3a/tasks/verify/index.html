@@ -5523,7 +5523,7 @@
 Expected on SW1: <code>This bridge is the root</code>, priority 4096</p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show spanning-tree interface
 </code></pre></div>
-Expected on SW2: one trunk port in <code>Discarding / Alternate</code>, access ports in <code>Forwarding / Edge</code></p>
+Expected on SW2: ge-0/0/0 shows <code>FWD ROOT</code>, ge-0/0/3 shows <code>BLK ALT</code></p>
 <p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bridge domain
 </code></pre></div>
 Expected: VLAN10 and VLAN11 each showing three interfaces (two trunk subunits + one access port)</p>

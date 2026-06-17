@@ -5528,7 +5528,7 @@
 <p>On SW2, note which trunk port is in Forwarding state (Root role):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show spanning-tree interface
 </code></pre></div>
-<p>Note the interface name — either <code>ge-0/0/0.10</code> or <code>ge-0/0/3.10</code> will be the Root port.</p>
+<p>Note the interface name — either <code>ge-0/0/0</code> or <code>ge-0/0/3</code> will show <code>FWD ROOT</code>.</p>
 <h2 id="step-3-disconnect-the-active-trunk-in-gns3">Step 3: Disconnect the active trunk in GNS3</h2>
 <p>In GNS3, right-click the <strong>active trunk link</strong> (the one carrying traffic) and select <strong>Delete link</strong> or simply <strong>Suspend link</strong> if available.</p>
 <p>Watch the ping output from PC1. With RSTP:</p>
@@ -5540,7 +5540,7 @@
 <p>On SW2:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show spanning-tree interface
 </code></pre></div>
-<p>The port that was previously Alternate/Discarding should now show Root/Forwarding. The dead trunk should show Discarding.</p>
+<p>The port that was previously <code>BLK ALT</code> should now show <code>FWD ROOT</code>. The dead trunk should show <code>BLK</code>.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show bridge domain
 </code></pre></div>
 <p>The bridge domain still lists both trunk interfaces — but traffic now flows through the previously-blocked one.</p>
