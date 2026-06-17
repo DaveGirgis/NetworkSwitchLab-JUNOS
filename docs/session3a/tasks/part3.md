@@ -20,7 +20,7 @@ On SW2, note which trunk port is in Forwarding state (Root role):
 show spanning-tree interface
 ```
 
-Note the interface name — either `ge-0/0/0.10` or `ge-0/0/3.10` will be the Root port.
+Note the interface name — either `ge-0/0/0` or `ge-0/0/3` will show `FWD ROOT`.
 
 ## Step 3: Disconnect the active trunk in GNS3
 
@@ -39,7 +39,7 @@ On SW2:
 show spanning-tree interface
 ```
 
-The port that was previously Alternate/Discarding should now show Root/Forwarding. The dead trunk should show Discarding.
+The port that was previously `BLK ALT` should now show `FWD ROOT`. The dead trunk should show `BLK`.
 
 ```junos
 show bridge domain

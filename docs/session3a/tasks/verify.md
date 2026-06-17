@@ -32,7 +32,7 @@ Expected on SW1: `This bridge is the root`, priority 4096
 ```junos
 show spanning-tree interface
 ```
-Expected on SW2: one trunk port in `Discarding / Alternate`, access ports in `Forwarding / Edge`
+Expected on SW2: ge-0/0/0 shows `FWD ROOT`, ge-0/0/3 shows `BLK ALT`
 
 ```junos
 show bridge domain
