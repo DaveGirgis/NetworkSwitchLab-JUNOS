@@ -5581,15 +5581,16 @@
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Interface    Port ID    Designated      Designated         Port    State  Role
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                         port ID        bridge ID          Cost
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>ge-0/0/0         128:1        128:1   4096.0005867107d0     20000  FWD    ROOT
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>ge-0/0/1         128:2        128:2   8192.SW2mac           20000  FWD    DESG
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>ge-0/0/2         128:3        128:3   8192.SW2mac           20000  FWD    DESG
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>ge-0/0/3         128:4        128:4   8192.SW2mac           20000  BLK    ALT
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>ge-0/0/1         128:2        128:2   8192.000586714cd0     20000  FWD    DESG
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>ge-0/0/2         128:3        128:3   8192.000586714cd0     20000  FWD    DESG
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>ge-0/0/3         128:4        128:4   4096.0005867107d0     20000  BLK    ALT
 </code></pre></div>
-<p><code>ge-0/0/0</code> is the <strong>Root port</strong> — SW2's best path to the root bridge.
-<code>ge-0/0/3</code> is the <strong>Alternate port</strong> — the redundant trunk is blocked.</p>
+<p><code>ge-0/0/0</code> is the <strong>Root port</strong> — SW2's best path to the root bridge (Designated bridge ID shows SW1).
+<code>ge-0/0/3</code> is the <strong>Alternate port</strong> — blocked. Note the Designated bridge ID for ge-0/0/3 is also SW1's (<code>4096...</code>), not SW2's. This is correct: SW1's ge-0/0/3 is the Designated port on that segment, so SW1's bridge ID is advertised there. SW2 loses the election on that segment and puts its port into Alternate.
+<code>ge-0/0/1</code> and <code>ge-0/0/2</code> show SW2's own bridge ID — SW2 is the sole switch on those access segments and is therefore Designated.</p>
 <div class="admonition note">
 <p class="admonition-title">Which trunk gets blocked?</p>
-<p>Both trunks have the same port cost (20000), so the tie is broken by port ID. The higher port number (ge-0/0/3) on SW2 loses and becomes the Alternate. The actual MAC addresses in your output will differ but the Root/ALT roles should match.</p>
+<p>Both trunks have the same port cost (20000), so the tie is broken by port ID. The higher port number (ge-0/0/3) on SW2 loses and becomes the Alternate. MAC addresses in your output will differ but the ROOT/ALT roles should match.</p>
 </div>
 <h2 id="step-3-confirm-traffic-is-unaffected">Step 3: Confirm traffic is unaffected</h2>
 <p>From PC1, ping PC3:</p>
