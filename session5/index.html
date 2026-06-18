@@ -5357,6 +5357,55 @@
 <li>Session 4 complete — OSPF running on PE1, P1, P2, PE2 with full loopback reachability</li>
 <li>The <code>JNCIS-SP-Core</code> GNS3 project is open and all four nodes are running</li>
 </ul>
+<h2 id="is-is-protocol-overview">IS-IS Protocol Overview</h2>
+<p>IS-IS (Intermediate System to Intermediate System) was designed by the <strong>ISO</strong> (International Organization for Standardization) as the routing protocol for <strong>OSI</strong> (Open Systems Interconnection) networks. In the OSI model, a router is called an <strong>Intermediate System (IS)</strong> and a host is called an <strong>End System (ES)</strong> — hence the name.</p>
+<p>Originally, IS-IS was built to route <strong>CLNP</strong> (Connectionless Network Protocol), the OSI equivalent of IP. In 1990, <strong>RFC 1195</strong> extended IS-IS to also carry IP routing information, creating what is commonly called <strong>Integrated IS-IS</strong>. This is the version used in all modern SP networks and on Junos.</p>
+<h3 id="how-is-is-works">How IS-IS Works</h3>
+<p>IS-IS is a <strong>link-state</strong> protocol, which means every router builds a complete map of the network and runs <strong>SPF</strong> (Shortest Path First — the Dijkstra algorithm) locally to compute the best path to each destination. The same fundamental mechanism as OSPF, but with different packet types and addressing.</p>
+<p>The protocol operates in three steps:</p>
+<ol>
+<li>
+<p><strong>Adjacency formation</strong> — routers send <strong>IIH</strong> (IS-IS Hello) PDUs on each interface to discover neighbors and negotiate hold timers. IS-IS hellos carry <strong>SNPA</strong> (Subnetwork Point of Attachment) addresses — the MAC address on Ethernet — rather than IP addresses. This is why IS-IS runs at Layer 2.</p>
+</li>
+<li>
+<p><strong>LSP flooding</strong> — once adjacent, each router generates an <strong>LSP</strong> (Link State PDU) describing its links and reachable prefixes. LSPs are flooded to all routers in the level. The collection of all LSPs forms the <strong>LSDB</strong> (Link State Database). <strong>CSNP</strong> (Complete Sequence Number PDU) and <strong>PSNP</strong> (Partial Sequence Number PDU) messages keep the LSDB synchronized.</p>
+</li>
+<li>
+<p><strong>SPF computation</strong> — each router independently runs SPF on its LSDB copy to build a shortest-path tree and install routes.</p>
+</li>
+</ol>
+<h3 id="is-is-levels">IS-IS Levels</h3>
+<p>IS-IS uses two routing levels instead of OSPF-style areas:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Scope</th>
+<th>Equivalent in OSPF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Level 1 (L1)</strong></td>
+<td>Intra-area routing</td>
+<td>Non-backbone area</td>
+</tr>
+<tr>
+<td><strong>Level 2 (L2)</strong></td>
+<td>Inter-area / backbone routing</td>
+<td>Area 0.0.0.0</td>
+</tr>
+<tr>
+<td><strong>L1/L2</strong></td>
+<td>Both — connects L1 areas to the L2 backbone</td>
+<td>ABR</td>
+</tr>
+</tbody>
+</table>
+<p>In a simple SP backbone with no customer routing, only Level 2 is needed. This session disables Level 1 on all routers, making the backbone a flat Level 2 domain — the most common configuration in real ISP networks.</p>
+<h3 id="lsps-and-tlvs">LSPs and TLVs</h3>
+<p>IS-IS encodes all information inside LSPs using <strong>TLV</strong> (Type-Length-Value) fields. Each TLV carries a specific type of information: IP reachability, IS neighbors, area addresses, and so on. This extensible format is why IS-IS was straightforward to extend for MPLS traffic engineering and segment routing — new TLVs were simply defined without changing the base protocol.</p>
+<p>On broadcast (multi-access) segments, IS-IS elects a <strong>DIS</strong> (Designated Intermediate System) — equivalent to OSPF's DR — to reduce LSP flooding overhead. On point-to-point links (as used in this lab), no DIS election occurs.</p>
 <h2 id="why-is-is-instead-of-ospf">Why IS-IS Instead of OSPF?</h2>
 <p>Both are link-state IGPs that serve the same purpose: flooding topology information so every router can compute the best path. Most enterprise networks use OSPF. Most large service providers — AT&amp;T, Verizon, NTT, and others — run IS-IS as their backbone IGP.</p>
 <table>

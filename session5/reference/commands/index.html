@@ -3064,6 +3064,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#is-is-acronym-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Acronym Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#session-5-wrap-up" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5583,6 +5594,128 @@
 <td>Default metric</td>
 <td>1</td>
 <td>10</td>
+</tr>
+</tbody>
+</table>
+<h2 id="is-is-acronym-reference">IS-IS Acronym Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Acronym</th>
+<th>Full Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IS-IS</strong></td>
+<td>Intermediate System to Intermediate System</td>
+<td>The routing protocol itself</td>
+</tr>
+<tr>
+<td><strong>IS</strong></td>
+<td>Intermediate System</td>
+<td>ISO term for a router</td>
+</tr>
+<tr>
+<td><strong>ES</strong></td>
+<td>End System</td>
+<td>ISO term for a host</td>
+</tr>
+<tr>
+<td><strong>OSI</strong></td>
+<td>Open Systems Interconnection</td>
+<td>The ISO networking framework IS-IS originates from</td>
+</tr>
+<tr>
+<td><strong>CLNP</strong></td>
+<td>Connectionless Network Protocol</td>
+<td>The OSI Layer 3 protocol IS-IS was originally designed to route</td>
+</tr>
+<tr>
+<td><strong>IGP</strong></td>
+<td>Interior Gateway Protocol</td>
+<td>A routing protocol that runs within a single autonomous system</td>
+</tr>
+<tr>
+<td><strong>NET</strong></td>
+<td>Network Entity Title</td>
+<td>The IS-IS system identifier — configured on the loopback</td>
+</tr>
+<tr>
+<td><strong>NSAP</strong></td>
+<td>Network Service Access Point</td>
+<td>The full OSI address format; a NET is a special case of an NSAP</td>
+</tr>
+<tr>
+<td><strong>AFI</strong></td>
+<td>Authority and Format Identifier</td>
+<td>First byte of the NET — <code>49</code> means private/lab address space</td>
+</tr>
+<tr>
+<td><strong>SEL</strong></td>
+<td>N-Selector</td>
+<td>Last byte of the NET — always <code>00</code> for a router</td>
+</tr>
+<tr>
+<td><strong>IIH</strong></td>
+<td>IS-IS Hello</td>
+<td>The hello PDU used to discover neighbors and maintain adjacencies</td>
+</tr>
+<tr>
+<td><strong>PDU</strong></td>
+<td>Protocol Data Unit</td>
+<td>Generic term for a protocol message</td>
+</tr>
+<tr>
+<td><strong>LSP</strong></td>
+<td>Link State PDU</td>
+<td>IS-IS topology advertisement — equivalent to an OSPF LSA</td>
+</tr>
+<tr>
+<td><strong>LSDB</strong></td>
+<td>Link State Database</td>
+<td>The complete collection of all LSPs</td>
+</tr>
+<tr>
+<td><strong>TLV</strong></td>
+<td>Type-Length-Value</td>
+<td>The extensible encoding used inside LSPs for all data fields</td>
+</tr>
+<tr>
+<td><strong>CSNP</strong></td>
+<td>Complete Sequence Number PDU</td>
+<td>Lists every LSP in the LSDB — used to synchronize databases</td>
+</tr>
+<tr>
+<td><strong>PSNP</strong></td>
+<td>Partial Sequence Number PDU</td>
+<td>Requests missing LSPs or acknowledges receipt of specific LSPs</td>
+</tr>
+<tr>
+<td><strong>SPF</strong></td>
+<td>Shortest Path First</td>
+<td>The Dijkstra algorithm run on the LSDB to compute best paths</td>
+</tr>
+<tr>
+<td><strong>DIS</strong></td>
+<td>Designated Intermediate System</td>
+<td>Elected on broadcast segments to reduce flooding — equivalent to OSPF DR</td>
+</tr>
+<tr>
+<td><strong>SNPA</strong></td>
+<td>Subnetwork Point of Attachment</td>
+<td>The data-link address (e.g., MAC address) used by IS-IS hellos</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>Level 1</td>
+<td>Intra-area IS-IS routing</td>
+</tr>
+<tr>
+<td><strong>L2</strong></td>
+<td>Level 2</td>
+<td>Inter-area / backbone IS-IS routing</td>
 </tr>
 </tbody>
 </table>
