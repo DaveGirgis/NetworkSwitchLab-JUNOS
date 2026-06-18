@@ -118,10 +118,8 @@ nav:
     - Topology: session5/topology.md
     - Addressing: session5/addressing.md
     - Tasks:
-      - Part 0 — Base Config: session5/tasks/part0.md
-      - Part 1 — IS-IS Level 1 & 2: session5/tasks/part1.md
-      - Part 2 — Route Leaking: session5/tasks/part2.md
-      - Part 3 — IS-IS vs OSPF Redistribution: session5/tasks/part3.md
+      - Part 0 — Remove OSPF & Configure IS-IS: session5/tasks/part0.md
+      - Part 1 — Verify IS-IS: session5/tasks/part1.md
       - Verification: session5/tasks/verify.md
     - Reference:
       - Command Reference: session5/reference/commands.md

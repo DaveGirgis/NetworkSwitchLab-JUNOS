@@ -28,7 +28,7 @@ graph LR
 | [Session 3](session3/index.md) | Bridging & VLANs | Bridge domains, 802.1Q trunks, access ports, IRB inter-VLAN routing |
 | [Session 3a](session3a/index.md) | Spanning Tree Protocol *(self-directed)* | RSTP, root election, port roles, failover |
 | [Session 4](session4/index.md) | OSPF Single-Area | Area 0, neighbor adjacency, LSAs, passive interfaces |
-| [Session 5](session5/index.md) | IS-IS | Level 1/2, NET addressing, redistribution |
+| [Session 5](session5/index.md) | IS-IS | NET addressing, Level 2 single-area, IS-IS adjacency |
 | [Session 6](session6/index.md) | BGP | eBGP, iBGP, route reflectors, routing policies |
 | [Session 7](session7/index.md) | MPLS & LDP | Label switching, LDP neighbor, RSVP-TE intro |
 | [Session 7a](session7a/index.md) | Layer 2 Services *(self-directed)* | L2circuit, VPLS |
