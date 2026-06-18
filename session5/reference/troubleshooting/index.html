@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-4-troubleshooting" class="md-skip">
+        <a href="#session-5-troubleshooting" class="md-skip">
           Skip to content
         </a>
       
@@ -2762,10 +2762,6 @@
       
         
       
-        
-      
-        
-      
     
     
     
@@ -2822,7 +2818,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Remove OSPF & Configure IS-IS
   
 
     
@@ -2850,63 +2846,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — IS-IS Level 1 & 2
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../tasks/part2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 2 — Route Leaking
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../tasks/part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — IS-IS vs OSPF Redistribution
+    Part 1 — Verify IS-IS
   
 
     
@@ -3057,6 +2997,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3073,6 +3031,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#show-isis-adjacency-returns-empty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show isis adjacency Returns Empty
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-adjacency-stuck-in-initializing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Adjacency Stuck in Initializing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-adjacency-up-but-no-ipv4-routes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Adjacency Up but No IPv4 Routes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routes-present-but-loopback-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routes Present but Loopback Missing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#show-route-protocol-isis-shows-routes-but-ping-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        show route protocol isis Shows Routes But Ping Fails
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5414,10 +5446,81 @@
   
 
 
-<h1 id="session-4-troubleshooting">Session 4 — Troubleshooting</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-5-troubleshooting">Session 5 — Troubleshooting</h1>
+<h2 id="show-isis-adjacency-returns-empty"><code>show isis adjacency</code> Returns Empty</h2>
+<p><strong>Symptom:</strong> No neighbors listed after committing IS-IS configuration.</p>
+<p><strong>Cause / Fix:</strong></p>
+<ol>
+<li>
+<p>Confirm <code>family iso</code> is on the interface:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show interfaces ge-0/0/0 detail | match iso
+</code></pre></div>
+   If no output, add <code>set interfaces ge-0/0/0 unit 0 family iso</code> and commit.</p>
+</li>
+<li>
+<p>Confirm IS-IS is committed on the remote router — both sides must have IS-IS configured for an adjacency to form.</p>
+</li>
+<li>
+<p>Confirm the interface is added to IS-IS:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show configuration protocols isis
+</code></pre></div>
+   The interface stanza must be present.</p>
+</li>
+</ol>
+<hr />
+<h2 id="is-is-adjacency-stuck-in-initializing">IS-IS Adjacency Stuck in <code>Initializing</code></h2>
+<p><strong>Symptom:</strong> <code>show isis adjacency</code> shows state <code>Initializing</code> rather than <code>Up</code>.</p>
+<p><strong>Cause:</strong> IS-IS Hellos are being received from the neighbor but the adjacency has not fully formed — usually a level mismatch or area mismatch.</p>
+<p><strong>Fix:</strong></p>
+<ol>
+<li>
+<p>Confirm both sides have <code>level 1 disable</code> — if one side runs L1/L2 and the other runs L2 only, adjacency forms at L2 but may appear inconsistent.</p>
+</li>
+<li>
+<p>Confirm both sides are in the same area:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show isis adjacency detail
+</code></pre></div>
+   Look for <code>Area addresses</code> in the output — both neighbors must share at least one area address.</p>
+</li>
+</ol>
+<hr />
+<h2 id="is-is-adjacency-up-but-no-ipv4-routes">IS-IS Adjacency Up but No IPv4 Routes</h2>
+<p><strong>Symptom:</strong> <code>show isis adjacency</code> shows <code>Up</code> but <code>show route protocol isis</code> is empty.</p>
+<p><strong>Cause:</strong> IS-IS adjacency runs over ISO (<code>family iso</code>) but IPv4 reachability requires <code>family inet</code> to also be present on the interface. If a transit interface is missing <code>family inet</code>, IS-IS will form an adjacency but will not carry IPv4 prefix information.</p>
+<p><strong>Fix:</strong> Confirm <code>family inet address X.X.X.X/Y</code> is configured on all transit interfaces:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show interfaces ge-0/0/0 terse
+</code></pre></div>
+<p>The unit should show both <code>inet</code> and <code>iso</code> address families.</p>
+<hr />
+<h2 id="routes-present-but-loopback-missing">Routes Present but Loopback Missing</h2>
+<p><strong>Symptom:</strong> Transit subnet routes appear in <code>show route protocol isis</code> but loopback routes are missing.</p>
+<p><strong>Cause:</strong> The loopback is not added to IS-IS as a passive interface, or <code>family iso</code> with the NET address is missing from <code>lo0 unit 0</code>.</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show configuration interfaces lo0
+</code></pre></div>
+<p>Should include:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>unit 0 {
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    family inet {
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        address 10.0.0.1/32;
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    }
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    family iso {
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        address 49.0001.0100.0000.0001.00;
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    }
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>}
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>show configuration protocols isis
+</code></pre></div>
+<p>Should include <code>interface lo0.0 { passive; }</code>.</p>
+<hr />
+<h2 id="show-route-protocol-isis-shows-routes-but-ping-fails"><code>show route protocol isis</code> Shows Routes But Ping Fails</h2>
+<p><strong>Symptom:</strong> IS-IS routes are in the routing table but pings between loopbacks fail.</p>
+<p><strong>Fix:</strong> Confirm the routes show <code>*</code> (active) and the next-hop interface is up:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>show route 10.0.0.4
+</code></pre></div>
+<p>If the route is active, run a ping with source set to the loopback:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ping 10.0.0.4 source 10.0.0.1 count 3
+</code></pre></div>
+<p>If this succeeds but the sourceless ping fails, the return path is missing — check IS-IS on the remote routers.</p>
 
 
 

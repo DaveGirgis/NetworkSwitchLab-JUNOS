@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-4-command-reference" class="md-skip">
+        <a href="#session-5-command-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -2762,10 +2762,6 @@
       
         
       
-        
-      
-        
-      
     
     
     
@@ -2822,7 +2818,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Remove OSPF & Configure IS-IS
   
 
     
@@ -2850,63 +2846,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — IS-IS Level 1 & 2
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../tasks/part2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 2 — Route Leaking
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../tasks/part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — IS-IS vs OSPF Redistribution
+    Part 1 — Verify IS-IS
   
 
     
@@ -3029,6 +2969,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3045,6 +3003,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-show-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Show Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#net-address-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NET Address Format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-vs-ospf-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS vs OSPF Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-5-wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session 5 Wrap-Up
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5414,10 +5446,149 @@
   
 
 
-<h1 id="session-4-command-reference">Session 4 — Command Reference</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-5-command-reference">Session 5 — Command Reference</h1>
+<h2 id="is-is-configuration">IS-IS Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set interfaces lo0 unit 0 family iso address &lt;NET&gt;</code></td>
+<td>Assign NET address to loopback (required for IS-IS)</td>
+</tr>
+<tr>
+<td><code>set interfaces ge-0/0/0 unit 0 family iso</code></td>
+<td>Enable ISO address family on transit interface</td>
+</tr>
+<tr>
+<td><code>set protocols isis level 1 disable</code></td>
+<td>Run Level 2 only (standard for SP backbones)</td>
+</tr>
+<tr>
+<td><code>set protocols isis interface ge-0/0/0.0 point-to-point</code></td>
+<td>Add interface to IS-IS as p2p link</td>
+</tr>
+<tr>
+<td><code>set protocols isis interface lo0.0 passive</code></td>
+<td>Advertise loopback prefix, suppress IS-IS hellos</td>
+</tr>
+</tbody>
+</table>
+<h2 id="is-is-show-commands">IS-IS Show Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show isis adjacency</code></td>
+<td>Neighbor summary — system name, level, state, hold timer</td>
+</tr>
+<tr>
+<td><code>show isis adjacency detail</code></td>
+<td>Full neighbor detail including area address and IP</td>
+</tr>
+<tr>
+<td><code>show isis interface</code></td>
+<td>Interface participation, DR state, metric</td>
+</tr>
+<tr>
+<td><code>show isis database</code></td>
+<td>All LSPs in the LSDB</td>
+</tr>
+<tr>
+<td><code>show isis database detail</code></td>
+<td>Full LSP content with TLVs</td>
+</tr>
+<tr>
+<td><code>show isis database PE1.00-00 detail</code></td>
+<td>One specific LSP by ID</td>
+</tr>
+<tr>
+<td><code>show isis route</code></td>
+<td>IS-IS SPF-computed routes</td>
+</tr>
+<tr>
+<td><code>show route protocol isis</code></td>
+<td>IS-IS routes in inet.0</td>
+</tr>
+<tr>
+<td><code>show isis statistics</code></td>
+<td>Hello, LSP, and CSNP counters</td>
+</tr>
+</tbody>
+</table>
+<h2 id="net-address-format">NET Address Format</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>49.0001.0100.0000.0001.00
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>^   ^    ^^^^^^^^^^^^^^^^  ^
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|   |    System ID         SEL (always 00)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>|   Area (0001)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>AFI (49 = private)
+</code></pre></div>
+<p>Derive System ID from loopback: pad each octet to 3 digits, concatenate, group in 4s.
+<code>10.0.0.1</code> → <code>010.000.001</code> → <code>0100.0000.0001</code></p>
+<h2 id="is-is-vs-ospf-reference">IS-IS vs OSPF Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>OSPF Term</th>
+<th>IS-IS Term</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Router identifier</td>
+<td>Router ID</td>
+<td>NET / System ID</td>
+</tr>
+<tr>
+<td>Topology unit</td>
+<td>LSA</td>
+<td>LSP (Link State PDU)</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>LSDB</td>
+<td>LSDB</td>
+</tr>
+<tr>
+<td>Hello protocol</td>
+<td>OSPF Hello</td>
+<td>IS-IS Hello (IIH)</td>
+</tr>
+<tr>
+<td>Backbone area</td>
+<td>Area 0.0.0.0</td>
+<td>Level 2</td>
+</tr>
+<tr>
+<td>Sub-area</td>
+<td>Non-zero area</td>
+<td>Level 1</td>
+</tr>
+<tr>
+<td>Route preference</td>
+<td>10 (internal)</td>
+<td>18 (L2 internal)</td>
+</tr>
+<tr>
+<td>Default metric</td>
+<td>1</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<h2 id="session-5-wrap-up">Session 5 Wrap-Up</h2>
+<p>IS-IS is now the IGP for your provider backbone. The outcome is identical to OSPF — all four loopbacks are reachable — but the mechanism differs: IS-IS runs over Layer 2, uses TLVs instead of typed LSAs, and is the protocol you will encounter on real SP equipment.</p>
+<p>In Session 6 you will build <strong>BGP</strong> on top of this IS-IS backbone. IS-IS provides reachability between loopbacks; BGP uses those loopbacks as its peering addresses for iBGP sessions across the provider core.</p>
 
 
 

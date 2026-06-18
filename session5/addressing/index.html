@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-4-addressing" class="md-skip">
+        <a href="#session-5-addressing-table" class="md-skip">
           Skip to content
         </a>
       
@@ -2735,6 +2735,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -2752,6 +2770,58 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ip-addressing-unchanged-from-session-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IP Addressing (unchanged from Session 4)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-net-addresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS NET Addresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2765,10 +2835,6 @@
   
     
     
-      
-        
-      
-        
       
         
       
@@ -2832,7 +2898,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Remove OSPF & Configure IS-IS
   
 
     
@@ -2860,63 +2926,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — IS-IS Level 1 & 2
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tasks/part2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 2 — Route Leaking
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tasks/part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — IS-IS vs OSPF Redistribution
+    Part 1 — Verify IS-IS
   
 
     
@@ -5412,8 +5422,147 @@
   
 
 
-<h1 id="session-4-addressing">Session 4 — Addressing</h1>
-<p>Same addressing as Session 3. IS-IS adds <strong>NET</strong> (Network Entity Title) addresses — covered in the session tasks.</p>
+<h1 id="session-5-addressing-table">Session 5 — Addressing Table</h1>
+<h2 id="ip-addressing-unchanged-from-session-4">IP Addressing (unchanged from Session 4)</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>lo0.0</td>
+<td>10.0.0.1/32</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>lo0.0</td>
+<td>10.0.0.2/32</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>lo0.0</td>
+<td>10.0.0.3/32</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>lo0.0</td>
+<td>10.0.0.4/32</td>
+</tr>
+<tr>
+<td>PE1</td>
+<td>ge-0/0/0</td>
+<td>10.1.12.1/30</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>ge-0/0/0</td>
+<td>10.1.12.2/30</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>ge-0/0/1</td>
+<td>10.1.23.1/30</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>ge-0/0/0</td>
+<td>10.1.23.2/30</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>ge-0/0/1</td>
+<td>10.1.34.1/30</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>ge-0/0/0</td>
+<td>10.1.34.2/30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="is-is-net-addresses">IS-IS NET Addresses</h2>
+<p>A <strong>NET</strong> (Network Entity Title) is IS-IS's equivalent of a router ID. It has three parts:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>49 . 0001 . 0100.0000.0001 . 00
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>^     ^      ^                ^
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>AFI   Area   System ID        SEL (always 00)
+</code></pre></div>
+<ul>
+<li><strong>AFI 49</strong> — private/lab address space (like RFC 1918 for IP)</li>
+<li><strong>Area 0001</strong> — all four routers are in the same area</li>
+<li><strong>System ID</strong> — derived from the loopback IP by padding each octet to 3 digits and grouping into 4-digit hex fields:
+  <code>10.0.0.1</code> → <code>010.000.001</code> → <code>0100.0000.0001</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Loopback</th>
+<th>NET</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>10.0.0.1/32</td>
+<td>49.0001.0100.0000.0001.00</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>10.0.0.2/32</td>
+<td>49.0001.0100.0000.0002.00</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>10.0.0.3/32</td>
+<td>49.0001.0100.0000.0003.00</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>10.0.0.4/32</td>
+<td>49.0001.0100.0000.0004.00</td>
+</tr>
+</tbody>
+</table>
+<h2 id="is-is-parameters">IS-IS Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Area</td>
+<td>49.0001</td>
+</tr>
+<tr>
+<td>Level</td>
+<td>Level 2 only (Level 1 disabled)</td>
+</tr>
+<tr>
+<td>Interface type</td>
+<td>point-to-point on all transit links</td>
+</tr>
+<tr>
+<td>Default metric</td>
+<td>10 per interface</td>
+</tr>
+<tr>
+<td>Route preference</td>
+<td>18 (IS-IS L2 internal)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Level 2 only</p>
+<p>A single-area backbone with no customer sites attached only needs Level 2. Disabling Level 1 simplifies the configuration and matches real-world SP practice where the backbone is a flat Level 2 domain.</p>
+</div>
 
 
 

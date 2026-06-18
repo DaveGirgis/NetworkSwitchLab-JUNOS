@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session5/tasks/verify/">
       
       
-        <link rel="prev" href="../part3/">
+        <link rel="prev" href="../part1/">
       
       
         <link rel="next" href="../../reference/commands/">
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-4-verification" class="md-skip">
+        <a href="#session-5-verification-checklist" class="md-skip">
           Skip to content
         </a>
       
@@ -2764,10 +2764,6 @@
       
         
       
-        
-      
-        
-      
     
     
     
@@ -2824,7 +2820,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Remove OSPF & Configure IS-IS
   
 
     
@@ -2852,63 +2848,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — IS-IS Level 1 & 2
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../part2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 2 — Route Leaking
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — IS-IS vs OSPF Redistribution
+    Part 1 — Verify IS-IS
   
 
     
@@ -2938,6 +2878,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -2954,6 +2912,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ospf-removal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OSPF Removal
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-is-adjacency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS Adjacency
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-state-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link-State Database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#routing-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routing Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#end-to-end-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Connectivity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5414,10 +5468,50 @@
   
 
 
-<h1 id="session-4-verification">Session 4 — Verification</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-5-verification-checklist">Session 5 — Verification Checklist</h1>
+<h2 id="ospf-removal">OSPF Removal</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ospf neighbor</code> — returns empty or <code>OSPF instance is not running</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show ospf neighbor</code> — same</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> No OSPF routes in <code>show route protocol ospf</code> on any router</li>
+</ul>
+<h2 id="is-is-configuration">IS-IS Configuration</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show isis interface</code> — <code>ge-0/0/0.0</code> shows <code>Point to Point</code>, <code>lo0.0</code> shows <code>Passive</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show isis interface</code> — both <code>ge-0/0/0.0</code> and <code>ge-0/0/1.0</code> show <code>Point to Point</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>show configuration protocols isis</code> on PE1 shows <code>level 1 disable</code> and interface stanzas</li>
+</ul>
+<h2 id="is-is-adjacency">IS-IS Adjacency</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show isis adjacency</code> — one neighbor: <code>P1</code>, state <code>Up</code>, level <code>2</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show isis adjacency</code> — two neighbors: <code>PE1</code> and <code>P2</code>, both <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show isis adjacency</code> — two neighbors: <code>P1</code> and <code>PE2</code>, both <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show isis adjacency</code> — one neighbor: <code>P2</code>, state <code>Up</code></li>
+</ul>
+<h2 id="link-state-database">Link-State Database</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show isis database</code> — four LSPs present: PE1, P1, P2, PE2</li>
+</ul>
+<h2 id="routing-table">Routing Table</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route protocol isis</code> — routes to <code>10.0.0.2/32</code>, <code>10.0.0.3/32</code>, <code>10.0.0.4/32</code> and remote /30 subnets, all tagged <code>[IS-IS/18]</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route protocol isis</code> — routes to <code>10.0.0.1/32</code>, <code>10.0.0.2/32</code>, <code>10.0.0.3/32</code></li>
+</ul>
+<h2 id="end-to-end-connectivity">End-to-End Connectivity</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; ping 10.0.0.4 count 5</code> — 5/5 replies</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; ping 10.0.0.1 count 5</code> — 5/5 replies</li>
+</ul>
+<h2 id="quick-commands">Quick Commands</h2>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show isis adjacency
+</code></pre></div>
+Expected on P1: two neighbors, both <code>Up</code>, level <code>2</code></p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show isis database
+</code></pre></div>
+Expected: four LSPs, one per router</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show route protocol isis
+</code></pre></div>
+Expected: loopbacks and /30 subnets with <code>[IS-IS/18]</code> tag</p>
 
 
 
