@@ -5458,6 +5458,10 @@
 <td><code>set protocols bgp group &lt;name&gt; export &lt;policy&gt;</code></td>
 <td>Apply an export policy to control which routes are advertised</td>
 </tr>
+<tr>
+<td><code>set protocols bgp group &lt;name&gt; neighbor &lt;ip&gt; as-override</code></td>
+<td>Replace the peer's AS in the AS_PATH with the local AS — required when PE advertises to same-AS CE sites</td>
+</tr>
 </tbody>
 </table>
 <h2 id="routing-policy-prefix-advertisement-next-hop">Routing Policy (Prefix Advertisement &amp; Next-Hop)</h2>

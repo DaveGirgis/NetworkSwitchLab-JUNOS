@@ -5444,11 +5444,17 @@
 <ul>
 <li>iBGP peers use <strong>loopback addresses</strong> as source and neighbor, not physical interface IPs. IS-IS already provides reachability between the loopbacks.</li>
 <li>A next-hop-self export policy is required: without it, PE2 would see CE1's address (172.16.1.2) as the NEXT_HOP for CE1's prefix — an address PE2 cannot reach.</li>
+<li>An ADVERTISE-BGP export policy is required on the eBGP groups: Junos 14.1 does not re-advertise iBGP-learned routes to eBGP peers without an explicit export policy.</li>
+<li><code>as-override</code> is required on PE-CE eBGP neighbors: CE1 and CE2 are in the same AS (65100), so BGP's loop prevention would otherwise suppress the advertisement.</li>
 <li>P1 and P2 are <strong>not</strong> iBGP peers. They are IS-IS transit routers only.</li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">next-hop-self on vMX 14.1</p>
-<p>Junos 14.1 does not support <code>next-hop-self</code> as a direct BGP neighbor statement. Instead, a routing policy with <code>then next-hop self</code> achieves the same result and is applied as an export policy on the iBGP group.</p>
+<p>Junos 14.1 does not support <code>next-hop-self</code> as a direct BGP neighbor statement. A routing policy with <code>then next-hop self</code> achieves the same result and is applied as an export policy on the iBGP group.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">as-override — same-AS customer sites</p>
+<p>CE1 and CE2 are both in AS 65100 (two sites of the same customer). Without <code>as-override</code>, PE2 would see AS 65100 in the AS_PATH of CE1's prefix and suppress the advertisement to CE2 (loop prevention). <code>as-override</code> replaces the customer AS in the path with the provider AS (65001) before advertising, so CE2 receives AS_PATH <code>65001 65001 I</code> and accepts it. This is standard PE-CE BGP behavior for same-AS multi-site customers.</p>
 </div>
 <h2 id="step-1-configure-ibgp-on-pe1">Step 1: Configure iBGP on PE1</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
@@ -5460,8 +5466,12 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>commit
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>set policy-options policy-statement ADVERTISE-BGP term 1 from protocol bgp
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>set policy-options policy-statement ADVERTISE-BGP term 1 then accept
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>set protocols bgp group EBGP-CE1 export ADVERTISE-BGP
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>set protocols bgp group EBGP-CE1 neighbor 172.16.1.2 as-override
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>commit
 </code></pre></div>
 <h2 id="step-2-configure-ibgp-on-pe2">Step 2: Configure iBGP on PE2</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
@@ -5473,8 +5483,12 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>commit
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>set policy-options policy-statement ADVERTISE-BGP term 1 from protocol bgp
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>set policy-options policy-statement ADVERTISE-BGP term 1 then accept
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>set protocols bgp group EBGP-CE2 export ADVERTISE-BGP
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>set protocols bgp group EBGP-CE2 neighbor 172.16.2.2 as-override
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>commit
 </code></pre></div>
 <h2 id="step-3-verify-ibgp-session">Step 3: Verify iBGP Session</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>PE1&gt; show bgp summary
@@ -5500,7 +5514,7 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 </code></pre></div>
-<p>The next-hop is PE2's loopback (10.0.0.4) — <code>next-hop-self</code> replaced the original CE2 address. <code>Lclpref 100</code> is the default LOCAL_PREF applied to routes entering the AS via iBGP.</p>
+<p>The next-hop is PE2's loopback (10.0.0.4) — the NEXT-HOP-SELF policy replaced the original CE2 address. <code>Lclpref 100</code> is the default LOCAL_PREF applied to routes entering the AS via iBGP.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PE2&gt; show route receive-protocol bgp 10.0.0.1
 </code></pre></div>
 <p>Expected — CE1's prefix received from PE1 via iBGP:</p>
@@ -5511,36 +5525,39 @@
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 </code></pre></div>
 <h2 id="step-5-verify-ce-routers-receive-each-others-prefix">Step 5: Verify CE Routers Receive Each Other's Prefix</h2>
-<p>PE2 will now advertise CE1's prefix (10.0.0.11/32) to CE2 via eBGP, and PE1 will advertise CE2's prefix (10.0.0.12/32) to CE1.</p>
+<p>PE2 advertises CE1's prefix (10.0.0.11/32) to CE2 via eBGP, and PE1 advertises CE2's prefix (10.0.0.12/32) to CE1.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>CE1&gt; show route receive-protocol bgp 172.16.1.1
 </code></pre></div>
 <p>Expected — CE2's loopback received via PE1:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  Prefix                  Nexthop              MED     Lclpref    AS path
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>* 10.0.0.12/32            172.16.1.1                              65001 65100 I
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>* 10.0.0.12/32            172.16.1.1                              65001 65001 I
 </code></pre></div>
-<p>Note the AS_PATH: <code>65001 65100</code> — the route passed through the provider AS (65001) before originating in AS 65100 (CE2). CE routers do not run IS-IS so no <code>iso.0</code> table appears.</p>
+<p>AS_PATH <code>65001 65001 I</code> — <code>as-override</code> replaced the original AS 65100 with AS 65001, then PE1 prepended its own AS. CE routers do not run IS-IS so no <code>iso.0</code> table appears.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>CE2&gt; show route receive-protocol bgp 172.16.2.1
 </code></pre></div>
 <p>Expected — CE1's loopback received via PE2:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  Prefix                  Nexthop              MED     Lclpref    AS path
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>* 10.0.0.11/32            172.16.2.1                              65001 65100 I
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>* 10.0.0.11/32            172.16.2.1                              65001 65001 I
 </code></pre></div>
 <h2 id="step-6-confirm-the-full-bgp-table-on-pe1">Step 6: Confirm the Full BGP Table on PE1</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PE1&gt; show route protocol bgp
 </code></pre></div>
 <p>Expected — two BGP routes, one from each direction:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>inet.0: 9 destinations, 9 routes (9 active, 0 holddown, 0 hidden)
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>10.0.0.11/32       *[BGP/170] 00:04:15, localpref 100
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>                    AS path: 65100 I, validation-state: unverified
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>10.0.0.12/32       *[BGP/170] 00:01:30, localpref 100
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>                    AS path: 65100 I, validation-state: unverified
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>10.0.0.11/32       *[BGP/170] 00:04:15, localpref 100
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>10.0.0.12/32       *[BGP/170] 00:01:30, localpref 100, from 10.0.0.4
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 </code></pre></div>
-<p>10.0.0.11/32 was learned from CE1 directly (eBGP, out ge-0/0/1). 10.0.0.12/32 was learned from PE2 (iBGP, next-hop resolved via IS-IS out ge-0/0/0 toward P1).</p>
+<p>10.0.0.11/32 was learned from CE1 directly via eBGP (next-hop 172.16.1.2, out ge-0/0/1). 10.0.0.12/32 was learned from PE2 via iBGP (<code>, from 10.0.0.4</code>; next-hop resolved by IS-IS out ge-0/0/0 toward P1).</p>
 <div class="admonition note">
 <p class="admonition-title">Why CE-to-CE ping fails without MPLS</p>
 <p>CE1 has a route to CE2's loopback (10.0.0.12/32) via PE1. CE2 has a route to CE1's loopback via PE2. The BGP knowledge is complete. However, when a packet from CE1 to 10.0.0.12 reaches PE1, PE1 forwards it toward PE2 via IS-IS — the packet passes through P1 and P2. Those P routers do not have a route to 10.0.0.12 and will drop it. Session 7 (MPLS) solves this by having P routers forward on labels rather than destination IPs.</p>
