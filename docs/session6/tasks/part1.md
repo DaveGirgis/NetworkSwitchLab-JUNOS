@@ -160,13 +160,14 @@ PE1> show route receive-protocol bgp 172.16.1.2
 Expected — CE1's loopback received:
 
 ```text
-inet.0: 8 destinations, 8 routes (8 active, 0 holddown, 0 hidden)
-+ = Active Route, - = Last Active, * = Both
+inet.0: 11 destinations, 11 routes (11 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 10.0.0.11/32            172.16.1.2                              65100 I
 
-10.0.0.11/32       *[BGP/170] 00:01:05, localpref 100
-                    AS path: 65100 I, validation-state: unverified
-                    > to 172.16.1.2 via ge-0/0/1.0
+iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 ```
+
+The `iso.0` table is normal — it reflects the IS-IS NET address carried by `family iso` on the PE interfaces.
 
 ```junos
 PE2> show route receive-protocol bgp 172.16.2.2
@@ -175,9 +176,11 @@ PE2> show route receive-protocol bgp 172.16.2.2
 Expected — CE2's loopback received:
 
 ```text
-10.0.0.12/32       *[BGP/170] 00:00:58, localpref 100
-                    AS path: 65100 I, validation-state: unverified
-                    > to 172.16.2.2 via ge-0/0/1.0
+inet.0: 11 destinations, 11 routes (11 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 10.0.0.12/32            172.16.2.2                              65100 I
+
+iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 ```
 
 At this point PE1 knows CE1's prefix and PE2 knows CE2's prefix. The two PE routers have not yet shared this information — that is the job of iBGP in Part 2.

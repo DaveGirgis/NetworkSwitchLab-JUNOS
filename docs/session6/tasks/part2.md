@@ -66,14 +66,14 @@ PE1> show route receive-protocol bgp 10.0.0.4
 Expected — CE2's prefix received from PE2 via iBGP:
 
 ```text
-inet.0: 9 destinations, 9 routes (9 active, 0 holddown, 0 hidden)
+inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 10.0.0.12/32            10.0.0.4                    100        65100 I
 
-10.0.0.12/32       *[BGP/170] 00:01:12, localpref 100
-                    AS path: 65100 I, validation-state: unverified
-                    > to 10.1.12.2 via ge-0/0/0.0
+iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 ```
 
-The next-hop for 10.0.0.12/32 is now PE2's loopback (10.0.0.4, resolved via IS-IS to ge-0/0/0.0 toward P1).
+The next-hop is PE2's loopback (10.0.0.4) — `next-hop-self` replaced the original CE2 address. `Lclpref 100` is the default LOCAL_PREF applied to routes entering the AS via iBGP.
 
 ```junos
 PE2> show route receive-protocol bgp 10.0.0.1
@@ -82,9 +82,11 @@ PE2> show route receive-protocol bgp 10.0.0.1
 Expected — CE1's prefix received from PE1 via iBGP:
 
 ```text
-10.0.0.11/32       *[BGP/170] 00:01:08, localpref 100
-                    AS path: 65100 I, validation-state: unverified
-                    > to 10.1.34.1 via ge-0/0/0.0
+inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 10.0.0.11/32            10.0.0.1                    100        65100 I
+
+iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 ```
 
 ## Step 5: Verify CE Routers Receive Each Other's Prefix
@@ -98,12 +100,12 @@ CE1> show route receive-protocol bgp 172.16.1.1
 Expected — CE2's loopback received via PE1:
 
 ```text
-10.0.0.12/32       *[BGP/170] 00:00:44, localpref 100
-                    AS path: 65001 65100 I, validation-state: unverified
-                    > to 172.16.1.1 via ge-0/0/0.0
+inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 10.0.0.12/32            172.16.1.1                              65001 65100 I
 ```
 
-Note the AS_PATH: `65001 65100` — the route passed through the provider AS (65001) then originated in AS 65100 (CE2).
+Note the AS_PATH: `65001 65100` — the route passed through the provider AS (65001) before originating in AS 65100 (CE2). CE routers do not run IS-IS so no `iso.0` table appears.
 
 ```junos
 CE2> show route receive-protocol bgp 172.16.2.1
@@ -112,9 +114,9 @@ CE2> show route receive-protocol bgp 172.16.2.1
 Expected — CE1's loopback received via PE2:
 
 ```text
-10.0.0.11/32       *[BGP/170] 00:00:41, localpref 100
-                    AS path: 65001 65100 I, validation-state: unverified
-                    > to 172.16.2.1 via ge-0/0/0.0
+inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+  Prefix                  Nexthop              MED     Lclpref    AS path
+* 10.0.0.11/32            172.16.2.1                              65001 65100 I
 ```
 
 ## Step 6: Confirm the Full BGP Table on PE1
