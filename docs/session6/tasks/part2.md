@@ -5,8 +5,11 @@
 iBGP connects PE1 and PE2 within AS 65001 so that customer prefixes learned on one PE can be shared with the other. Key points before configuring:
 
 - iBGP peers use **loopback addresses** as source and neighbor, not physical interface IPs. IS-IS already provides reachability between the loopbacks.
-- `next-hop-self` is required: without it, PE2 would see CE1's address (172.16.1.2) as the NEXT_HOP for CE1's prefix — an address PE2 cannot reach.
+- A next-hop-self export policy is required: without it, PE2 would see CE1's address (172.16.1.2) as the NEXT_HOP for CE1's prefix — an address PE2 cannot reach.
 - P1 and P2 are **not** iBGP peers. They are IS-IS transit routers only.
+
+!!! note "next-hop-self on vMX 14.1"
+    Junos 14.1 does not support `next-hop-self` as a direct BGP neighbor statement. Instead, a routing policy with `then next-hop self` achieves the same result and is applied as an export policy on the iBGP group.
 
 ## Step 1: Configure iBGP on PE1
 
@@ -16,7 +19,9 @@ configure
 set protocols bgp group IBGP type internal
 set protocols bgp group IBGP local-address 10.0.0.1
 set protocols bgp group IBGP neighbor 10.0.0.4
-set protocols bgp group IBGP neighbor 10.0.0.4 next-hop-self
+set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
+set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
+set protocols bgp group IBGP export NEXT-HOP-SELF
 
 commit
 ```
@@ -29,7 +34,9 @@ configure
 set protocols bgp group IBGP type internal
 set protocols bgp group IBGP local-address 10.0.0.4
 set protocols bgp group IBGP neighbor 10.0.0.1
-set protocols bgp group IBGP neighbor 10.0.0.1 next-hop-self
+set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
+set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
+set protocols bgp group IBGP export NEXT-HOP-SELF
 
 commit
 ```

@@ -91,23 +91,39 @@ In Junos, BGP by default **does** re-advertise eBGP-learned routes to iBGP peers
 
 **Symptom:** `show route receive-protocol bgp 10.0.0.4` shows the prefix but `show route protocol bgp` does not show it as active.
 
-**Cause:** The NEXT_HOP is unreachable — `next-hop-self` is missing or not working.
+**Cause:** The NEXT_HOP is unreachable — the `NEXT-HOP-SELF` export policy is missing or not applied to the iBGP group.
 
 **Fix:**
 
-Confirm `next-hop-self` is configured on the iBGP neighbor:
+Confirm the export policy is applied to the iBGP group:
 ```junos
 show configuration protocols bgp group IBGP
 ```
 
-Should show `neighbor 10.0.0.4 { next-hop-self; }`.
+Should show `export NEXT-HOP-SELF`. If not, apply it:
+```junos
+set protocols bgp group IBGP export NEXT-HOP-SELF
+commit
+```
+
+Confirm the policy exists:
+```junos
+show configuration policy-options policy-statement NEXT-HOP-SELF
+```
+
+Should show `then next-hop self` and `then accept`. If missing, create it:
+```junos
+set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
+set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
+commit
+```
 
 Check what next-hop value is being received:
 ```junos
 show route receive-protocol bgp 10.0.0.4 detail
 ```
 
-Look for the `Next hop` line — if it shows a 172.16.x.x address, `next-hop-self` is not being applied on the sending side. Configure it on PE2 for its neighbor 10.0.0.1.
+If the `Next hop` line shows a 172.16.x.x address, the policy is not being applied on the sending PE — configure it there.
 
 ---
 
