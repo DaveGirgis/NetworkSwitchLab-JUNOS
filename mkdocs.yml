@@ -129,10 +129,9 @@ nav:
     - Topology: session6/topology.md
     - Addressing: session6/addressing.md
     - Tasks:
-      - Part 0 — Base Config: session6/tasks/part0.md
-      - Part 1 — eBGP Peering: session6/tasks/part1.md
-      - Part 2 — iBGP & Route Reflectors: session6/tasks/part2.md
-      - Part 3 — Routing Policies: session6/tasks/part3.md
+      - Part 0 — Expand Topology & Base Config: session6/tasks/part0.md
+      - Part 1 — eBGP PE-CE: session6/tasks/part1.md
+      - Part 2 — iBGP PE-PE: session6/tasks/part2.md
       - Verification: session6/tasks/verify.md
     - Reference:
       - Command Reference: session6/reference/commands.md
