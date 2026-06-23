@@ -29,7 +29,7 @@
     
     
       
-        <title>Part 0 — Base Config - Junos SP Training Labs</title>
+        <title>Part 0 — Expand Topology & Base Config - Junos SP Training Labs</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-0-base-config" class="md-skip">
+        <a href="#part-0-expand-topology-base-config" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Part 0 — Base Config
+              Part 0 — Expand Topology & Base Config
             
           </span>
         </div>
@@ -3172,8 +3172,6 @@
       
         
       
-        
-      
     
     
     
@@ -3232,6 +3230,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Expand Topology & Base Config
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3239,7 +3255,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Expand Topology & Base Config
   
 
     
@@ -3248,6 +3264,175 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cli-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-add-ce-nodes-to-gns3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Add CE Nodes to GNS3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-base-config-on-ce1-and-ce2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Base Config on CE1 and CE2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Base Config on CE1 and CE2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ce1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ce2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-configure-interfaces-on-ce1-and-ce2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Configure Interfaces on CE1 and CE2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Configure Interfaces on CE1 and CE2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ce1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ce2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-configure-pe-ce-interfaces-on-pe1-and-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Configure PE-CE Interfaces on PE1 and PE2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Configure PE-CE Interfaces on PE1 and PE2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-verify-direct-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Verify Direct Connectivity
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -3268,7 +3453,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — eBGP PE-CE
   
 
     
@@ -3296,35 +3481,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — Routing Policies
+    Part 2 — iBGP PE-PE
   
 
     
@@ -5354,9 +5511,123 @@
   
 
 
-<h1 id="part-0-base-config">Part 0 — Base Config</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<h1 id="part-0-expand-topology-base-config">Part 0 — Expand Topology &amp; Base Config</h1>
+<h2 id="cli-setup">CLI Setup</h2>
+<p>Before pasting any configuration, run these two commands at the operational prompt (<code>&gt;</code>) on each router:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>set cli screen-length 0
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set cli complete-on-space off
+</code></pre></div>
+<p>Re-run these at the start of every console session — they do not persist across reconnects.</p>
+<h2 id="step-1-add-ce-nodes-to-gns3">Step 1: Add CE Nodes to GNS3</h2>
+<p>In the <code>JNCIS-SP-Core</code> GNS3 project:</p>
+<ol>
+<li>Drag two new <strong>vMX-14.1</strong> nodes onto the canvas and name them <code>CE1</code> and <code>CE2</code></li>
+<li>Draw the following links:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Node A</th>
+<th>Adapter</th>
+<th>Node B</th>
+<th>Adapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 — PE1</td>
+<td>CE1</td>
+<td>2 (ge-0/0/0)</td>
+<td>PE1</td>
+<td>3 (ge-0/0/1)</td>
+</tr>
+<tr>
+<td>CE2 — PE2</td>
+<td>CE2</td>
+<td>2 (ge-0/0/0)</td>
+<td>PE2</td>
+<td>3 (ge-0/0/1)</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Start CE1 and CE2. Wait 3–5 minutes for both to fully boot before opening consoles.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">RAM check</p>
+<p>Six vMX-14.1 nodes require 12 GB of RAM in the GNS3 VM. Confirm the GNS3 VM has at least 12 GB allocated before starting CE1 and CE2.</p>
+</div>
+<h2 id="step-2-base-config-on-ce1-and-ce2">Step 2: Base Config on CE1 and CE2</h2>
+<h3 id="ce1">CE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set system host-name CE1
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set system root-authentication plain-text-password
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>New password: lab123
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Retype new password: lab123
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>commit
+</code></pre></div>
+<h3 id="ce2">CE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set system host-name CE2
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set system root-authentication plain-text-password
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>New password: lab123
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>Retype new password: lab123
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>commit
+</code></pre></div>
+<h2 id="step-3-configure-interfaces-on-ce1-and-ce2">Step 3: Configure Interfaces on CE1 and CE2</h2>
+<h3 id="ce1_1">CE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set interfaces ge-0/0/0 unit 0 family inet address 172.16.1.2/30
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>set interfaces lo0 unit 0 family inet address 10.0.0.11/32
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>set routing-options router-id 10.0.0.11
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>commit
+</code></pre></div>
+<h3 id="ce2_1">CE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>configure
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>set interfaces ge-0/0/0 unit 0 family inet address 172.16.2.2/30
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>set interfaces lo0 unit 0 family inet address 10.0.0.12/32
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>set routing-options router-id 10.0.0.12
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>commit
+</code></pre></div>
+<h2 id="step-4-configure-pe-ce-interfaces-on-pe1-and-pe2">Step 4: Configure PE-CE Interfaces on PE1 and PE2</h2>
+<p>PE1 and PE2 already have ge-0/0/0 configured (provider core). Add the new CE-facing interface on each.</p>
+<h3 id="pe1">PE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>configure
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>set interfaces ge-0/0/1 unit 0 family inet address 172.16.1.1/30
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>commit
+</code></pre></div>
+<h3 id="pe2">PE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>configure
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>set interfaces ge-0/0/1 unit 0 family inet address 172.16.2.1/30
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>commit
+</code></pre></div>
+<h2 id="step-5-verify-direct-connectivity">Step 5: Verify Direct Connectivity</h2>
+<p>Confirm each PE can reach its directly connected CE:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>PE1&gt; ping 172.16.1.2 count 3
+</code></pre></div>
+<p>Expected: 3/3 replies from CE1.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE2&gt; ping 172.16.2.2 count 3
+</code></pre></div>
+<p>Expected: 3/3 replies from CE2.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>CE1&gt; ping 172.16.1.1 count 3
+</code></pre></div>
+<p>Expected: 3/3 replies from PE1.</p>
+<div class="admonition warning">
+<p class="admonition-title">Verify links before configuring BGP</p>
+<p>BGP sessions will not establish if the underlying IP connectivity is broken. Fix any interface or link issues here before moving to Part 1.</p>
 </div>
 
 

@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-5-bgp" class="md-skip">
+        <a href="#session-6-bgp" class="md-skip">
           Skip to content
         </a>
       
@@ -3170,8 +3170,6 @@
       
         
       
-        
-      
     
     
     
@@ -3228,7 +3226,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Expand Topology & Base Config
   
 
     
@@ -3256,7 +3254,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — eBGP PE-CE
   
 
     
@@ -3284,35 +3282,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="tasks/part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — Routing Policies
+    Part 2 — iBGP PE-PE
   
 
     
@@ -5342,13 +5312,188 @@
   
 
 
-<h1 id="session-5-bgp">Session 5 — BGP</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-<p>Complete Sessions 1–4 first.</p>
-</div>
-<h2 id="preview">Preview</h2>
-<p>You will configure eBGP between the provider and customer ASes, then set up iBGP with route reflectors across the provider backbone.</p>
+<h1 id="session-6-bgp">Session 6 — BGP</h1>
+<h2 id="objectives">Objectives</h2>
+<p>By the end of this session you will be able to:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain the difference between eBGP and iBGP and when each is used</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Configure eBGP peering between a PE router and a CE router</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Configure iBGP peering between two PE routers using loopback addresses</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain why <code>next-hop-self</code> is required for iBGP to work across a provider core</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Read the BGP table and trace a prefix from CE1 through the provider to CE2</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain the iBGP full mesh rule and how Route Reflectors solve it</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Session 5 complete — IS-IS running on PE1, P1, P2, PE2 with full loopback reachability</li>
+<li>The <code>JNCIS-SP-Core</code> GNS3 project is open and all four provider nodes are running</li>
+</ul>
+<h2 id="bgp-protocol-overview">BGP Protocol Overview</h2>
+<p>BGP (Border Gateway Protocol) is the routing protocol that holds the internet together. Every ISP, cloud provider, and large enterprise exchanges routing information with its neighbors using BGP. It is the only EGP (Exterior Gateway Protocol) in widespread use today.</p>
+<p>Unlike IS-IS and OSPF — which are link-state protocols that flood topology and compute shortest paths — BGP is a <strong>path vector</strong> protocol. Instead of building a map of the network, BGP advertises <strong>reachability</strong>: "I can reach prefix X, and the path to get there goes through these autonomous systems."</p>
+<h3 id="autonomous-systems">Autonomous Systems</h3>
+<p>An <strong>AS</strong> (Autonomous System) is a network under a single administrative domain with a consistent routing policy. Each AS is identified by an <strong>ASN</strong> (Autonomous System Number). In this lab:</p>
+<table>
+<thead>
+<tr>
+<th>AS</th>
+<th>ASN</th>
+<th>Routers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Provider</td>
+<td>65001</td>
+<td>PE1, P1, P2, PE2</td>
+</tr>
+<tr>
+<td>Customer A</td>
+<td>65100</td>
+<td>CE1, CE2</td>
+</tr>
+</tbody>
+</table>
+<p>ASNs 64512–65534 are private (like RFC 1918 for IP) — used in labs and internal deployments.</p>
+<h3 id="ebgp-vs-ibgp">eBGP vs iBGP</h3>
+<p>BGP has two operating modes depending on whether the peering is within or between autonomous systems:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>eBGP</th>
+<th>iBGP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Between</td>
+<td>Different ASes</td>
+<td>Same AS</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>PE-CE peering</td>
+<td>PE-PE peering across provider core</td>
+</tr>
+<tr>
+<td>TTL default</td>
+<td>1 (direct link)</td>
+<td>255 (multihop)</td>
+</tr>
+<tr>
+<td>NEXT_HOP behavior</td>
+<td>Set to peering address</td>
+<td>Unchanged (requires next-hop-self)</td>
+</tr>
+<tr>
+<td>AS_PATH</td>
+<td>Prepend own ASN</td>
+<td>Not modified</td>
+</tr>
+</tbody>
+</table>
+<p>In this lab, PE1 runs <strong>eBGP</strong> with CE1 and <strong>iBGP</strong> with PE2. P1 and P2 do not run BGP at all — they are pure IS-IS transit routers.</p>
+<h3 id="bgp-session-establishment">BGP Session Establishment</h3>
+<p>BGP sessions run over <strong>TCP port 179</strong>. The session lifecycle:</p>
+<ol>
+<li><strong>OPEN</strong> — each peer sends its ASN, BGP version, hold time, and router ID</li>
+<li><strong>KEEPALIVE</strong> — sent to confirm the OPEN and maintain the session (default every 30s)</li>
+<li><strong>UPDATE</strong> — carries <strong>NLRI</strong> (prefix advertisements) and withdrawals</li>
+<li><strong>NOTIFICATION</strong> — signals an error and tears down the session</li>
+</ol>
+<p>Once both peers exchange KEEPALIVEs the session reaches <strong>Established</strong> state and UPDATE messages begin flowing.</p>
+<h3 id="bgp-path-selection-simplified">BGP Path Selection (Simplified)</h3>
+<p>When BGP receives the same prefix from multiple peers, it selects one best path using a sequence of tiebreakers. The most important attributes in order:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Attribute</th>
+<th>Prefer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>LOCAL_PREF</td>
+<td>Highest</td>
+</tr>
+<tr>
+<td>2</td>
+<td>AS_PATH length</td>
+<td>Shortest</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ORIGIN</td>
+<td>IGP &gt; EGP &gt; Incomplete</td>
+</tr>
+<tr>
+<td>4</td>
+<td>MED</td>
+<td>Lowest</td>
+</tr>
+<tr>
+<td>5</td>
+<td>eBGP over iBGP</td>
+<td>eBGP</td>
+</tr>
+<tr>
+<td>6</td>
+<td>IGP cost to next-hop</td>
+<td>Lowest</td>
+</tr>
+</tbody>
+</table>
+<p>In this session only one path exists for each prefix, so path selection is not exercised — but these attributes appear in <code>show route detail</code> output.</p>
+<h3 id="ibgp-full-mesh-rule">iBGP Full Mesh Rule</h3>
+<p>iBGP does not re-advertise routes learned from one iBGP peer to another iBGP peer. This prevents routing loops within the AS but creates a requirement: <strong>every iBGP speaker must peer with every other iBGP speaker</strong> (full mesh).</p>
+<p>With two PE routers this is one session (PE1 ↔ PE2) — trivial. With ten PE routers it would be 45 sessions. The solution is a <strong>Route Reflector (RR)</strong>: a designated router that re-advertises iBGP routes to its <strong>RR clients</strong>, eliminating the full mesh requirement.</p>
+<p>In this lab the full mesh is manageable (one session), so no RR is configured. Session 8 (L3 VPN) introduces MP-BGP and the RR design becomes relevant at scale.</p>
+<h3 id="why-loopbacks-for-ibgp-peering">Why Loopbacks for iBGP Peering</h3>
+<p>iBGP peers in this lab use their <strong>loopback addresses</strong> (10.0.0.1 and 10.0.0.4) as the BGP source and neighbor address, rather than the physical interface IPs. This provides resilience: if one physical link between PE1 and PE2 goes down but IS-IS finds an alternate path, the BGP session stays up because the loopback remains reachable.</p>
+<h3 id="next-hop-self">next-hop-self</h3>
+<p>When PE1 receives a prefix from CE1 via eBGP, the <strong>NEXT_HOP</strong> attribute is set to CE1's IP address (172.16.1.2). When PE1 re-advertises this prefix to PE2 via iBGP, the NEXT_HOP is <strong>not changed by default</strong> — PE2 would see a next-hop of 172.16.1.2, which it cannot reach (it has no route to the 172.16.1.0/30 subnet).</p>
+<p><code>next-hop-self</code> tells PE1 to replace the NEXT_HOP with its own loopback (10.0.0.1) when advertising to iBGP peers. PE2 has IS-IS reachability to 10.0.0.1, so the route becomes usable.</p>
+<h3 id="a-note-on-end-to-end-forwarding">A Note on End-to-End Forwarding</h3>
+<p>By the end of this session both PE routers will have CE1's and CE2's loopbacks in their BGP tables, and both CEs will have each other's loopbacks via eBGP. However, <strong>a ping from CE1 to CE2's loopback will fail</strong> — the packet reaches PE1, which forwards it toward PE2 via IS-IS, but the transit P routers (P1, P2) do not have routes to CE prefixes. They only know IS-IS routes.</p>
+<p>This is the problem MPLS solves: in Session 7, P routers forward based on labels rather than destination IP, so they do not need to know customer prefixes. End-to-end CE-to-CE connectivity is the payoff of Session 7.</p>
+<h2 id="topology-overview">Topology Overview</h2>
+<pre class="mermaid"><code>graph LR
+  CE1([CE1&lt;br/&gt;AS 65100&lt;br/&gt;10.0.0.11]) ---|"172.16.1.0/30"| PE1([PE1&lt;br/&gt;AS 65001&lt;br/&gt;10.0.0.1])
+  PE1 ---|"10.1.12.0/30"| P1([P1&lt;br/&gt;10.0.0.2])
+  P1 ---|"10.1.23.0/30"| P2([P2&lt;br/&gt;10.0.0.3])
+  P2 ---|"10.1.34.0/30"| PE2([PE2&lt;br/&gt;AS 65001&lt;br/&gt;10.0.0.4])
+  PE2 ---|"172.16.2.0/30"| CE2([CE2&lt;br/&gt;AS 65100&lt;br/&gt;10.0.0.12])</code></pre>
+<p>CE1 and CE2 are added to the GNS3 project in Part 0. P1 and P2 do not run BGP.</p>
+<h2 id="session-parts">Session Parts</h2>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Topic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="tasks/part0/">Part 0</a></td>
+<td>Expand topology — add CE nodes, configure interfaces</td>
+</tr>
+<tr>
+<td><a href="tasks/part1/">Part 1</a></td>
+<td>eBGP PE-CE peering and prefix advertisement</td>
+</tr>
+<tr>
+<td><a href="tasks/part2/">Part 2</a></td>
+<td>iBGP PE-PE peering with loopback addresses</td>
+</tr>
+<tr>
+<td><a href="tasks/verify/">Verification</a></td>
+<td>Checklist</td>
+</tr>
+</tbody>
+</table>
 
 
 

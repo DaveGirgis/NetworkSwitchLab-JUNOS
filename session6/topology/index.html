@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-5-topology" class="md-skip">
+        <a href="#session-6-topology" class="md-skip">
           Skip to content
         </a>
       
@@ -3113,6 +3113,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3129,6 +3147,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gns3-new-links-part-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GNS3 New Links (Part 0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-session-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP Session Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -3171,8 +3263,6 @@
   
     
     
-      
-        
       
         
       
@@ -3238,7 +3328,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Expand Topology & Base Config
   
 
     
@@ -3266,7 +3356,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — eBGP PE-CE
   
 
     
@@ -3294,35 +3384,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tasks/part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — Routing Policies
+    Part 2 — iBGP PE-PE
   
 
     
@@ -5352,8 +5414,231 @@
   
 
 
-<h1 id="session-5-topology">Session 5 — Topology</h1>
-<p>Expanded topology adding CE1 and CE2 nodes. Detailed topology coming soon.</p>
+<h1 id="session-6-topology">Session 6 — Topology</h1>
+<h2 id="diagram">Diagram</h2>
+<pre class="mermaid"><code>graph LR
+  CE1([CE1&lt;br/&gt;lo0: 10.0.0.11/32&lt;br/&gt;AS 65100]) ---|"172.16.1.0/30&lt;br/&gt;eBGP"| PE1([PE1&lt;br/&gt;lo0: 10.0.0.1/32&lt;br/&gt;AS 65001])
+  PE1 ---|"10.1.12.0/30&lt;br/&gt;IS-IS"| P1([P1&lt;br/&gt;lo0: 10.0.0.2/32])
+  P1 ---|"10.1.23.0/30&lt;br/&gt;IS-IS"| P2([P2&lt;br/&gt;lo0: 10.0.0.3/32])
+  P2 ---|"10.1.34.0/30&lt;br/&gt;IS-IS"| PE2([PE2&lt;br/&gt;lo0: 10.0.0.4/32&lt;br/&gt;AS 65001])
+  PE2 ---|"172.16.2.0/30&lt;br/&gt;eBGP"| CE2([CE2&lt;br/&gt;lo0: 10.0.0.12/32&lt;br/&gt;AS 65100])
+  PE1 -. "iBGP&lt;br/&gt;loopback peering" .- PE2</code></pre>
+<h2 id="device-summary">Device Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Role</th>
+<th>ASN</th>
+<th>Loopback</th>
+<th>Runs BGP?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1</td>
+<td>Customer Edge</td>
+<td>65100</td>
+<td>10.0.0.11/32</td>
+<td>Yes — eBGP to PE1</td>
+</tr>
+<tr>
+<td>PE1</td>
+<td>Provider Edge</td>
+<td>65001</td>
+<td>10.0.0.1/32</td>
+<td>Yes — eBGP + iBGP</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Provider Core</td>
+<td>65001</td>
+<td>10.0.0.2/32</td>
+<td>No — IS-IS only</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Provider Core</td>
+<td>65001</td>
+<td>10.0.0.3/32</td>
+<td>No — IS-IS only</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>Provider Edge</td>
+<td>65001</td>
+<td>10.0.0.4/32</td>
+<td>Yes — eBGP + iBGP</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>Customer Edge</td>
+<td>65100</td>
+<td>10.0.0.12/32</td>
+<td>Yes — eBGP to PE2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="link-summary">Link Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Left Device</th>
+<th>Left Interface</th>
+<th>Left Address</th>
+<th>Right Device</th>
+<th>Right Interface</th>
+<th>Right Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 — PE1</td>
+<td>CE1</td>
+<td>ge-0/0/0</td>
+<td>172.16.1.2/30</td>
+<td>PE1</td>
+<td>ge-0/0/1</td>
+<td>172.16.1.1/30</td>
+</tr>
+<tr>
+<td>PE1 — P1</td>
+<td>PE1</td>
+<td>ge-0/0/0</td>
+<td>10.1.12.1/30</td>
+<td>P1</td>
+<td>ge-0/0/0</td>
+<td>10.1.12.2/30</td>
+</tr>
+<tr>
+<td>P1 — P2</td>
+<td>P1</td>
+<td>ge-0/0/1</td>
+<td>10.1.23.1/30</td>
+<td>P2</td>
+<td>ge-0/0/0</td>
+<td>10.1.23.2/30</td>
+</tr>
+<tr>
+<td>P2 — PE2</td>
+<td>P2</td>
+<td>ge-0/0/1</td>
+<td>10.1.34.1/30</td>
+<td>PE2</td>
+<td>ge-0/0/0</td>
+<td>10.1.34.2/30</td>
+</tr>
+<tr>
+<td>PE2 — CE2</td>
+<td>PE2</td>
+<td>ge-0/0/1</td>
+<td>172.16.2.1/30</td>
+<td>CE2</td>
+<td>ge-0/0/0</td>
+<td>172.16.2.2/30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gns3-new-links-part-0">GNS3 New Links (Part 0)</h2>
+<p>Two new links are added in Part 0:</p>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Node A</th>
+<th>Adapter</th>
+<th>Node B</th>
+<th>Adapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 — PE1</td>
+<td>CE1</td>
+<td>2 (ge-0/0/0)</td>
+<td>PE1</td>
+<td>3 (ge-0/0/1)</td>
+</tr>
+<tr>
+<td>CE2 — PE2</td>
+<td>CE2</td>
+<td>2 (ge-0/0/0)</td>
+<td>PE2</td>
+<td>3 (ge-0/0/1)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bgp-session-summary">BGP Session Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Session</th>
+<th>Type</th>
+<th>Local Router</th>
+<th>Local Address</th>
+<th>Peer</th>
+<th>Peer Address</th>
+<th>Peer AS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 — PE1</td>
+<td>eBGP</td>
+<td>CE1</td>
+<td>172.16.1.2</td>
+<td>PE1</td>
+<td>172.16.1.1</td>
+<td>65001</td>
+</tr>
+<tr>
+<td>PE1 — CE1</td>
+<td>eBGP</td>
+<td>PE1</td>
+<td>172.16.1.1</td>
+<td>CE1</td>
+<td>172.16.1.2</td>
+<td>65100</td>
+</tr>
+<tr>
+<td>PE1 — PE2</td>
+<td>iBGP</td>
+<td>PE1</td>
+<td>10.0.0.1 (lo0)</td>
+<td>PE2</td>
+<td>10.0.0.4 (lo0)</td>
+<td>65001</td>
+</tr>
+<tr>
+<td>PE2 — PE1</td>
+<td>iBGP</td>
+<td>PE2</td>
+<td>10.0.0.4 (lo0)</td>
+<td>PE1</td>
+<td>10.0.0.1 (lo0)</td>
+<td>65001</td>
+</tr>
+<tr>
+<td>PE2 — CE2</td>
+<td>eBGP</td>
+<td>PE2</td>
+<td>172.16.2.1</td>
+<td>CE2</td>
+<td>172.16.2.2</td>
+<td>65100</td>
+</tr>
+<tr>
+<td>CE2 — PE2</td>
+<td>eBGP</td>
+<td>CE2</td>
+<td>172.16.2.2</td>
+<td>PE2</td>
+<td>172.16.2.1</td>
+<td>65001</td>
+</tr>
+</tbody>
+</table>
 
 
 

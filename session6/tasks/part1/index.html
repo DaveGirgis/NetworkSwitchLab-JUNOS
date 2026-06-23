@@ -29,7 +29,7 @@
     
     
       
-        <title>Part 1 — eBGP Peering - Junos SP Training Labs</title>
+        <title>Part 1 — eBGP PE-CE - Junos SP Training Labs</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-1-ebgp-peering" class="md-skip">
+        <a href="#part-1-ebgp-pe-ce" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Part 1 — eBGP Peering
+              Part 1 — eBGP PE-CE
             
           </span>
         </div>
@@ -3172,8 +3172,6 @@
       
         
       
-        
-      
     
     
     
@@ -3230,7 +3228,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Expand Topology & Base Config
   
 
     
@@ -3260,6 +3258,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — eBGP PE-CE
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3267,7 +3283,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — eBGP PE-CE
   
 
     
@@ -3276,6 +3292,214 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-configure-as-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Configure AS Numbers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Configure AS Numbers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe1-and-pe2-as-65001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE1 and PE2 (AS 65001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ce1-and-ce2-as-65100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE1 and CE2 (AS 65100)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-configure-ebgp-on-pe1-and-ce1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Configure eBGP on PE1 and CE1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Configure eBGP on PE1 and CE1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ce1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-configure-ebgp-on-pe2-and-ce2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Configure eBGP on PE2 and CE2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Configure eBGP on PE2 and CE2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ce2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-verify-ebgp-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Verify eBGP Sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-advertise-ce-loopbacks-into-bgp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Advertise CE Loopbacks into BGP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Advertise CE Loopbacks into BGP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ce1-advertise-10001132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE1 — advertise 10.0.0.11/32
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ce2-advertise-10001232" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE2 — advertise 10.0.0.12/32
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-verify-prefix-receipt-on-pe-routers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Verify Prefix Receipt on PE Routers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -3296,35 +3520,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — Routing Policies
+    Part 2 — iBGP PE-PE
   
 
     
@@ -5354,9 +5550,134 @@
   
 
 
-<h1 id="part-1-ebgp-peering">Part 1 — eBGP Peering</h1>
+<h1 id="part-1-ebgp-pe-ce">Part 1 — eBGP PE-CE</h1>
+<h2 id="overview">Overview</h2>
+<p>eBGP sessions are configured between each PE router and its directly connected CE router. The peers use the physical link addresses (172.16.x.x) since eBGP by default only travels one IP hop (TTL=1).</p>
+<p>In Junos, BGP configuration lives under <code>[edit protocols bgp]</code>. Peers are grouped — a <strong>group</strong> holds shared configuration (type, peer-AS, policy) and individual neighbors inherit it.</p>
+<h2 id="step-1-configure-as-numbers">Step 1: Configure AS Numbers</h2>
+<p>Each router must have its ASN defined before BGP can start.</p>
+<h3 id="pe1-and-pe2-as-65001">PE1 and PE2 (AS 65001)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>PE1&gt; configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set routing-options autonomous-system 65001
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>PE2&gt; configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set routing-options autonomous-system 65001
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
+</code></pre></div>
+<h3 id="ce1-and-ce2-as-65100">CE1 and CE2 (AS 65100)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>CE1&gt; configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set routing-options autonomous-system 65100
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>commit
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>CE2&gt; configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set routing-options autonomous-system 65100
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>commit
+</code></pre></div>
+<h2 id="step-2-configure-ebgp-on-pe1-and-ce1">Step 2: Configure eBGP on PE1 and CE1</h2>
+<h3 id="pe1">PE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>configure
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>set protocols bgp group EBGP-CE1 type external
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>set protocols bgp group EBGP-CE1 peer-as 65100
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>set protocols bgp group EBGP-CE1 neighbor 172.16.1.2
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>commit
+</code></pre></div>
+<h3 id="ce1">CE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>configure
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>set protocols bgp group EBGP-PE1 type external
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>set protocols bgp group EBGP-PE1 peer-as 65001
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>set protocols bgp group EBGP-PE1 neighbor 172.16.1.1
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>commit
+</code></pre></div>
+<h2 id="step-3-configure-ebgp-on-pe2-and-ce2">Step 3: Configure eBGP on PE2 and CE2</h2>
+<h3 id="pe2">PE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>configure
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>set protocols bgp group EBGP-CE2 type external
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>set protocols bgp group EBGP-CE2 peer-as 65100
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>set protocols bgp group EBGP-CE2 neighbor 172.16.2.2
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>commit
+</code></pre></div>
+<h3 id="ce2">CE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>configure
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>set protocols bgp group EBGP-PE2 type external
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>set protocols bgp group EBGP-PE2 peer-as 65001
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>set protocols bgp group EBGP-PE2 neighbor 172.16.2.1
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>commit
+</code></pre></div>
+<h2 id="step-4-verify-ebgp-sessions">Step 4: Verify eBGP Sessions</h2>
+<p>Wait ~30 seconds, then check the session state:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Expected — one eBGP peer in <code>Establ</code> state:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>inet.0                 0          0          0          0          0          0
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>172.16.1.2            65100          5          5       0       0         :42 Establ
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  inet.0: 0/0/0/0
+</code></pre></div>
+<p><code>Establ</code> confirms the session is up. The <code>0/0/0/0</code> prefix count is expected — no prefixes are being advertised yet.</p>
+<h2 id="step-5-advertise-ce-loopbacks-into-bgp">Step 5: Advertise CE Loopbacks into BGP</h2>
+<p>By default, BGP does not advertise any routes. An <strong>export policy</strong> must be configured to select which routes to send.</p>
+<p>We will advertise each CE's loopback into BGP using a routing policy that matches the directly connected loopback prefix.</p>
+<h3 id="ce1-advertise-10001132">CE1 — advertise 10.0.0.11/32</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>configure
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>set policy-options policy-statement ADVERTISE-LOOPBACK term 1 from protocol direct
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>set policy-options policy-statement ADVERTISE-LOOPBACK term 1 from route-filter 10.0.0.11/32 exact
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>set policy-options policy-statement ADVERTISE-LOOPBACK term 1 then accept
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>set protocols bgp group EBGP-PE1 export ADVERTISE-LOOPBACK
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>commit
+</code></pre></div>
+<h3 id="ce2-advertise-10001232">CE2 — advertise 10.0.0.12/32</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>configure
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>set policy-options policy-statement ADVERTISE-LOOPBACK term 1 from protocol direct
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>set policy-options policy-statement ADVERTISE-LOOPBACK term 1 from route-filter 10.0.0.12/32 exact
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>set policy-options policy-statement ADVERTISE-LOOPBACK term 1 then accept
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>set protocols bgp group EBGP-PE2 export ADVERTISE-LOOPBACK
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>commit
+</code></pre></div>
+<h2 id="step-6-verify-prefix-receipt-on-pe-routers">Step 6: Verify Prefix Receipt on PE Routers</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PE1&gt; show route receive-protocol bgp 172.16.1.2
+</code></pre></div>
+<p>Expected — CE1's loopback received:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>inet.0: 8 destinations, 8 routes (8 active, 0 holddown, 0 hidden)
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>10.0.0.11/32       *[BGP/170] 00:01:05, localpref 100
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>                    AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>PE2&gt; show route receive-protocol bgp 172.16.2.2
+</code></pre></div>
+<p>Expected — CE2's loopback received:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>10.0.0.12/32       *[BGP/170] 00:00:58, localpref 100
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>                    AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>                    &gt; to 172.16.2.2 via ge-0/0/1.0
+</code></pre></div>
+<p>At this point PE1 knows CE1's prefix and PE2 knows CE2's prefix. The two PE routers have not yet shared this information — that is the job of iBGP in Part 2.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">BGP route preference 170</p>
+<p>In Junos all BGP routes carry a preference of 170, lower than IS-IS (18) and OSPF (10). BGP routes will only be installed in inet.0 if no better-preference route to the same prefix exists.</p>
 </div>
 
 

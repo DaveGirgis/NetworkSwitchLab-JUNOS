@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://DaveGirgis.github.io/NetworkSwitchLab-JUNOS/session6/tasks/verify/">
       
       
-        <link rel="prev" href="../part3/">
+        <link rel="prev" href="../part2/">
       
       
         <link rel="next" href="../../reference/commands/">
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-5-verification" class="md-skip">
+        <a href="#session-6-verification-checklist" class="md-skip">
           Skip to content
         </a>
       
@@ -3172,8 +3172,6 @@
       
         
       
-        
-      
     
     
     
@@ -3230,7 +3228,7 @@
   <span class="md-ellipsis">
     
   
-    Part 0 — Base Config
+    Part 0 — Expand Topology & Base Config
   
 
     
@@ -3258,7 +3256,7 @@
   <span class="md-ellipsis">
     
   
-    Part 1 — eBGP Peering
+    Part 1 — eBGP PE-CE
   
 
     
@@ -3286,35 +3284,7 @@
   <span class="md-ellipsis">
     
   
-    Part 2 — iBGP & Route Reflectors
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../part3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Part 3 — Routing Policies
+    Part 2 — iBGP PE-PE
   
 
     
@@ -3344,6 +3314,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3360,6 +3348,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interfaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ebgp-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eBGP Sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ibgp-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iBGP Session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prefix-propagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prefix Propagation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5354,10 +5438,56 @@
   
 
 
-<h1 id="session-5-verification">Session 5 — Verification</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-6-verification-checklist">Session 6 — Verification Checklist</h1>
+<h2 id="topology">Topology</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> CE1 and CE2 nodes added to GNS3 project and running</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> CE1 Adapter 2 linked to PE1 Adapter 3 (ge-0/0/0 ↔ ge-0/0/1)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> CE2 Adapter 2 linked to PE2 Adapter 3 (ge-0/0/0 ↔ ge-0/0/1)</li>
+</ul>
+<h2 id="interfaces">Interfaces</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show interfaces terse</code> — <code>ge-0/0/1.0</code> is <code>up up</code>, address <code>172.16.1.1/30</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show interfaces terse</code> — <code>ge-0/0/1.0</code> is <code>up up</code>, address <code>172.16.2.1/30</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; show interfaces terse</code> — <code>ge-0/0/0.0</code> is <code>172.16.1.2/30</code>, <code>lo0.0</code> is <code>10.0.0.11/32</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; show interfaces terse</code> — <code>ge-0/0/0.0</code> is <code>172.16.2.2/30</code>, <code>lo0.0</code> is <code>10.0.0.12/32</code></li>
+</ul>
+<h2 id="ebgp-sessions">eBGP Sessions</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show bgp summary</code> — peer <code>172.16.1.2</code> (CE1) shows <code>Establ</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show bgp summary</code> — peer <code>172.16.2.2</code> (CE2) shows <code>Establ</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; show bgp summary</code> — peer <code>172.16.1.1</code> (PE1) shows <code>Establ</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; show bgp summary</code> — peer <code>172.16.2.1</code> (PE2) shows <code>Establ</code></li>
+</ul>
+<h2 id="ibgp-session">iBGP Session</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show bgp summary</code> — peer <code>10.0.0.4</code> (PE2) shows <code>Establ</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show bgp summary</code> — peer <code>10.0.0.1</code> (PE1) shows <code>Establ</code></li>
+</ul>
+<h2 id="prefix-propagation">Prefix Propagation</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route receive-protocol bgp 172.16.1.2</code> — shows <code>10.0.0.11/32</code> from CE1</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route receive-protocol bgp 172.16.2.2</code> — shows <code>10.0.0.12/32</code> from CE2</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route receive-protocol bgp 10.0.0.4</code> — shows <code>10.0.0.12/32</code> from PE2 via iBGP</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route receive-protocol bgp 10.0.0.1</code> — shows <code>10.0.0.11/32</code> from PE1 via iBGP</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; show route receive-protocol bgp 172.16.1.1</code> — shows <code>10.0.0.12/32</code>, AS path <code>65001 65100</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; show route receive-protocol bgp 172.16.2.1</code> — shows <code>10.0.0.11/32</code>, AS path <code>65001 65100</code></li>
+</ul>
+<h2 id="bgp-table">BGP Table</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route protocol bgp</code> — two routes: <code>10.0.0.11/32</code> (eBGP) and <code>10.0.0.12/32</code> (iBGP)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route protocol bgp</code> — two routes: <code>10.0.0.12/32</code> (eBGP) and <code>10.0.0.11/32</code> (iBGP)</li>
+</ul>
+<h2 id="quick-commands">Quick Commands</h2>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show bgp summary
+</code></pre></div>
+Expected: all peers in <code>Establ</code> state</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show route protocol bgp
+</code></pre></div>
+Expected on PE1: <code>10.0.0.11/32</code> via ge-0/0/1 (eBGP), <code>10.0.0.12/32</code> via IS-IS next-hop (iBGP)</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bgp neighbor 10.0.0.4
+</code></pre></div>
+Expected on PE1: <code>Type: Internal</code>, <code>State: Established</code>, <code>next-hop-self</code> confirmed in options</p>
 
 
 
