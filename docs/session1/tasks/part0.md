@@ -114,3 +114,15 @@ set cli complete-on-space off
 
 !!! note "These do not persist across reconnects"
     Re-run both commands at the start of every console session. They apply to the current session only.
+
+!!! tip "Pasting large config blocks"
+    Use `load set terminal` in config mode instead of pasting directly at the `#` prompt. Junos buffers all input until you press **Ctrl+D**, then processes every set command at once — eliminating paste-rate issues with console terminals.
+
+    ```text
+    configure
+    load set terminal
+    set system host-name PE1
+    set interfaces ge-0/0/0 ...
+    ^D
+    commit
+    ```

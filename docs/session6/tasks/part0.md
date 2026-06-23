@@ -11,6 +11,18 @@ set cli complete-on-space off
 
 Re-run these at the start of every console session — they do not persist across reconnects.
 
+!!! tip "Pasting large config blocks"
+    Use `load set terminal` in config mode instead of pasting directly at the `#` prompt. Junos buffers all input until you press **Ctrl+D**, then processes every set command at once — eliminating paste-rate issues with console terminals.
+
+    ```text
+    configure
+    load set terminal
+    set system host-name PE1
+    set interfaces ge-0/0/0 ...
+    ^D
+    commit
+    ```
+
 ## Step 1: Add CE Nodes to GNS3
 
 In the `JNCIS-SP-Core` GNS3 project:
