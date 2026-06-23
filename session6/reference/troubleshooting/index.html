@@ -5487,16 +5487,27 @@
 <hr />
 <h2 id="ibgp-route-received-but-not-active-hidden">iBGP Route Received but Not Active (Hidden)</h2>
 <p><strong>Symptom:</strong> <code>show route receive-protocol bgp 10.0.0.4</code> shows the prefix but <code>show route protocol bgp</code> does not show it as active.</p>
-<p><strong>Cause:</strong> The NEXT_HOP is unreachable — <code>next-hop-self</code> is missing or not working.</p>
+<p><strong>Cause:</strong> The NEXT_HOP is unreachable — the <code>NEXT-HOP-SELF</code> export policy is missing or not applied to the iBGP group.</p>
 <p><strong>Fix:</strong></p>
-<p>Confirm <code>next-hop-self</code> is configured on the iBGP neighbor:
+<p>Confirm the export policy is applied to the iBGP group:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>show configuration protocols bgp group IBGP
 </code></pre></div></p>
-<p>Should show <code>neighbor 10.0.0.4 { next-hop-self; }</code>.</p>
-<p>Check what next-hop value is being received:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>show route receive-protocol bgp 10.0.0.4 detail
+<p>Should show <code>export NEXT-HOP-SELF</code>. If not, apply it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>commit
 </code></pre></div></p>
-<p>Look for the <code>Next hop</code> line — if it shows a 172.16.x.x address, <code>next-hop-self</code> is not being applied on the sending side. Configure it on PE2 for its neighbor 10.0.0.1.</p>
+<p>Confirm the policy exists:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>show configuration policy-options policy-statement NEXT-HOP-SELF
+</code></pre></div></p>
+<p>Should show <code>then next-hop self</code> and <code>then accept</code>. If missing, create it:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>commit
+</code></pre></div></p>
+<p>Check what next-hop value is being received:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>show route receive-protocol bgp 10.0.0.4 detail
+</code></pre></div></p>
+<p>If the <code>Next hop</code> line shows a 172.16.x.x address, the policy is not being applied on the sending PE — configure it there.</p>
 <hr />
 <h2 id="ce-to-ce-ping-fails">CE-to-CE Ping Fails</h2>
 <p><strong>Symptom:</strong> CE1 can reach PE1 but cannot ping CE2's loopback (10.0.0.12).</p>

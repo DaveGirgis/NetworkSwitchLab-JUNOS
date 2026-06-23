@@ -3467,10 +3467,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#routing-policy-prefix-advertisement" class="md-nav__link">
+  <a href="#routing-policy-prefix-advertisement-next-hop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Routing Policy (Prefix Advertisement)
+        Routing Policy (Prefix Advertisement &amp; Next-Hop)
       
     </span>
   </a>
@@ -5455,16 +5455,12 @@
 <td>Set the local source address (use loopback for iBGP)</td>
 </tr>
 <tr>
-<td><code>set protocols bgp group &lt;name&gt; neighbor &lt;ip&gt; next-hop-self</code></td>
-<td>Replace NEXT_HOP with local address when sending to iBGP peer</td>
-</tr>
-<tr>
 <td><code>set protocols bgp group &lt;name&gt; export &lt;policy&gt;</code></td>
 <td>Apply an export policy to control which routes are advertised</td>
 </tr>
 </tbody>
 </table>
-<h2 id="routing-policy-prefix-advertisement">Routing Policy (Prefix Advertisement)</h2>
+<h2 id="routing-policy-prefix-advertisement-next-hop">Routing Policy (Prefix Advertisement &amp; Next-Hop)</h2>
 <table>
 <thead>
 <tr>
@@ -5488,6 +5484,10 @@
 <tr>
 <td><code>set policy-options policy-statement &lt;name&gt; term &lt;t&gt; then reject</code></td>
 <td>Reject (suppress) matched routes</td>
+</tr>
+<tr>
+<td><code>set policy-options policy-statement &lt;name&gt; term &lt;t&gt; then next-hop self</code></td>
+<td>Replace NEXT_HOP with local router address (used for iBGP next-hop-self on vMX 14.1)</td>
 </tr>
 </tbody>
 </table>
