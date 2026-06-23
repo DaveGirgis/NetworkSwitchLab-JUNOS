@@ -21,6 +21,7 @@
 | `set policy-options policy-statement <name> term <t> from route-filter <prefix> exact` | Match an exact prefix |
 | `set policy-options policy-statement <name> term <t> then accept` | Accept (advertise) matched routes |
 | `set policy-options policy-statement <name> term <t> then reject` | Reject (suppress) matched routes |
+| `set policy-options policy-statement <name> term <t> from protocol bgp` | Match only BGP-learned routes (required to prevent IS-IS/direct routes leaking into iBGP) |
 | `set policy-options policy-statement <name> term <t> then next-hop self` | Replace NEXT_HOP with local router address (used for iBGP next-hop-self on vMX 14.1) |
 
 ## BGP Show Commands

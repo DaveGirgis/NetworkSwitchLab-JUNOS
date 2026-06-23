@@ -106,18 +106,18 @@ Wait ~30 seconds, then check the session state:
 PE1> show bgp summary
 ```
 
-Expected — one eBGP peer in `Establ` state:
+Expected — one eBGP peer up, no prefixes yet:
 
 ```text
 Groups: 1 Peers: 1 Down peers: 0
 Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
-inet.0                 0          0          0          0          0          0
+inet.0
+                       0          0          0          0          0          0
 Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-172.16.1.2            65100          5          5       0       0         :42 Establ
-  inet.0: 0/0/0/0
+172.16.1.2            65100          5          5       0       0         :42 0/0/0/0              0/0/0/0
 ```
 
-`Establ` confirms the session is up. The `0/0/0/0` prefix count is expected — no prefixes are being advertised yet.
+The peer line shows `0/0/0/0  0/0/0/0` — two count groups for inet.0 and iso.0 respectively. A session that has not formed yet shows `Active` or `Connect` instead of counts. The `0/0/0/0` with no error text confirms the session is established. Prefix counts are zero because no export policy is configured on CE1 yet.
 
 ## Step 5: Advertise CE Loopbacks into BGP
 

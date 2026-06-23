@@ -19,6 +19,7 @@ configure
 set protocols bgp group IBGP type internal
 set protocols bgp group IBGP local-address 10.0.0.1
 set protocols bgp group IBGP neighbor 10.0.0.4
+set policy-options policy-statement NEXT-HOP-SELF term 1 from protocol bgp
 set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
 set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
 set protocols bgp group IBGP export NEXT-HOP-SELF
@@ -34,6 +35,7 @@ configure
 set protocols bgp group IBGP type internal
 set protocols bgp group IBGP local-address 10.0.0.4
 set protocols bgp group IBGP neighbor 10.0.0.1
+set policy-options policy-statement NEXT-HOP-SELF term 1 from protocol bgp
 set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
 set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
 set protocols bgp group IBGP export NEXT-HOP-SELF
@@ -47,20 +49,19 @@ commit
 PE1> show bgp summary
 ```
 
-Expected — both eBGP (CE1) and iBGP (PE2) sessions established:
+Expected — both eBGP (CE1) and iBGP (PE2) sessions up, one prefix each:
 
 ```text
 Groups: 2 Peers: 2 Down peers: 0
 Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
-inet.0                 2          2          0          0          0          0
+inet.0
+                       2          2          0          0          0          0
 Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-172.16.1.2            65100         12         11       0       0       3:24 Establ
-  inet.0: 1/1/1/0
-10.0.0.4              65001          8          8       0       0       1:47 Establ
-  inet.0: 1/1/1/0
+10.0.0.4              65001         17         17       0       0        3:53 1/1/1/0              0/0/0/0
+172.16.1.2            65100         73         88       0       0       37:34 1/1/1/0              0/0/0/0
 ```
 
-The iBGP peer (10.0.0.4) shows `1/1/1/0` — one prefix received (CE2's loopback from PE2).
+Both peers show `1/1/1/0` — one prefix received, one active. The second group `0/0/0/0` is the iso.0 address family count (always zero; IS-IS does not use BGP to carry ISO routes).
 
 ## Step 4: Verify Prefix Propagation
 
