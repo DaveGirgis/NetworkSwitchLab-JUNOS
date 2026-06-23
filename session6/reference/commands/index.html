@@ -5486,6 +5486,10 @@
 <td>Reject (suppress) matched routes</td>
 </tr>
 <tr>
+<td><code>set policy-options policy-statement &lt;name&gt; term &lt;t&gt; from protocol bgp</code></td>
+<td>Match only BGP-learned routes (required to prevent IS-IS/direct routes leaking into iBGP)</td>
+</tr>
+<tr>
 <td><code>set policy-options policy-statement &lt;name&gt; term &lt;t&gt; then next-hop self</code></td>
 <td>Replace NEXT_HOP with local router address (used for iBGP next-hop-self on vMX 14.1)</td>
 </tr>

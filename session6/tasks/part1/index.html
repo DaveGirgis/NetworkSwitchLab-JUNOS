@@ -5624,15 +5624,15 @@
 <p>Wait ~30 seconds, then check the session state:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE1&gt; show bgp summary
 </code></pre></div>
-<p>Expected — one eBGP peer in <code>Establ</code> state:</p>
+<p>Expected — one eBGP peer up, no prefixes yet:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Groups: 1 Peers: 1 Down peers: 0
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>inet.0                 0          0          0          0          0          0
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>172.16.1.2            65100          5          5       0       0         :42 Establ
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  inet.0: 0/0/0/0
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>inet.0
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>                       0          0          0          0          0          0
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>172.16.1.2            65100          5          5       0       0         :42 0/0/0/0              0/0/0/0
 </code></pre></div>
-<p><code>Establ</code> confirms the session is up. The <code>0/0/0/0</code> prefix count is expected — no prefixes are being advertised yet.</p>
+<p>The peer line shows <code>0/0/0/0  0/0/0/0</code> — two count groups for inet.0 and iso.0 respectively. A session that has not formed yet shows <code>Active</code> or <code>Connect</code> instead of counts. The <code>0/0/0/0</code> with no error text confirms the session is established. Prefix counts are zero because no export policy is configured on CE1 yet.</p>
 <h2 id="step-5-advertise-ce-loopbacks-into-bgp">Step 5: Advertise CE Loopbacks into BGP</h2>
 <p>By default, BGP does not advertise any routes. An <strong>export policy</strong> must be configured to select which routes to send.</p>
 <p>We will advertise each CE's loopback into BGP using a routing policy that matches the directly connected loopback prefix.</p>

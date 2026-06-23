@@ -5456,11 +5456,12 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols bgp group IBGP type internal
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set protocols bgp group IBGP local-address 10.0.0.1
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>set protocols bgp group IBGP neighbor 10.0.0.4
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>commit
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 from protocol bgp
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>commit
 </code></pre></div>
 <h2 id="step-2-configure-ibgp-on-pe2">Step 2: Configure iBGP on PE2</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
@@ -5468,26 +5469,26 @@
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols bgp group IBGP type internal
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set protocols bgp group IBGP local-address 10.0.0.4
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>set protocols bgp group IBGP neighbor 10.0.0.1
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>commit
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 from protocol bgp
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then next-hop self
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>set policy-options policy-statement NEXT-HOP-SELF term 1 then accept
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>set protocols bgp group IBGP export NEXT-HOP-SELF
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>commit
 </code></pre></div>
 <h2 id="step-3-verify-ibgp-session">Step 3: Verify iBGP Session</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>PE1&gt; show bgp summary
 </code></pre></div>
-<p>Expected — both eBGP (CE1) and iBGP (PE2) sessions established:</p>
+<p>Expected — both eBGP (CE1) and iBGP (PE2) sessions up, one prefix each:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Groups: 2 Peers: 2 Down peers: 0
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>inet.0                 2          2          0          0          0          0
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>172.16.1.2            65100         12         11       0       0       3:24 Establ
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  inet.0: 1/1/1/0
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>10.0.0.4              65001          8          8       0       0       1:47 Establ
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  inet.0: 1/1/1/0
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>inet.0
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                       2          2          0          0          0          0
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>10.0.0.4              65001         17         17       0       0        3:53 1/1/1/0              0/0/0/0
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>172.16.1.2            65100         73         88       0       0       37:34 1/1/1/0              0/0/0/0
 </code></pre></div>
-<p>The iBGP peer (10.0.0.4) shows <code>1/1/1/0</code> — one prefix received (CE2's loopback from PE2).</p>
+<p>Both peers show <code>1/1/1/0</code> — one prefix received, one active. The second group <code>0/0/0/0</code> is the iso.0 address family count (always zero; IS-IS does not use BGP to carry ISO routes).</p>
 <h2 id="step-4-verify-prefix-propagation">Step 4: Verify Prefix Propagation</h2>
 <p>PE1 should now have CE2's loopback via iBGP from PE2, and vice versa.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route receive-protocol bgp 10.0.0.4
