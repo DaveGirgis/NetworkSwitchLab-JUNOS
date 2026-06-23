@@ -5485,36 +5485,38 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route receive-protocol bgp 10.0.0.4
 </code></pre></div>
 <p>Expected — CE2's prefix received from PE2 via iBGP:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>inet.0: 9 destinations, 9 routes (9 active, 0 holddown, 0 hidden)
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>10.0.0.12/32       *[BGP/170] 00:01:12, localpref 100
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                    AS path: 65100 I, validation-state: unverified
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  Prefix                  Nexthop              MED     Lclpref    AS path
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>* 10.0.0.12/32            10.0.0.4                    100        65100 I
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 </code></pre></div>
-<p>The next-hop for 10.0.0.12/32 is now PE2's loopback (10.0.0.4, resolved via IS-IS to ge-0/0/0.0 toward P1).</p>
+<p>The next-hop is PE2's loopback (10.0.0.4) — <code>next-hop-self</code> replaced the original CE2 address. <code>Lclpref 100</code> is the default LOCAL_PREF applied to routes entering the AS via iBGP.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PE2&gt; show route receive-protocol bgp 10.0.0.1
 </code></pre></div>
 <p>Expected — CE1's prefix received from PE1 via iBGP:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>10.0.0.11/32       *[BGP/170] 00:01:08, localpref 100
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>                    AS path: 65100 I, validation-state: unverified
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>                    &gt; to 10.1.34.1 via ge-0/0/0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  Prefix                  Nexthop              MED     Lclpref    AS path
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>* 10.0.0.11/32            10.0.0.1                    100        65100 I
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
 </code></pre></div>
 <h2 id="step-5-verify-ce-routers-receive-each-others-prefix">Step 5: Verify CE Routers Receive Each Other's Prefix</h2>
 <p>PE2 will now advertise CE1's prefix (10.0.0.11/32) to CE2 via eBGP, and PE1 will advertise CE2's prefix (10.0.0.12/32) to CE1.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>CE1&gt; show route receive-protocol bgp 172.16.1.1
 </code></pre></div>
 <p>Expected — CE2's loopback received via PE1:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>10.0.0.12/32       *[BGP/170] 00:00:44, localpref 100
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>                    AS path: 65001 65100 I, validation-state: unverified
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>                    &gt; to 172.16.1.1 via ge-0/0/0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  Prefix                  Nexthop              MED     Lclpref    AS path
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>* 10.0.0.12/32            172.16.1.1                              65001 65100 I
 </code></pre></div>
-<p>Note the AS_PATH: <code>65001 65100</code> — the route passed through the provider AS (65001) then originated in AS 65100 (CE2).</p>
+<p>Note the AS_PATH: <code>65001 65100</code> — the route passed through the provider AS (65001) before originating in AS 65100 (CE2). CE routers do not run IS-IS so no <code>iso.0</code> table appears.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>CE2&gt; show route receive-protocol bgp 172.16.2.1
 </code></pre></div>
 <p>Expected — CE1's loopback received via PE2:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>10.0.0.11/32       *[BGP/170] 00:00:41, localpref 100
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>                    AS path: 65001 65100 I, validation-state: unverified
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>                    &gt; to 172.16.2.1 via ge-0/0/0.0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  Prefix                  Nexthop              MED     Lclpref    AS path
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>* 10.0.0.11/32            172.16.2.1                              65001 65100 I
 </code></pre></div>
 <h2 id="step-6-confirm-the-full-bgp-table-on-pe1">Step 6: Confirm the Full BGP Table on PE1</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PE1&gt; show route protocol bgp
