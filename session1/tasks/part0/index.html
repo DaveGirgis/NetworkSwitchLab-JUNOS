@@ -5588,6 +5588,17 @@
 <p class="admonition-title">These do not persist across reconnects</p>
 <p>Re-run both commands at the start of every console session. They apply to the current session only.</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Pasting large config blocks</p>
+<p>Use <code>load set terminal</code> in config mode instead of pasting directly at the <code>#</code> prompt. Junos buffers all input until you press <strong>Ctrl+D</strong>, then processes every set command at once — eliminating paste-rate issues with console terminals.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>configure
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>load set terminal
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>set system host-name PE1
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>set interfaces ge-0/0/0 ...
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>^D
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>commit
+</code></pre></div>
+</div>
 
 
 
