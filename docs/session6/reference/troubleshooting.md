@@ -127,6 +127,38 @@ If the `Next hop` line shows a 172.16.x.x address, the policy is not being appli
 
 ---
 
+## CE Receives No Prefixes from PE Despite Session Up
+
+**Symptom:** `show route receive-protocol bgp <PE-address>` on CE shows the inet.0 table summary but no prefix rows.
+
+**Cause:** One of two issues:
+
+1. **PE has no export policy for the eBGP group** — Junos 14.1 requires an explicit export policy to re-advertise iBGP-learned routes to eBGP peers. Confirm the PE's eBGP group has an export policy:
+   ```junos
+   show configuration protocols bgp group EBGP-CE2
+   ```
+   Should show `export ADVERTISE-BGP`. If missing:
+   ```junos
+   set policy-options policy-statement ADVERTISE-BGP term 1 from protocol bgp
+   set policy-options policy-statement ADVERTISE-BGP term 1 then accept
+   set protocols bgp group EBGP-CE2 export ADVERTISE-BGP
+   commit
+   ```
+
+2. **AS_PATH loop prevention** — CE1 and CE2 are both in AS 65100. When PE2 tries to advertise CE1's prefix (AS_PATH: `65100`) to CE2 (also AS 65100), BGP suppresses it. Confirm `as-override` is set:
+   ```junos
+   show configuration protocols bgp group EBGP-CE2 neighbor 172.16.2.2
+   ```
+   Should show `as-override`. If missing:
+   ```junos
+   set protocols bgp group EBGP-CE2 neighbor 172.16.2.2 as-override
+   commit
+   ```
+
+   After `as-override`, CE2 receives AS_PATH `65001 65001 I` instead of `65001 65100 I`.
+
+---
+
 ## CE-to-CE Ping Fails
 
 **Symptom:** CE1 can reach PE1 but cannot ping CE2's loopback (10.0.0.12).

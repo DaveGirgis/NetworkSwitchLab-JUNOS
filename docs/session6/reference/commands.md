@@ -12,6 +12,7 @@
 | `set protocols bgp group <name> neighbor <ip>` | Add a neighbor to the group |
 | `set protocols bgp group <name> local-address 10.0.0.1` | Set the local source address (use loopback for iBGP) |
 | `set protocols bgp group <name> export <policy>` | Apply an export policy to control which routes are advertised |
+| `set protocols bgp group <name> neighbor <ip> as-override` | Replace the peer's AS in the AS_PATH with the local AS — required when PE advertises to same-AS CE sites |
 
 ## Routing Policy (Prefix Advertisement & Next-Hop)
 
