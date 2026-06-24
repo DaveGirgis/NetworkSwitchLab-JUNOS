@@ -3815,6 +3815,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#practical-uses-of-rsvp-te" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Uses of RSVP-TE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#ldp-vs-rsvp-te" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5566,6 +5577,13 @@
 <li>The ingress router receives the RESV and the LSP is established</li>
 </ol>
 <p>The result is a <strong>signaled LSP</strong> — every router on the path knows it exists, the exact path is fixed at the ingress, and bandwidth can be reserved.</p>
+<h3 id="practical-uses-of-rsvp-te">Practical Uses of RSVP-TE</h3>
+<p><strong>Bandwidth reservation</strong> is one of the primary reasons SPs deploy RSVP-TE. Yes — bandwidth limits are configured directly on the LSP. When you add <code>bandwidth 100m</code> to an LSP definition, RSVP carries that constraint in the PATH message. Each transit router checks whether the requested bandwidth is available on the outgoing interface and either admits or rejects the reservation. If admitted, the router marks that bandwidth as reserved — CSPF on other routers will not route new LSPs through that link if doing so would oversubscribe it. This gives the operator guaranteed capacity, not best-effort.</p>
+<p>A practical example: a service provider sells a customer a 1 Gbps leased-line service. An RSVP-TE LSP with <code>bandwidth 1g</code> is provisioned from ingress PE to egress PE. The bandwidth is reserved end-to-end across the core — no other traffic can consume it even during congestion. The customer's traffic rides that LSP. Without RSVP-TE, the same traffic would share whatever capacity is left over from all other flows on the IGP shortest path.</p>
+<p><strong>Traffic engineering away from congested links</strong> is the second major use. If a core link between P1 and P2 is congested, CSPF can be given an explicit constraint to avoid it — either by setting a lower reservable bandwidth on that link (so CSPF routes around it) or by specifying an explicit path in the LSP definition that bypasses it entirely. LDP has no mechanism to do this; it blindly follows IS-IS.</p>
+<p><strong>Fast Reroute (FRR)</strong> is where RSVP-TE earns its complexity overhead in large SP networks. When a link or node fails, normal IS-IS convergence takes several hundred milliseconds — long enough to drop VoIP calls and disrupt real-time traffic. RSVP-TE FRR works by pre-computing a <strong>bypass LSP</strong> around every protected link or node before any failure occurs. When a failure is detected (typically via BFD in under 10ms), the protecting router locally reroutes traffic onto the pre-computed bypass — no signaling needed, no waiting for IS-IS to converge. Traffic restoration happens in under 50ms, fast enough to be invisible to most applications.</p>
+<p><strong>LSP hierarchy and inter-AS TE</strong> are advanced uses: RSVP-TE LSPs can be nested (an LSP tunnel stitched across multiple domains) or used to stitch together engineered paths across AS boundaries where a single LDP path would not suffice.</p>
+<p>In summary: RSVP-TE is deployed when an operator needs to make guarantees — about bandwidth, about path, or about recovery time — that pure IP routing and LDP cannot provide.</p>
 <h3 id="ldp-vs-rsvp-te">LDP vs RSVP-TE</h3>
 <table>
 <thead>
