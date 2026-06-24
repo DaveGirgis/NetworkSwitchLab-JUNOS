@@ -42,8 +42,8 @@
 
 ## End-to-End CE Reachability
 
-- [ ] `CE1> ping 10.0.0.12 count 5` — 5/5 replies, 0% packet loss
-- [ ] `CE2> ping 10.0.0.11 count 5` — 5/5 replies, 0% packet loss
+- [ ] `CE1> ping 10.0.0.12 source 10.0.0.11 count 5` — 5/5 replies, 0% packet loss
+- [ ] `CE2> ping 10.0.0.11 source 10.0.0.12 count 5` — 5/5 replies, 0% packet loss
 
 ## MPLS Forwarding Table (P Routers)
 

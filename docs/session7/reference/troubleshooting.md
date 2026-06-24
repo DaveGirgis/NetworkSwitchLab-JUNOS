@@ -87,6 +87,26 @@
 
 ---
 
+## CE-to-CE Ping Fails with 100% Loss — No Source Specified
+
+**Symptom:** `CE1> ping 10.0.0.12 count 5` returns 100% packet loss immediately (no replies at all).
+
+**Cause:** Junos uses the outgoing interface address (172.16.1.2) as the source when no `source` is specified. The forward path works — CE2 receives the ping — but CE2 has no route to 172.16.1.2 (only loopback prefixes were advertised into BGP) and drops the reply.
+
+**Fix:** Always specify the loopback as source:
+
+```junos
+CE1> ping 10.0.0.12 source 10.0.0.11 count 5
+```
+
+```junos
+CE2> ping 10.0.0.11 source 10.0.0.12 count 5
+```
+
+CE2 has a BGP route to 10.0.0.11 via PE2, and CE1 has a BGP route to 10.0.0.12 via PE1 — both reply paths exist when loopbacks are used as the source.
+
+---
+
 ## CE-to-CE Ping Still Failing After MPLS Is Up
 
 **Symptom:** `show route table inet.3` has LDP entries, BGP routes show a label-stack, but `CE1> ping 10.0.0.12` fails.

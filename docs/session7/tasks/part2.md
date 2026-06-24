@@ -123,8 +123,11 @@ The critical lines are `Label operation: Push 299808` and `State: <Active Int Ex
 
 This is the payoff of Session 7. A ping from CE1 to CE2's loopback was failing at the end of Session 6 because P routers had no route to CE prefixes. With LDP running, the label path carries the packet end-to-end.
 
+!!! warning "Always specify the loopback as source"
+    The BGP export policies in this lab only advertise loopback prefixes (10.0.0.11/32 and 10.0.0.12/32), not the PE-CE link subnets. If you run `ping 10.0.0.12` without a source, Junos uses the outgoing interface address (172.16.1.2). CE2 receives the ping but has no route to 172.16.1.2 and drops the reply — 100% loss. Always use `source 10.0.0.11` so the reply travels back over the BGP-learned path.
+
 ```junos
-CE1> ping 10.0.0.12 count 5
+CE1> ping 10.0.0.12 source 10.0.0.11 count 5
 ```
 
 Expected — all five replies succeed:
@@ -142,22 +145,23 @@ PING 10.0.0.12 (10.0.0.12): 56 data bytes
 round-trip min/avg/max/stddev = 2.8/3.0/3.2/0.1 ms
 ```
 
-The TTL of 60 reflects packet traversal across multiple hops (started at 64, decremented by each router). What is happening end-to-end:
+What is happening end-to-end:
 
-1. CE1 sends an ICMP packet destined for 10.0.0.12 toward its BGP next-hop PE1 (172.16.1.1)
+1. CE1 sends an ICMP packet sourced from 10.0.0.11 (loopback), destined for 10.0.0.12, toward PE1 (172.16.1.1)
 2. PE1 has a BGP route to 10.0.0.12 resolved via inet.3 — pushes label 299808 and forwards to P1
-3. P1 swaps label 299808 with its outgoing label for PE2 and forwards to P2
+3. P1 swaps label 299808 with its outgoing label for FEC 10.0.0.4 and forwards to P2
 4. P2 performs PHP (pops the label) and forwards the bare IP packet to PE2
-5. PE2 receives an IP packet, looks up 10.0.0.12 in its BGP table, and forwards out ge-0/0/1 to CE2
-6. CE2 replies to CE1's IP (10.0.0.11 or 172.16.1.2), path reverses through the same LSP
+5. PE2 receives the IP packet, looks up 10.0.0.12 in its BGP table, and forwards out ge-0/0/1 to CE2
+6. CE2 sends an ICMP reply to 10.0.0.11 (CE1's loopback) — CE2 has a BGP route to 10.0.0.11 via PE2
+7. The reply path reverses: CE2 → PE2 (push label for FEC 10.0.0.1) → P2 (swap) → P1 (PHP pop) → PE1 → CE1
 
 !!! note "TTL propagation through MPLS"
-    By default, Junos copies the IP TTL into the MPLS TTL field when pushing a label (RFC 3032 behavior). Each label swap decrements the MPLS TTL. When the label is popped, the remaining TTL is written back into the IP header. This means TTL-based traceroute will show P1 and P2 in the path as expected.
+    The `Label TTL action: prop-ttl` seen in Step 3 means Junos copies the IP TTL into the MPLS TTL on push. Each label swap decrements it. When the label is popped, the remaining TTL is written back into the IP header — traceroute shows P1 and P2 as hops through the MPLS domain.
 
-Also verify the reverse direction:
+Verify the reverse direction:
 
 ```junos
-CE2> ping 10.0.0.11 count 5
+CE2> ping 10.0.0.11 source 10.0.0.12 count 5
 ```
 
 Expected: same pattern, all five replies succeed.
