@@ -82,35 +82,42 @@ Before MPLS, the BGP route to CE2's loopback on PE1 had no label — P routers w
 PE1> show route 10.0.0.12 detail
 ```
 
-Expected (key lines highlighted):
+Expected:
 
 ```text
-inet.0: 14 destinations, 14 routes (14 active, 0 holddown, 0 hidden)
+inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
 10.0.0.12/32 (1 entry, 1 announced)
         *BGP    Preference: 170/-101
                 Next hop type: Indirect
-                Next-hop reference count: 1
+                Address: 0x96f0568
+                Next-hop reference count: 3
                 Source: 10.0.0.4
+                Next hop type: Router, Next hop index: 569
                 Next hop: 10.1.12.2 via ge-0/0/0.0, selected
-                Label-stack { 299808 }; MPLS-label: Push 299808
+                Label operation: Push 299808
+                Label TTL action: prop-ttl
+                Load balance label: Label 299808: None;
+                Session Id: 0x140
                 Protocol next hop: 10.0.0.4
-                Indirect next hop: 0x93474a0 299808 INH Session ID: 0x150001
-                State: <Active Ext>
-                Age: 4:07      Metric2: 3
-                Task: BGP_65001.10.0.0.4+179
+                Indirect next hop: 0x9650110 1048574 INH Session ID: 0x143
+                State: <Active Int Ext>
+                Local AS: 65001 Peer AS: 65001
+                Age: 22:22:05   Metric2: 1
+                Validation State: unverified
+                Task: BGP_65001.10.0.0.4+59859
+                Announcement bits (3): 0-KRT 3-BGP_RT_Background 4-Resolve tree 4
                 AS path: 65100 I
+                Accepted
                 Localpref: 100
                 Router ID: 10.0.0.4
 ```
 
-The critical line is `Label-stack { 299808 }; MPLS-label: Push 299808`. This confirms:
+The critical lines are `Label operation: Push 299808` and `State: <Active Int Ext>`. Together they confirm:
 
-- BGP found the route to CE2's loopback (10.0.0.12) via iBGP from PE2 (10.0.0.4)
-- BGP resolved the next-hop 10.0.0.4 using inet.3
-- inet.3 says: push label 299808 to reach 10.0.0.4 via P1 (10.1.12.2)
-- When PE1 forwards this packet, it will push label 299808 before handing off to P1
-
-P1 and P2 will swap/pop the label without ever looking at the 10.0.0.12 destination IP.
+- **`Label operation: Push 299808`** — PE1 will push label 299808 onto every packet headed for 10.0.0.12 before handing it to P1. P routers forward on the label without looking at the 10.0.0.12 destination IP.
+- **`State: <Active Int Ext>`** — `Int` means the BGP next-hop (10.0.0.4) was resolved through inet.3 (the MPLS/LDP table), not inet.0. `Ext` means this is an external route (received via iBGP). Before MPLS was enabled, `Int` would not appear here.
+- **`Protocol next hop: 10.0.0.4`** — the iBGP next-hop is PE2's loopback, which inet.3 maps to the label path.
+- **`Label TTL action: prop-ttl`** — IP TTL is copied into the MPLS label TTL on push, so traceroute sees each hop through the MPLS domain.
 
 ## Step 4: CE-to-CE Ping
 
