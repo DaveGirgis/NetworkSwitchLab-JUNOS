@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-1-mpls-enable-ldp" class="md-skip">
+        <a href="#part-1-enable-mpls-ldp" class="md-skip">
           Skip to content
         </a>
       
@@ -3696,6 +3696,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — MPLS Enable & LDP
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3712,6 +3730,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-enable-mpls-ldp-on-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Enable MPLS &amp; LDP on PE1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-enable-mpls-ldp-on-p1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Enable MPLS &amp; LDP on P1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-enable-mpls-ldp-on-p2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Enable MPLS &amp; LDP on P2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-enable-mpls-ldp-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Enable MPLS &amp; LDP on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-verify-ldp-neighbors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Verify LDP Neighbors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-quick-sanity-check-on-ldp-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Quick Sanity Check on LDP Session
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5438,91 @@
   
 
 
-<h1 id="part-1-mpls-enable-ldp">Part 1 — MPLS Enable &amp; LDP</h1>
+<h1 id="part-1-enable-mpls-ldp">Part 1 — Enable MPLS &amp; LDP</h1>
+<h2 id="overview">Overview</h2>
+<p>With <code>family mpls</code> in place on all provider interfaces, enable the MPLS and LDP protocols on each router. Each router needs:</p>
+<ol>
+<li><strong><code>protocols mpls interface &lt;intf&gt;</code></strong> — registers the interface with the MPLS forwarding engine</li>
+<li><strong><code>protocols ldp interface &lt;intf&gt;</code></strong> — enables LDP hello and label distribution on the interface</li>
+<li><strong><code>protocols ldp interface lo0.0</code></strong> — adds the loopback to LDP so LDP uses the loopback IP as its LSR-ID and transport address</li>
+</ol>
+<p>LDP discovers neighbors by sending <strong>hello</strong> messages out enabled interfaces. When two routers see each other's hellos, they establish a TCP session (on port 646) and exchange label bindings for every prefix in their routing tables. This process happens automatically once the interfaces are enabled — no explicit neighbor configuration is required.</p>
+<h2 id="step-1-enable-mpls-ldp-on-pe1">Step 1: Enable MPLS &amp; LDP on PE1</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols mpls interface ge-0/0/0.0
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set protocols ldp interface ge-0/0/0.0
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>set protocols ldp interface lo0.0
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>commit
+</code></pre></div>
+<h2 id="step-2-enable-mpls-ldp-on-p1">Step 2: Enable MPLS &amp; LDP on P1</h2>
+<p>P1 has two provider-facing interfaces — both need MPLS and LDP.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols mpls interface ge-0/0/0.0
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set protocols mpls interface ge-0/0/1.0
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>set protocols ldp interface ge-0/0/0.0
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>set protocols ldp interface ge-0/0/1.0
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>set protocols ldp interface lo0.0
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>commit
+</code></pre></div>
+<h2 id="step-3-enable-mpls-ldp-on-p2">Step 3: Enable MPLS &amp; LDP on P2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set protocols mpls interface ge-0/0/0.0
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set protocols mpls interface ge-0/0/1.0
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>set protocols ldp interface ge-0/0/0.0
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>set protocols ldp interface ge-0/0/1.0
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>set protocols ldp interface lo0.0
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>commit
+</code></pre></div>
+<h2 id="step-4-enable-mpls-ldp-on-pe2">Step 4: Enable MPLS &amp; LDP on PE2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set protocols mpls interface ge-0/0/0.0
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>set protocols ldp interface ge-0/0/0.0
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>set protocols ldp interface lo0.0
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>commit
+</code></pre></div>
+<h2 id="step-5-verify-ldp-neighbors">Step 5: Verify LDP Neighbors</h2>
+<p>LDP sessions should form within a few seconds of both sides being configured. Check each router in turn.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show ldp neighbor
+</code></pre></div>
+<p>Expected — one LDP neighbor (P1), identified by its loopback address:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Address                             Interface       Label space ID     Hold time
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>10.1.12.2                         ge-0/0/0.0      10.0.0.2:0              13
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>P1&gt; show ldp neighbor
+</code></pre></div>
+<p>Expected — two LDP neighbors (PE1 and P2):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Address                             Interface       Label space ID     Hold time
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>10.1.12.1                         ge-0/0/0.0      10.0.0.1:0              12
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>10.1.23.2                         ge-0/0/1.0      10.0.0.3:0              11
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE2&gt; show ldp neighbor
+</code></pre></div>
+<p>Expected — one LDP neighbor (P2):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Address                             Interface       Label space ID     Hold time
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>10.1.34.1                         ge-0/0/1.0      10.0.0.3:0              14
+</code></pre></div>
+<p>The <strong>Label space ID</strong> column shows the neighbor's loopback address with <code>:0</code> (platform-wide label space). If the neighbor column is empty, wait 10–15 seconds and retry — LDP convergence takes a moment after IS-IS is already up.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">LDP transport address</p>
+<p>Adding <code>lo0.0</code> to the LDP interface list tells Junos to use the loopback as the LDP transport address. This means the LDP TCP session runs between loopback addresses (10.0.0.x) rather than link addresses. If a physical link goes down but IS-IS reroutes, the LDP session survives because loopback reachability is maintained.</p>
 </div>
+<h2 id="step-6-quick-sanity-check-on-ldp-session">Step 6: Quick Sanity Check on LDP Session</h2>
+<p>Confirm the LDP session between PE1 and P1 is fully up:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>PE1&gt; show ldp session
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Address                          State       Connection  Hold time  Adv. Mode
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>10.0.0.2                         Operational Open          26        DU
+</code></pre></div>
+<p><strong>State: Operational</strong> confirms the TCP session is up and labels have been exchanged. <strong>DU</strong> (Downstream Unsolicited) is the default LDP advertisement mode — each router advertises labels for all its routes to all neighbors without waiting to be asked.</p>
 
 
 

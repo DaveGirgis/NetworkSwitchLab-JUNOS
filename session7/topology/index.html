@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6-topology" class="md-skip">
+        <a href="#session-7-topology" class="md-skip">
           Skip to content
         </a>
       
@@ -3549,6 +3549,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3565,6 +3583,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpls-enabled-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPLS-Enabled Interfaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,8 +5403,182 @@
   
 
 
-<h1 id="session-6-topology">Session 6 — Topology</h1>
-<p>Same as Session 5. MPLS operates on the provider backbone links.</p>
+<h1 id="session-7-topology">Session 7 — Topology</h1>
+<h2 id="diagram">Diagram</h2>
+<pre class="mermaid"><code>graph LR
+  CE1([CE1&lt;br/&gt;lo0: 10.0.0.11/32&lt;br/&gt;AS 65100]) ---|"172.16.1.0/30&lt;br/&gt;eBGP / IP only"| PE1([PE1&lt;br/&gt;lo0: 10.0.0.1/32&lt;br/&gt;AS 65001])
+  PE1 ---|"10.1.12.0/30&lt;br/&gt;IS-IS + MPLS + LDP"| P1([P1&lt;br/&gt;lo0: 10.0.0.2/32])
+  P1 ---|"10.1.23.0/30&lt;br/&gt;IS-IS + MPLS + LDP"| P2([P2&lt;br/&gt;lo0: 10.0.0.3/32])
+  P2 ---|"10.1.34.0/30&lt;br/&gt;IS-IS + MPLS + LDP"| PE2([PE2&lt;br/&gt;lo0: 10.0.0.4/32&lt;br/&gt;AS 65001])
+  PE2 ---|"172.16.2.0/30&lt;br/&gt;eBGP / IP only"| CE2([CE2&lt;br/&gt;lo0: 10.0.0.12/32&lt;br/&gt;AS 65100])
+  PE1 -. "iBGP&lt;br/&gt;loopback peering" .- PE2</code></pre>
+<p>Same six-router topology as Session 6. No new nodes or GNS3 links are added. MPLS and LDP are enabled only on the four provider backbone links — the PE-CE links remain pure IP.</p>
+<h2 id="device-summary">Device Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Role</th>
+<th>Loopback</th>
+<th>Runs MPLS?</th>
+<th>Runs LDP?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1</td>
+<td>Customer Edge</td>
+<td>10.0.0.11/32</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PE1</td>
+<td>Provider Edge (LER)</td>
+<td>10.0.0.1/32</td>
+<td>Yes — ge-0/0/0</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Provider Core (LSR)</td>
+<td>10.0.0.2/32</td>
+<td>Yes — ge-0/0/0, ge-0/0/1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Provider Core (LSR)</td>
+<td>10.0.0.3/32</td>
+<td>Yes — ge-0/0/0, ge-0/0/1</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>Provider Edge (LER)</td>
+<td>10.0.0.4/32</td>
+<td>Yes — ge-0/0/0</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>Customer Edge</td>
+<td>10.0.0.12/32</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2 id="link-summary">Link Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Left Device</th>
+<th>Left Interface</th>
+<th>Left Address</th>
+<th>Right Device</th>
+<th>Right Interface</th>
+<th>Right Address</th>
+<th>MPLS?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 — PE1</td>
+<td>CE1</td>
+<td>ge-0/0/0</td>
+<td>172.16.1.2/30</td>
+<td>PE1</td>
+<td>ge-0/0/1</td>
+<td>172.16.1.1/30</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PE1 — P1</td>
+<td>PE1</td>
+<td>ge-0/0/0</td>
+<td>10.1.12.1/30</td>
+<td>P1</td>
+<td>ge-0/0/0</td>
+<td>10.1.12.2/30</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>P1 — P2</td>
+<td>P1</td>
+<td>ge-0/0/1</td>
+<td>10.1.23.1/30</td>
+<td>P2</td>
+<td>ge-0/0/0</td>
+<td>10.1.23.2/30</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>P2 — PE2</td>
+<td>P2</td>
+<td>ge-0/0/1</td>
+<td>10.1.34.1/30</td>
+<td>PE2</td>
+<td>ge-0/0/0</td>
+<td>10.1.34.2/30</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PE2 — CE2</td>
+<td>PE2</td>
+<td>ge-0/0/1</td>
+<td>172.16.2.1/30</td>
+<td>CE2</td>
+<td>ge-0/0/0</td>
+<td>172.16.2.2/30</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mpls-enabled-interfaces">MPLS-Enabled Interfaces</h2>
+<table>
+<thead>
+<tr>
+<th>Router</th>
+<th>Interface</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>ge-0/0/0.0</td>
+<td>Toward P1</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>ge-0/0/0.0</td>
+<td>Toward PE1</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>ge-0/0/1.0</td>
+<td>Toward P2</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>ge-0/0/0.0</td>
+<td>Toward P1</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>ge-0/0/1.0</td>
+<td>Toward PE2</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>ge-0/0/0.0</td>
+<td>Toward P2</td>
+</tr>
+</tbody>
+</table>
+<p>The loopback (lo0.0) is added to LDP on every provider router so LDP uses the loopback as its transport address — this makes the LDP session independent of any single physical link.</p>
 
 
 

@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-2-label-distribution" class="md-skip">
+        <a href="#part-2-label-distribution-verification" class="md-skip">
           Skip to content
         </a>
       
@@ -3724,6 +3724,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — Label Distribution
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3740,6 +3758,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-inspect-the-ldp-label-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Inspect the LDP Label Database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-verify-inet3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Verify inet.3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-verify-bgp-route-resolution-with-mpls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify BGP Route Resolution with MPLS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-ce-to-ce-ping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: CE-to-CE Ping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-view-the-mpls-forwarding-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: View the MPLS Forwarding Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5427,158 @@
   
 
 
-<h1 id="part-2-label-distribution">Part 2 — Label Distribution</h1>
+<h1 id="part-2-label-distribution-verification">Part 2 — Label Distribution Verification</h1>
+<h2 id="overview">Overview</h2>
+<p>With LDP sessions established, every provider router has exchanged label bindings for all prefixes in their routing tables. This part walks through the label tables and ends with the payoff: a CE-to-CE ping that was impossible before MPLS.</p>
+<h2 id="step-1-inspect-the-ldp-label-database">Step 1: Inspect the LDP Label Database</h2>
+<p>The <strong>LDP database</strong> shows the label bindings exchanged between two LDP peers. On PE1, there is one LDP session (to P1). The database shows what labels PE1 received from P1 (input) and what labels PE1 sent to P1 (output).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>PE1&gt; show ldp database
+</code></pre></div>
+<p>Expected output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Input label database, 10.0.0.1:0--10.0.0.2:0
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  Label     Prefix
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>      3       10.0.0.1/32
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  299776      10.0.0.2/32
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  299777      10.0.0.3/32
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  299778      10.0.0.4/32
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  299779      10.1.12.0/30
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  299780      10.1.23.0/30
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  299781      10.1.34.0/30
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Output label database, 10.0.0.1:0--10.0.0.2:0
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  Label     Prefix
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      3       10.0.0.2/32
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  299792      10.0.0.1/32
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  299793      10.0.0.3/32
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  299794      10.0.0.4/32
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  299795      10.1.12.0/30
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  299796      10.1.23.0/30
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>  299797      10.1.34.0/30
+</code></pre></div>
+<p><strong>Input label database</strong> — labels PE1 received from P1. These are the labels PE1 will use when pushing traffic toward P1:
+- Label <code>3</code> for 10.0.0.1/32 — PHP in action. P1 sends implicit-null (label 3) for PE1's own loopback, telling PE1 to pop the label before forwarding. Since PE1 is the egress for its own loopback, no label is needed.
+- Labels 299776–299781 for all other reachable prefixes — PE1 will push one of these when forwarding labeled traffic toward P1.</p>
+<p><strong>Output label database</strong> — labels PE1 sent to P1. P1 will push these labels when sending traffic destined for PE1 to handle:
+- Label <code>3</code> for 10.0.0.2/32 — PE1 sends implicit-null for P1's loopback (PHP — PE1 is the penultimate hop for traffic arriving at P1's loopback from the PE1 side).
+- Labels 299792–299797 — PE1's own label assignments for all other prefixes P1 might send to PE1.</p>
+<h2 id="step-2-verify-inet3">Step 2: Verify inet.3</h2>
+<p>The <strong>inet.3</strong> routing table holds MPLS-resolved next-hops computed by LDP. BGP uses inet.3 to resolve its protocol next-hops — this is the table that makes MPLS transparent to BGP.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>PE1&gt; show route table inet.3
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>inet.3: 3 destinations, 3 routes (3 active, 0 holddown, 0 hidden)
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>10.0.0.2/32        *[LDP/9] 00:03:21, metric 1
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>10.0.0.3/32        *[LDP/9] 00:03:21, metric 2
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push 299777
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>10.0.0.4/32        *[LDP/9] 00:03:21, metric 3
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push 299778
+</code></pre></div>
+<p>Three entries — one for each provider loopback that PE1 can reach via LDP:</p>
+<ul>
+<li><strong>10.0.0.2/32 (P1)</strong> — directly adjacent; PHP applies. P1 sent implicit-null, so no label is pushed. Traffic arrives at P1 as a plain IP packet.</li>
+<li><strong>10.0.0.3/32 (P2)</strong> — two hops. PE1 pushes label 299777. P1 receives it, swaps or pops (PHP from P2), and forwards toward P2.</li>
+<li><strong>10.0.0.4/32 (PE2)</strong> — three hops. PE1 pushes label 299778. P1 swaps, P2 pops (PHP, as P2 is penultimate for PE2), PE2 receives a plain IP packet.</li>
+</ul>
+<p>The preference value is <strong>LDP/9</strong> — LDP routes in inet.3 have a preference of 9, which is lower (more preferred) than IS-IS (18), ensuring LDP routes are used when resolving BGP next-hops.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">inet.3 is separate from inet.0</p>
+<p>BGP next-hops are resolved in inet.3 by default. IS-IS and other IGP routes only appear in inet.0. This separation allows BGP to use the MPLS LSP (label path) while non-BGP traffic continues to use the normal IP path in inet.0.</p>
 </div>
+<h2 id="step-3-verify-bgp-route-resolution-with-mpls">Step 3: Verify BGP Route Resolution with MPLS</h2>
+<p>Before MPLS, the BGP route to CE2's loopback on PE1 had no label — P routers would receive an IP packet destined for 10.0.0.12 and drop it. Now, check the route detail:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route 10.0.0.12 detail
+</code></pre></div>
+<p>Expected (key lines highlighted):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>inet.0: 14 destinations, 14 routes (14 active, 0 holddown, 0 hidden)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>10.0.0.12/32 (1 entry, 1 announced)
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        *BGP    Preference: 170/-101
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                Next hop type: Indirect
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                Next-hop reference count: 1
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                Source: 10.0.0.4
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                Next hop: 10.1.12.2 via ge-0/0/0.0, selected
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                Label-stack { 299778 }; MPLS-label: Push 299778
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                Protocol next hop: 10.0.0.4
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>                Indirect next hop: 0x93474a0 299778 INH Session ID: 0x150001
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                State: &lt;Active Ext&gt;
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>                Age: 4:07      Metric2: 3
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                Task: BGP_65001.10.0.0.4+179
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>                AS path: 65100 I
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>                Localpref: 100
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>                Router ID: 10.0.0.4
+</code></pre></div>
+<p>The critical line is <code>Label-stack { 299778 }; MPLS-label: Push 299778</code>. This confirms:</p>
+<ul>
+<li>BGP found the route to CE2's loopback (10.0.0.12) via iBGP from PE2 (10.0.0.4)</li>
+<li>BGP resolved the next-hop 10.0.0.4 using inet.3</li>
+<li>inet.3 says: push label 299778 to reach 10.0.0.4 via P1 (10.1.12.2)</li>
+<li>When PE1 forwards this packet, it will push label 299778 before handing off to P1</li>
+</ul>
+<p>P1 and P2 will swap/pop the label without ever looking at the 10.0.0.12 destination IP.</p>
+<h2 id="step-4-ce-to-ce-ping">Step 4: CE-to-CE Ping</h2>
+<p>This is the payoff of Session 7. A ping from CE1 to CE2's loopback was failing at the end of Session 6 because P routers had no route to CE prefixes. With LDP running, the label path carries the packet end-to-end.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>CE1&gt; ping 10.0.0.12 count 5
+</code></pre></div>
+<p>Expected — all five replies succeed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>PING 10.0.0.12 (10.0.0.12): 56 data bytes
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>64 bytes from 10.0.0.12: icmp_seq=0 ttl=60 time=3.2 ms
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>64 bytes from 10.0.0.12: icmp_seq=1 ttl=60 time=2.9 ms
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>64 bytes from 10.0.0.12: icmp_seq=2 ttl=60 time=3.1 ms
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>64 bytes from 10.0.0.12: icmp_seq=3 ttl=60 time=2.8 ms
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>64 bytes from 10.0.0.12: icmp_seq=4 ttl=60 time=3.0 ms
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>--- 10.0.0.12 ping statistics ---
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>5 packets transmitted, 5 packets received, 0% packet loss
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>round-trip min/avg/max/stddev = 2.8/3.0/3.2/0.1 ms
+</code></pre></div>
+<p>The TTL of 60 reflects packet traversal across multiple hops (started at 64, decremented by each router). What is happening end-to-end:</p>
+<ol>
+<li>CE1 sends an ICMP packet destined for 10.0.0.12 toward its BGP next-hop PE1 (172.16.1.1)</li>
+<li>PE1 has a BGP route to 10.0.0.12 resolved via inet.3 — pushes label 299778 and forwards to P1</li>
+<li>P1 swaps label 299778 with its outgoing label for PE2 and forwards to P2</li>
+<li>P2 performs PHP (pops the label) and forwards the bare IP packet to PE2</li>
+<li>PE2 receives an IP packet, looks up 10.0.0.12 in its BGP table, and forwards out ge-0/0/1 to CE2</li>
+<li>CE2 replies to CE1's IP (10.0.0.11 or 172.16.1.2), path reverses through the same LSP</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">TTL propagation through MPLS</p>
+<p>By default, Junos copies the IP TTL into the MPLS TTL field when pushing a label (RFC 3032 behavior). Each label swap decrements the MPLS TTL. When the label is popped, the remaining TTL is written back into the IP header. This means TTL-based traceroute will show P1 and P2 in the path as expected.</p>
+</div>
+<p>Also verify the reverse direction:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>CE2&gt; ping 10.0.0.11 count 5
+</code></pre></div>
+<p>Expected: same pattern, all five replies succeed.</p>
+<h2 id="step-5-view-the-mpls-forwarding-table">Step 5: View the MPLS Forwarding Table</h2>
+<p>The <strong>mpls.0</strong> table shows the local LFIB — what happens to each incoming labeled packet on this router.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>P1&gt; show route table mpls.0
+</code></pre></div>
+<p>Expected on P1 (a transit LSR):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>mpls.0: 8 destinations, 8 routes (8 active, 0 holddown, 0 hidden)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>0                  *[MPLS/0] 2d 04:12:00, metric 1
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>                      Receive
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>1                  *[MPLS/0] 2d 04:12:00, metric 1
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>                      Receive
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>2                  *[MPLS/0] 2d 04:12:00, metric 1
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>                      Receive
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>299776             *[LDP/9] 00:08:14, metric 1
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>                    &gt; to 10.1.23.2 via ge-0/0/1.0, Swap 299808
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>299777             *[LDP/9] 00:08:14, metric 1
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>                    &gt; to 10.1.23.2 via ge-0/0/1.0, Swap 299809
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>299778             *[LDP/9] 00:08:14, metric 1
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>                    &gt; to 10.1.23.2 via ge-0/0/1.0, Swap 299810
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>299792             *[LDP/9] 00:08:14, metric 1
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>                      Receive
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>299793             *[LDP/9] 00:08:14, metric 1
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>                    &gt; to 10.1.12.1 via ge-0/0/0.0, Swap 299793
+</code></pre></div>
+<p>Labels 0, 1, 2 are reserved (IPv4 Explicit Null, Router Alert, IPv6 Explicit Null) — any packet arriving with these labels is consumed locally.</p>
+<p>Labels 299776–299778 are labels P1 assigned for traffic arriving from PE1 destined for P2's and PE2's loopbacks — P1 swaps these to P2's outgoing labels (299808–299810) and forwards out ge-0/0/1 toward P2.</p>
+<p>Label 299792 maps to Receive — this is P1's own label for its loopback (traffic labeled 299792 arriving at P1 is destined for P1 itself).</p>
+<p>The swap operations are the core of what makes P1 an LSR: no IP lookup, just label in → label out → forward.</p>
 
 
 

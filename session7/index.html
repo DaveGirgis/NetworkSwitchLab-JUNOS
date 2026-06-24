@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6-mpls-ldp" class="md-skip">
+        <a href="#session-7-mpls-ldp" class="md-skip">
           Skip to content
         </a>
       
@@ -5312,13 +5312,219 @@
   
 
 
-<h1 id="session-6-mpls-ldp">Session 6 — MPLS &amp; LDP</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-<p>Complete Sessions 1–5 first.</p>
-</div>
-<h2 id="preview">Preview</h2>
-<p>You will enable MPLS on all provider interfaces and configure LDP to distribute labels. After this session, the provider backbone will forward packets using labels instead of IP lookups.</p>
+<h1 id="session-7-mpls-ldp">Session 7 — MPLS &amp; LDP</h1>
+<h2 id="objectives">Objectives</h2>
+<p>By the end of this session you will be able to:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain what MPLS is and why service providers use it instead of pure IP forwarding</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Describe the difference between LER, LSR, LSP, FEC, and PHP</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain why LDP and RSVP-TE exist and when each is used</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Enable MPLS and LDP on the four-router provider backbone</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Read the LDP neighbor table, label database, and inet.3 routing table</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Explain why inet.3 exists and how BGP uses it to resolve next-hops</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Verify end-to-end CE-to-CE reachability using label switching</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Configure a basic RSVP-TE LSP and verify it with show commands</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Session 6 complete — IS-IS running on PE1, P1, P2, PE2; BGP sessions up between PE1/PE2 and CE1/CE2; CE-to-CE prefix knowledge confirmed</li>
+<li>The <code>JNCIS-SP-Core</code> GNS3 project is open with all six nodes running</li>
+</ul>
+<h2 id="what-is-mpls">What Is MPLS?</h2>
+<p><strong>MPLS</strong> (Multiprotocol Label Switching) is a data-plane forwarding mechanism that replaces per-hop IP lookups with a simple label swap operation. Instead of every router performing a longest-prefix match on the full routing table for every packet, the first router in the MPLS domain stamps a short fixed-length <strong>label</strong> onto each packet, and every transit router that follows simply reads that label, swaps it for a new one, and forwards — no IP lookup required.</p>
+<p>The label is 32 bits wide, inserted between the Layer 2 header and the IP header. Twenty bits carry the label value itself. Three bits are the <strong>TC</strong> (Traffic Class) field used for QoS. One bit is the <strong>S</strong> (bottom-of-stack) flag — set on the innermost label. Eight bits are the <strong>TTL</strong> field. This 4-byte shim is sometimes called the MPLS shim header or MPLS label stack entry.</p>
+<p>Because labels are short and the label lookup is a simple exact-match operation (not a longest-prefix search), forwarding through an MPLS core is faster and more predictable than IP-based forwarding. More importantly, it decouples what the packet carries from how it is forwarded — the same forwarding plane can carry IPv4, IPv6, Layer 2 frames, and VPN traffic using the same label mechanism.</p>
+<h2 id="why-and-when-to-use-mpls">Why and When to Use MPLS</h2>
+<h3 id="p-routers-do-not-need-customer-routes">P Routers Do Not Need Customer Routes</h3>
+<p>In Session 6 you configured BGP so CE1 and CE2 exchange prefixes. The BGP knowledge is correct — PE1 knows CE2's loopback and vice versa. But a ping from CE1 to CE2 still fails. The reason: P1 and P2 are pure IS-IS routers. When PE1 forwards a packet toward CE2 (10.0.0.12), the packet reaches P1, P1 does an IP lookup, finds no route to 10.0.0.12, and drops it.</p>
+<p>Two solutions exist:</p>
+<ol>
+<li>
+<p>Run BGP on P1 and P2 so they carry customer routes — this is called <strong>full BGP table in the core</strong>. It works but scales poorly. A tier-1 ISP has hundreds of thousands of BGP prefixes. Putting that on every transit router is expensive and fragile.</p>
+</li>
+<li>
+<p>Use <strong>MPLS</strong> — PE1 pushes a label that represents "deliver this to PE2." P1 and P2 swap labels without ever looking at the IP destination. They do not need to know anything about CE prefixes. They only need to know how to reach PE2 by following labels.</p>
+</li>
+</ol>
+<p>MPLS is the industry solution. It keeps the core lean — P routers carry only IS-IS routes and a label forwarding table.</p>
+<h3 id="traffic-engineering">Traffic Engineering</h3>
+<p>Pure IP routing sends every packet on the same shortest-path computed by the IGP. MPLS-TE (Traffic Engineering) allows an operator to route traffic along an <strong>explicit path</strong> regardless of what the IGP prefers. This enables:</p>
+<ul>
+<li>Routing traffic around a congested link</li>
+<li>Reserving bandwidth for specific flows (a 10 Gbps video stream gets its own guaranteed path)</li>
+<li>Precomputing a backup path that can be activated in under 50 ms (Fast Reroute)</li>
+</ul>
+<h3 id="vpn-services">VPN Services</h3>
+<p>MPLS is the foundation for SP VPN services. <strong>L3 VPN</strong> (Session 8) uses a <strong>label stack</strong>: an inner VPN label identifies which customer VRF the packet belongs to, and an outer transport label carries it across the core. The P routers only see the outer label — they have no knowledge of VPN routing tables. <strong>L2 services</strong> (Session 7a) use the same label stack to carry customer Ethernet frames transparently across the provider backbone.</p>
+<h3 id="summary-when-to-use-mpls">Summary: When to Use MPLS</h3>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SP backbone with CE customers</td>
+<td>P routers avoid carrying customer/BGP routes</td>
+</tr>
+<tr>
+<td>Traffic engineering</td>
+<td>Explicit paths, bandwidth reservation, Fast Reroute</td>
+</tr>
+<tr>
+<td>L3 VPN (BGP/MPLS VPN)</td>
+<td>Label stack separates customer VRFs without per-customer routing on P routers</td>
+</tr>
+<tr>
+<td>L2 VPN (L2circuit, VPLS)</td>
+<td>Transparent Layer 2 connectivity across an IP/MPLS backbone</td>
+</tr>
+</tbody>
+</table>
+<p>MPLS is not typically used in small enterprise or campus networks where the routing table is small and IP forwarding is sufficient.</p>
+<h2 id="how-mpls-forwards-packets">How MPLS Forwards Packets</h2>
+<p>Forwarding happens in three operations:</p>
+<p><strong>Push</strong> — The ingress <strong>LER</strong> (Label Edge Router, i.e., the PE router) classifies the incoming packet into a <strong>FEC</strong> (Forwarding Equivalence Class — essentially "all packets going to this destination"). It selects the label for that FEC and stamps it onto the packet before forwarding.</p>
+<p><strong>Swap</strong> — Each <strong>LSR</strong> (Label Switch Router, i.e., a P router) receives a labeled packet, looks up the incoming label in its <strong>LFIB</strong> (Label Forwarding Information Base), replaces it with the outgoing label for the next hop, and forwards. No IP lookup occurs.</p>
+<p><strong>Pop</strong> — The egress LER (or the router before it, via PHP) removes the label and delivers the inner IP packet.</p>
+<p>In this lab:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CE1 --&gt; PE1 [Push] --&gt; P1 [Swap] --&gt; P2 [Swap/PHP Pop] --&gt; PE2 [Pop/deliver] --&gt; CE2
+</code></pre></div>
+<h3 id="penultimate-hop-popping-php">Penultimate Hop Popping (PHP)</h3>
+<p>PHP is an optimization. The router one hop before the egress PE (P2 in this lab for the PE1→PE2 direction) sends <strong>implicit-null</strong> (label value 3) as its label binding for the egress PE's loopback. This tells the upstream router (P1) to <strong>pop the label</strong> before forwarding instead of swapping. The egress PE receives a plain IP packet and avoids one label lookup — saving a small amount of processing at the busiest point in the flow.</p>
+<p>PHP is enabled by default in Junos and most implementations.</p>
+<h2 id="roles-in-the-mpls-network">Roles in the MPLS Network</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Full Name</th>
+<th>Role in this lab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LER</strong></td>
+<td>Label Edge Router</td>
+<td>PE1 and PE2 — push labels on ingress, pop on egress</td>
+</tr>
+<tr>
+<td><strong>LSR</strong></td>
+<td>Label Switch Router</td>
+<td>P1 and P2 — swap labels, no IP lookup</td>
+</tr>
+<tr>
+<td><strong>LSP</strong></td>
+<td>Label Switched Path</td>
+<td>The end-to-end label path from PE1 to PE2</td>
+</tr>
+<tr>
+<td><strong>FEC</strong></td>
+<td>Forwarding Equivalence Class</td>
+<td>The destination prefix a label represents</td>
+</tr>
+<tr>
+<td><strong>LFIB</strong></td>
+<td>Label Forwarding Information Base</td>
+<td>Per-router table of incoming label → outgoing label + interface</td>
+</tr>
+<tr>
+<td><strong>PHP</strong></td>
+<td>Penultimate Hop Popping</td>
+<td>P2 pops the label before handing off to PE2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ldp-vs-rsvp-te">LDP vs RSVP-TE</h2>
+<p>Two protocols distribute labels in Junos SP deployments:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>LDP</th>
+<th>RSVP-TE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full name</td>
+<td>Label Distribution Protocol</td>
+<td>Resource Reservation Protocol — Traffic Engineering</td>
+</tr>
+<tr>
+<td>Path selection</td>
+<td>Follows IGP shortest path</td>
+<td>Explicit or CSPF-computed path</td>
+</tr>
+<tr>
+<td>Bandwidth reservation</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Configuration complexity</td>
+<td>Low</td>
+<td>Higher — requires TE extensions in IGP</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>Baseline label distribution, L3 VPN transport</td>
+<td>Traffic engineering, guaranteed-bandwidth LSPs, Fast Reroute</td>
+</tr>
+<tr>
+<td>Standard</td>
+<td>RFC 5036</td>
+<td>RFC 3209</td>
+</tr>
+</tbody>
+</table>
+<p><strong>This session configures LDP</strong> for all four provider links and then introduces a basic RSVP-TE LSP in Part 3. In production networks both often run simultaneously — LDP for baseline connectivity and RSVP-TE for specific engineered paths.</p>
+<h2 id="inet3-the-mpls-routing-table">inet.3 — The MPLS Routing Table</h2>
+<p>Junos uses a separate routing table, <strong>inet.3</strong>, to hold MPLS-resolved next-hops. When LDP runs, routes to provider loopbacks appear in inet.3 with label operations (Push, Swap, Pop) as the next-hop action.</p>
+<p>BGP uses inet.3 to resolve its next-hops. When PE1 has a BGP route to 10.0.0.12 with next-hop 10.0.0.4, it looks up 10.0.0.4 in inet.3 (not inet.0). If inet.3 has an LDP entry for 10.0.0.4 with a Push action, BGP installs the route with the label stack. This is why P routers do not need BGP — the label in the packet tells P1 and P2 where to send it without any IP lookup.</p>
+<p>Before MPLS: BGP resolves 10.0.0.4 via inet.0 → IS-IS route → IP forwarding through P routers → P routers drop packet (no route to 10.0.0.12).</p>
+<p>After MPLS: BGP resolves 10.0.0.4 via inet.3 → LDP LSP → label forwarding through P routers → P routers swap labels → PE2 delivers to CE2.</p>
+<h2 id="topology-overview">Topology Overview</h2>
+<pre class="mermaid"><code>graph LR
+  CE1([CE1&lt;br/&gt;10.0.0.11/32]) ---|"172.16.1.0/30&lt;br/&gt;IP only"| PE1([PE1&lt;br/&gt;10.0.0.1/32])
+  PE1 ---|"10.1.12.0/30&lt;br/&gt;IS-IS + MPLS"| P1([P1&lt;br/&gt;10.0.0.2/32])
+  P1 ---|"10.1.23.0/30&lt;br/&gt;IS-IS + MPLS"| P2([P2&lt;br/&gt;10.0.0.3/32])
+  P2 ---|"10.1.34.0/30&lt;br/&gt;IS-IS + MPLS"| PE2([PE2&lt;br/&gt;10.0.0.4/32])
+  PE2 ---|"172.16.2.0/30&lt;br/&gt;IP only"| CE2([CE2&lt;br/&gt;10.0.0.12/32])</code></pre>
+<p>MPLS and LDP run only on the four provider backbone links. The PE-CE links remain pure IP — CE routers are outside the MPLS domain. No new GNS3 nodes are added in this session.</p>
+<h2 id="session-parts">Session Parts</h2>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Topic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="tasks/part0/">Part 0</a></td>
+<td>Verify Session 6 state and add <code>family mpls</code> to provider interfaces</td>
+</tr>
+<tr>
+<td><a href="tasks/part1/">Part 1</a></td>
+<td>Enable <code>protocols mpls</code> and <code>protocols ldp</code> on all provider routers</td>
+</tr>
+<tr>
+<td><a href="tasks/part2/">Part 2</a></td>
+<td>Verify label distribution, inet.3, and CE-to-CE reachability</td>
+</tr>
+<tr>
+<td><a href="tasks/part3/">Part 3</a></td>
+<td>RSVP-TE intro — configure a basic signaled LSP from PE1 to PE2</td>
+</tr>
+<tr>
+<td><a href="tasks/verify/">Verification</a></td>
+<td>Checklist</td>
+</tr>
+</tbody>
+</table>
 
 
 

@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-0-base-config" class="md-skip">
+        <a href="#part-0-verify-session-6-state-add-family-mpls" class="md-skip">
           Skip to content
         </a>
       
@@ -3668,6 +3668,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Base Config
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3684,6 +3702,119 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cli-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-verify-session-6-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Verify Session 6 State
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-add-family-mpls-to-provider-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Add family mpls to Provider Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Add family mpls to Provider Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-confirm-interface-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Confirm Interface Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,9 +5455,96 @@
   
 
 
-<h1 id="part-0-base-config">Part 0 — Base Config</h1>
+<h1 id="part-0-verify-session-6-state-add-family-mpls">Part 0 — Verify Session 6 State &amp; Add family mpls</h1>
+<h2 id="cli-setup">CLI Setup</h2>
+<p>Before pasting any configuration, run these two commands at the operational prompt (<code>&gt;</code>) on each router:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>set cli screen-length 0
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set cli complete-on-space off
+</code></pre></div>
+<p>Re-run these at the start of every console session — they do not persist across reconnects.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pasting large config blocks</p>
+<p>Use <code>load set terminal</code> in config mode instead of pasting directly at the <code>#</code> prompt. Junos buffers all input until you press <strong>Ctrl+D</strong>, then processes every set command at once — eliminating paste-rate issues with console terminals.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>load set terminal
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols mpls interface ge-0/0/0.0
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>...
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>^D
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>commit
+</code></pre></div>
+</div>
+<h2 id="step-1-verify-session-6-state">Step 1: Verify Session 6 State</h2>
+<p>Before adding MPLS, confirm IS-IS and BGP are healthy. If either is broken, MPLS will not fix it.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show isis adjacency
+</code></pre></div>
+<p>Expected — two adjacencies (P1 and no others on PE1; only ge-0/0/0 runs IS-IS):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Interface             System         L State        Hold (secs) SNPA
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ge-0/0/0.0           P1             2  Up                   22
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show bgp summary
+</code></pre></div>
+<p>Expected — two BGP sessions (eBGP to CE1, iBGP to PE2), both <code>Establ</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Groups: 2 Peers: 2 Down peers: 0
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>inet.0
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                       2          2          0          0          0          0
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>10.0.0.4              65001         42         41       0       0       20:11 1/1/1/0              0/0/0/0
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>172.16.1.2            65100         89        105       0       0       44:22 1/1/1/0              0/0/0/0
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Fix IS-IS or BGP issues before continuing</p>
+<p>MPLS depends on IS-IS routes to compute LSPs. BGP depends on MPLS to resolve next-hops. If IS-IS adjacencies are missing or BGP sessions are down, return to Sessions 5 or 6 to restore them.</p>
+</div>
+<h2 id="step-2-add-family-mpls-to-provider-interfaces">Step 2: Add <code>family mpls</code> to Provider Interfaces</h2>
+<p>MPLS-labeled packets have a different EtherType (0x8847) than plain IP packets. Each interface that will carry MPLS-labeled traffic must have <code>family mpls</code> enabled, or the router will drop incoming labeled frames.</p>
+<p>Add <code>family mpls</code> to the provider-facing interfaces on all four provider routers. CE-facing interfaces (ge-0/0/1 on PE1 and PE2) are <strong>not</strong> included — CE routers are outside the MPLS domain.</p>
+<h3 id="pe1">PE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>configure
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>set interfaces ge-0/0/0 unit 0 family mpls
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>commit
+</code></pre></div>
+<h3 id="p1">P1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>configure
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>set interfaces ge-0/0/0 unit 0 family mpls
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>set interfaces ge-0/0/1 unit 0 family mpls
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>commit
+</code></pre></div>
+<h3 id="p2">P2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>configure
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>set interfaces ge-0/0/0 unit 0 family mpls
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>set interfaces ge-0/0/1 unit 0 family mpls
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>commit
+</code></pre></div>
+<h3 id="pe2">PE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>configure
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>set interfaces ge-0/0/0 unit 0 family mpls
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>commit
+</code></pre></div>
+<h2 id="step-3-confirm-interface-configuration">Step 3: Confirm Interface Configuration</h2>
+<p>On PE1, confirm ge-0/0/0 now shows both <code>inet</code> and <code>mpls</code> families:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>show interfaces ge-0/0/0 detail | match family
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>    Input packets : 0
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    Output packets: 0
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    Protocol inet, MTU: 1500
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    Protocol mpls, MTU: 1488, Maximum labels: 3
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    Protocol iso, MTU: 1497
+</code></pre></div>
+<p>The <code>mpls</code> line confirms the interface is ready to receive labeled frames. The MTU of 1488 accounts for the 4-byte MPLS label header reducing the usable payload space below the 1492 Ethernet MTU.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">No traffic disruption</p>
+<p>Adding <code>family mpls</code> does not change how IP or IS-IS traffic is forwarded. IS-IS adjacencies and BGP sessions remain up throughout this step.</p>
 </div>
 
 

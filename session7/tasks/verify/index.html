@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6-verification" class="md-skip">
+        <a href="#session-7-verification-checklist" class="md-skip">
           Skip to content
         </a>
       
@@ -3780,6 +3780,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3796,6 +3814,135 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#family-mpls-on-provider-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        family mpls on Provider Interfaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ldp-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP Sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ldp-neighbors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP Neighbors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ldp-label-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP Label Database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inet3-mpls-routing-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        inet.3 — MPLS Routing Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-next-hop-resolution-via-mpls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP Next-Hop Resolution via MPLS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#end-to-end-ce-reachability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End CE Reachability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpls-forwarding-table-p-routers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPLS Forwarding Table (P Routers)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rsvp-te-part-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RSVP-TE (Part 3)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5471,79 @@
   
 
 
-<h1 id="session-6-verification">Session 6 — Verification</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-7-verification-checklist">Session 7 — Verification Checklist</h1>
+<h2 id="family-mpls-on-provider-interfaces">family mpls on Provider Interfaces</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show interfaces ge-0/0/0 detail | match mpls</code> — shows <code>Protocol mpls</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show interfaces ge-0/0/0 detail | match mpls</code> — shows <code>Protocol mpls</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show interfaces ge-0/0/1 detail | match mpls</code> — shows <code>Protocol mpls</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show interfaces ge-0/0/0 detail | match mpls</code> — shows <code>Protocol mpls</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show interfaces ge-0/0/1 detail | match mpls</code> — shows <code>Protocol mpls</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show interfaces ge-0/0/0 detail | match mpls</code> — shows <code>Protocol mpls</code></li>
+</ul>
+<h2 id="ldp-sessions">LDP Sessions</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp session</code> — <code>10.0.0.2</code> shows <code>Operational</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show ldp session</code> — both <code>10.0.0.1</code> and <code>10.0.0.3</code> show <code>Operational</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show ldp session</code> — both <code>10.0.0.2</code> and <code>10.0.0.4</code> show <code>Operational</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show ldp session</code> — <code>10.0.0.3</code> shows <code>Operational</code></li>
+</ul>
+<h2 id="ldp-neighbors">LDP Neighbors</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp neighbor</code> — one neighbor, label space ID <code>10.0.0.2:0</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show ldp neighbor</code> — two neighbors, <code>10.0.0.1:0</code> and <code>10.0.0.3:0</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show ldp neighbor</code> — two neighbors, <code>10.0.0.2:0</code> and <code>10.0.0.4:0</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show ldp neighbor</code> — one neighbor, label space ID <code>10.0.0.3:0</code></li>
+</ul>
+<h2 id="ldp-label-database">LDP Label Database</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp database</code> — Input labels for 10.0.0.4/32 received from P1 (a label number, not 3)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp database</code> — Label <code>3</code> (implicit-null) for 10.0.0.1/32 in Input database (PHP from P1)</li>
+</ul>
+<h2 id="inet3-mpls-routing-table">inet.3 — MPLS Routing Table</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table inet.3</code> — shows 3 destinations (10.0.0.2, 10.0.0.3, 10.0.0.4)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table inet.3</code> — 10.0.0.4/32 shows <code>Push &lt;label&gt;</code> action</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table inet.3</code> — shows 3 destinations (10.0.0.1, 10.0.0.2, 10.0.0.3)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table inet.3</code> — 10.0.0.1/32 shows <code>Push &lt;label&gt;</code> action</li>
+</ul>
+<h2 id="bgp-next-hop-resolution-via-mpls">BGP Next-Hop Resolution via MPLS</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route 10.0.0.12 detail</code> — shows <code>Label-stack { &lt;label&gt; }; MPLS-label: Push &lt;label&gt;</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route 10.0.0.11 detail</code> — shows <code>Label-stack { &lt;label&gt; }; MPLS-label: Push &lt;label&gt;</code></li>
+</ul>
+<h2 id="end-to-end-ce-reachability">End-to-End CE Reachability</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 10.0.0.12 count 5</code> — 5/5 replies, 0% packet loss</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 10.0.0.11 count 5</code> — 5/5 replies, 0% packet loss</li>
+</ul>
+<h2 id="mpls-forwarding-table-p-routers">MPLS Forwarding Table (P Routers)</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show route table mpls.0</code> — shows Swap entries (not just Receive) for labels from PE1</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show route table mpls.0</code> — shows Swap entries for labels from P1</li>
+</ul>
+<h2 id="rsvp-te-part-3">RSVP-TE (Part 3)</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show rsvp neighbor</code> — shows P1 (10.1.12.2) as RSVP neighbor</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show rsvp neighbor</code> — shows both PE1 (10.1.12.1) and P2 (10.1.23.2)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show rsvp session</code> — one Ingress session to 10.0.0.4, State: Up</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show rsvp session</code> — one Egress session from 10.0.0.1, State: Up</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show mpls lsp</code> — one Transit LSP for PE1-TO-PE2, State: Up</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show mpls lsp</code> — Ingress LSP PE1-TO-PE2 shows Up</li>
+</ul>
+<h2 id="quick-commands">Quick Commands</h2>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show ldp session
+</code></pre></div>
+Expected: all sessions in <code>Operational</code> state.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show route table inet.3
+</code></pre></div>
+Expected on PE1: three LDP routes with Push labels for 10.0.0.2, 10.0.0.3, 10.0.0.4.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show rsvp session
+</code></pre></div>
+Expected on PE1: Ingress session to 10.0.0.4 in Up state.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show mpls lsp
+</code></pre></div>
+Expected on PE1: PE1-TO-PE2 shows Up. Expected on P1/P2: Transit LSP for PE1-TO-PE2 shows Up.</p>
 
 
 

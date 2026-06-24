@@ -3752,6 +3752,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3 — RSVP-TE Intro
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3768,6 +3786,219 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ldp-vs-rsvp-te" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP vs RSVP-TE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-enable-is-is-traffic-engineering-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Enable IS-IS Traffic Engineering Extensions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Enable IS-IS Traffic Engineering Extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-enable-rsvp-on-provider-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Enable RSVP on Provider Interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Enable RSVP on Provider Interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pe1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pe2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PE2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-create-an-lsp-from-pe1-to-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Create an LSP from PE1 to PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-verify-rsvp-neighbors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Verify RSVP Neighbors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-verify-the-rsvp-te-lsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Verify the RSVP-TE LSP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-verify-rsvp-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Verify RSVP on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5325,9 +5556,210 @@
 
 
 <h1 id="part-3-rsvp-te-intro">Part 3 — RSVP-TE Intro</h1>
+<h2 id="overview">Overview</h2>
+<p>LDP distributes labels hop-by-hop, following the same path the IGP selects. Every router independently computes the best path and assigns labels — the result is a label-switched path that mirrors the IS-IS shortest path. There is no global coordination, no bandwidth reservation, and no ability to steer traffic onto an explicit path that differs from the IGP result.</p>
+<p><strong>RSVP-TE</strong> (Resource Reservation Protocol — Traffic Engineering) solves these limitations. It is a signaling protocol that establishes an <strong>LSP</strong> (Label Switched Path) with an explicit, end-to-end setup:</p>
+<ol>
+<li>The ingress router (PE1) sends an RSVP <strong>PATH</strong> message toward the egress (PE2), specifying the desired path and any bandwidth constraint</li>
+<li>Each transit router (P1, P2) allocates resources and records the state</li>
+<li>The egress router returns an RSVP <strong>RESV</strong> message back along the path, allocating labels hop-by-hop</li>
+<li>The ingress router receives the RESV and the LSP is established</li>
+</ol>
+<p>The result is a <strong>signaled LSP</strong> — every router on the path knows it exists, the exact path is fixed at the ingress, and bandwidth can be reserved.</p>
+<h3 id="ldp-vs-rsvp-te">LDP vs RSVP-TE</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LDP</th>
+<th>RSVP-TE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Path</td>
+<td>IGP shortest path</td>
+<td>Explicit or CSPF-computed</td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td>No reservation</td>
+<td>Optional reservation</td>
+</tr>
+<tr>
+<td>Signaling</td>
+<td>Distributed, per-hop</td>
+<td>End-to-end signaling from ingress</td>
+</tr>
+<tr>
+<td>Failure recovery</td>
+<td>Re-convergence with IGP</td>
+<td>Fast Reroute (pre-computed backup, sub-50ms)</td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>Low</td>
+<td>Higher</td>
+</tr>
+</tbody>
+</table>
+<p>In production deployments both often run simultaneously. LDP provides baseline label connectivity for all destinations. RSVP-TE LSPs are created for specific traffic-engineered paths — typically between PE routers — and BGP can be directed to prefer the RSVP LSP over the LDP path.</p>
+<h2 id="step-1-enable-is-is-traffic-engineering-extensions">Step 1: Enable IS-IS Traffic Engineering Extensions</h2>
+<p>RSVP-TE uses <strong>CSPF</strong> (Constrained Shortest Path First) to compute the explicit path. CSPF uses the IGP topology enriched with TE attributes — link bandwidth, TE metric, admin groups. IS-IS floods these attributes in TE extensions (TLV 22).</p>
+<p>Enable IS-IS TE extensions on all four provider routers. This is a single command per router.</p>
+<h3 id="pe1">PE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols isis traffic-engineering
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
+</code></pre></div>
+<h3 id="p1">P1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols isis traffic-engineering
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
+</code></pre></div>
+<h3 id="p2">P2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set protocols isis traffic-engineering
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>commit
+</code></pre></div>
+<h3 id="pe2">PE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set protocols isis traffic-engineering
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>commit
+</code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">IS-IS adjacencies remain stable</p>
+<p>Enabling TE extensions adds new TLVs to IS-IS LSPs. Existing adjacencies are not reset — they continue to carry traffic normally. The new TLVs propagate within the next IS-IS LSP refresh cycle (default 30 minutes, or triggered immediately if you run <code>clear isis database purge</code>).</p>
 </div>
+<h2 id="step-2-enable-rsvp-on-provider-interfaces">Step 2: Enable RSVP on Provider Interfaces</h2>
+<p>RSVP needs to be enabled on every interface along the path of the LSP. Enable it on all four provider routers.</p>
+<h3 id="pe1_1">PE1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>configure
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>set protocols rsvp interface ge-0/0/0.0
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>commit
+</code></pre></div>
+<h3 id="p1_1">P1</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>configure
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>set protocols rsvp interface ge-0/0/0.0
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>set protocols rsvp interface ge-0/0/1.0
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>commit
+</code></pre></div>
+<h3 id="p2_1">P2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>configure
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>set protocols rsvp interface ge-0/0/0.0
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>set protocols rsvp interface ge-0/0/1.0
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>commit
+</code></pre></div>
+<h3 id="pe2_1">PE2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>configure
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>set protocols rsvp interface ge-0/0/0.0
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>commit
+</code></pre></div>
+<h2 id="step-3-create-an-lsp-from-pe1-to-pe2">Step 3: Create an LSP from PE1 to PE2</h2>
+<p>The LSP is defined only on the <strong>ingress</strong> router (PE1). The <code>to</code> address is the egress router's loopback. No explicit path or bandwidth constraint is specified here — CSPF will compute the best path using the IS-IS TE topology.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>configure
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>set protocols mpls label-switched-path PE1-TO-PE2 to 10.0.0.4
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>commit
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">The LSP is one-directional</p>
+<p><code>PE1-TO-PE2</code> only creates a path from PE1 toward PE2. To have a bidirectional engineered path, configure a second LSP on PE2 pointing to PE1. For this intro, one direction is sufficient to see the mechanism.</p>
+</div>
+<h2 id="step-4-verify-rsvp-neighbors">Step 4: Verify RSVP Neighbors</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>PE1&gt; show rsvp neighbor
+</code></pre></div>
+<p>Expected — P1 appears as an RSVP neighbor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>RSVP neighbor: 1 learned
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Address            Idle    Up/Dn    LastChange  HelloInt  HelloTx/Rx  MsgRx
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>10.1.12.2           0      1/0           0:42         9    5/5           0
+</code></pre></div>
+<p>Each router only peers RSVP with directly adjacent routers (unlike BGP which can peer to loopbacks). The <code>HelloTx/Rx</code> counter confirms hellos are flowing bidirectionally.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>P1&gt; show rsvp neighbor
+</code></pre></div>
+<p>Expected — PE1 and P2 both appear as neighbors:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>RSVP neighbor: 2 learned
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Address            Idle    Up/Dn    LastChange  HelloInt  HelloTx/Rx  MsgRx
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>10.1.12.1           0      1/0           1:10         9    8/8           0
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>10.1.23.2           0      1/0           1:08         9    8/8           0
+</code></pre></div>
+<h2 id="step-5-verify-the-rsvp-te-lsp">Step 5: Verify the RSVP-TE LSP</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>PE1&gt; show rsvp session
+</code></pre></div>
+<p>Expected — the LSP is active:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Ingress RSVP: 1 sessions
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>To              From            State   Rt Style Labelin Labelout LSPname
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>10.0.0.4        10.0.0.1        Up       0  1 FF       -   299824 PE1-TO-PE2
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>Total 1 displayed, Up 1, Down 0
+</code></pre></div>
+<p>The <strong>State: Up</strong> confirms the LSP was successfully signaled from PE1 to PE2. <strong>Labelout: 299824</strong> is the label PE1 will push when forwarding traffic into this LSP. <strong>FF</strong> (Fixed-Filter) is the RSVP reservation style — one label is reserved per sender/destination pair.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>PE1&gt; show mpls lsp
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Ingress LSP: 1 sessions
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>To              From            State Rt P     ActivePath       LSPname
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>10.0.0.4        10.0.0.1        Up     0 *                      PE1-TO-PE2
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>Total 1 displayed, Up 1, Down 0
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>Egress LSP: 0 sessions
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>Total 0 displayed, Up 0, Down 0
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>Transit LSP: 0 sessions
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>Total 0 displayed, Up 0, Down 0
+</code></pre></div>
+<p>PE1 shows one <strong>Ingress LSP</strong> (PE1 is the head-end). Check P1 and P2 to see them as transit LSRs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>P1&gt; show mpls lsp
+</code></pre></div>
+<p>Expected on P1:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Ingress LSP: 0 sessions
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>Total 0 displayed, Up 0, Down 0
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>Egress LSP: 0 sessions
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>Total 0 displayed, Up 0, Down 0
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>Transit LSP: 1 sessions
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>To              From            State   Rt Style Labelin Labelout LSPname
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>10.0.0.4        10.0.0.1        Up       0  1 FF  299824   299840 PE1-TO-PE2
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>Total 1 displayed, Up 1, Down 0
+</code></pre></div>
+<p>P1 is a <strong>Transit LSP</strong> — it receives traffic labeled 299824 (from PE1) and swaps it to 299840 (toward P2).</p>
+<div class="admonition note">
+<p class="admonition-title">RSVP-TE and LDP coexist</p>
+<p>Both LDP and RSVP-TE are now running. The RSVP LSP is visible in inet.3 alongside LDP routes, but Junos needs explicit configuration (<code>traffic-engineering bgp-igp</code> or LSP-to-FEC binding) to steer BGP next-hops toward the RSVP LSP. Without that, BGP continues using the LDP paths from Part 2. Exploring those mechanisms is beyond this session's scope — the goal here is to understand how RSVP-TE signals and establishes a path.</p>
+</div>
+<h2 id="step-6-verify-rsvp-on-pe2">Step 6: Verify RSVP on PE2</h2>
+<p>On PE2, confirm the LSP arrives correctly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>PE2&gt; show rsvp session
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Egress RSVP: 1 sessions
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>To              From            State   Rt Style Labelin Labelout LSPname
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>10.0.0.4        10.0.0.1        Up       0  1 FF  3        -      PE1-TO-PE2
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>Total 1 displayed, Up 1, Down 0
+</code></pre></div>
+<p>PE2 appears as the <strong>Egress</strong> for the LSP. <strong>Labelin: 3</strong> is implicit-null — P2 performs PHP (pops the label before sending to PE2), so PE2 receives a plain IP packet. <strong>Labelout: -</strong> confirms no outgoing label (PE2 is the endpoint).</p>
 
 
 

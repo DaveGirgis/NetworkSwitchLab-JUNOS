@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6-command-reference" class="md-skip">
+        <a href="#session-7-command-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -3871,6 +3871,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3887,6 +3905,113 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mpls-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPLS Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ldp-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rsvp-te-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RSVP-TE Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpls-show-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPLS Show Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ldp-show-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP Show Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rsvp-show-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RSVP Show Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mpls-acronym-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPLS Acronym Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-7-wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session 7 Wrap-Up
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5449,318 @@
   
 
 
-<h1 id="session-6-command-reference">Session 6 — Command Reference</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-7-command-reference">Session 7 — Command Reference</h1>
+<h2 id="mpls-configuration">MPLS Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set interfaces ge-0/0/x unit 0 family mpls</code></td>
+<td>Enable MPLS packet processing on an interface — required before MPLS protocols can forward labeled frames</td>
+</tr>
+<tr>
+<td><code>set protocols mpls interface ge-0/0/x.0</code></td>
+<td>Register the interface with the MPLS forwarding engine</td>
+</tr>
+<tr>
+<td><code>set protocols mpls label-switched-path &lt;name&gt; to &lt;ip&gt;</code></td>
+<td>Define an RSVP-TE LSP with this router as ingress, targeting the given egress loopback</td>
+</tr>
+<tr>
+<td><code>set protocols mpls label-switched-path &lt;name&gt; bandwidth &lt;bps&gt;</code></td>
+<td>Optional bandwidth reservation for the LSP (e.g., <code>10m</code> for 10 Mbps)</td>
+</tr>
+<tr>
+<td><code>set protocols mpls label-switched-path &lt;name&gt; primary &lt;path-name&gt;</code></td>
+<td>Bind an explicit named path to the LSP for traffic engineering</td>
+</tr>
+<tr>
+<td><code>set protocols mpls path &lt;name&gt; &lt;ip&gt; strict</code></td>
+<td>Define an explicit path hop (strict = must be directly adjacent)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ldp-configuration">LDP Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set protocols ldp interface ge-0/0/x.0</code></td>
+<td>Enable LDP on a data interface — LDP hellos are sent out this interface to discover neighbors</td>
+</tr>
+<tr>
+<td><code>set protocols ldp interface lo0.0</code></td>
+<td>Add loopback to LDP — sets the loopback as the LDP transport address (LSR-ID and TCP session source)</td>
+</tr>
+<tr>
+<td><code>set protocols ldp preference &lt;value&gt;</code></td>
+<td>Override LDP route preference in inet.3 (default 9)</td>
+</tr>
+<tr>
+<td><code>delete protocols ldp interface ge-0/0/x.0</code></td>
+<td>Disable LDP on a specific interface</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rsvp-te-configuration">RSVP-TE Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set protocols rsvp interface ge-0/0/x.0</code></td>
+<td>Enable RSVP on an interface — required on every interface along a potential LSP path</td>
+</tr>
+<tr>
+<td><code>set protocols rsvp interface ge-0/0/x.0 bandwidth &lt;bps&gt;</code></td>
+<td>Define the reservable bandwidth on this interface for CSPF</td>
+</tr>
+<tr>
+<td><code>set protocols isis traffic-engineering</code></td>
+<td>Enable IS-IS TE extensions (TLV 22) so CSPF has link bandwidth and metric information</td>
+</tr>
+<tr>
+<td><code>set protocols isis traffic-engineering family inet</code></td>
+<td>Restrict TE extensions to IPv4 (default if unspecified)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mpls-show-commands">MPLS Show Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show route table mpls.0</code></td>
+<td>LFIB — incoming labels and their swap/pop/receive actions on this router</td>
+</tr>
+<tr>
+<td><code>show route table inet.3</code></td>
+<td>MPLS-resolved next-hops — LDP and RSVP routes used by BGP for next-hop resolution</td>
+</tr>
+<tr>
+<td><code>show route &lt;prefix&gt; detail</code></td>
+<td>Full route detail including Label-stack when MPLS is in use</td>
+</tr>
+<tr>
+<td><code>show mpls lsp</code></td>
+<td>Summary of all MPLS LSPs (Ingress, Egress, Transit) on this router</td>
+</tr>
+<tr>
+<td><code>show mpls lsp detail</code></td>
+<td>Full detail for each LSP including path, labels, bandwidth</td>
+</tr>
+<tr>
+<td><code>show mpls interface</code></td>
+<td>MPLS-enabled interfaces and their status</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ldp-show-commands">LDP Show Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show ldp neighbor</code></td>
+<td>Directly connected LDP neighbors discovered via hello messages</td>
+</tr>
+<tr>
+<td><code>show ldp session</code></td>
+<td>LDP TCP sessions and their state (Operational / OpenSent / etc.)</td>
+</tr>
+<tr>
+<td><code>show ldp database</code></td>
+<td>Input and output label bindings exchanged with each LDP peer</td>
+</tr>
+<tr>
+<td><code>show ldp database session &lt;ip&gt;</code></td>
+<td>Label bindings for a specific peer session</td>
+</tr>
+<tr>
+<td><code>show ldp route</code></td>
+<td>LDP routes computed from the label database</td>
+</tr>
+<tr>
+<td><code>show ldp statistics</code></td>
+<td>LDP message and session counters</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rsvp-show-commands">RSVP Show Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show rsvp session</code></td>
+<td>All RSVP sessions — Ingress (head-end), Egress (tail-end), Transit</td>
+</tr>
+<tr>
+<td><code>show rsvp session detail</code></td>
+<td>Full RSVP session detail including labels, bandwidth, path hops</td>
+</tr>
+<tr>
+<td><code>show rsvp neighbor</code></td>
+<td>Directly adjacent RSVP neighbors and hello state</td>
+</tr>
+<tr>
+<td><code>show rsvp interface</code></td>
+<td>RSVP-enabled interfaces and reservable bandwidth</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mpls-acronym-reference">MPLS Acronym Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Acronym</th>
+<th>Full Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MPLS</strong></td>
+<td>Multiprotocol Label Switching</td>
+<td>Data-plane mechanism that forwards packets using fixed-length labels instead of IP lookups</td>
+</tr>
+<tr>
+<td><strong>LDP</strong></td>
+<td>Label Distribution Protocol</td>
+<td>Protocol that distributes labels hop-by-hop following IGP paths; RFC 5036</td>
+</tr>
+<tr>
+<td><strong>RSVP-TE</strong></td>
+<td>Resource Reservation Protocol — Traffic Engineering</td>
+<td>Protocol that signals end-to-end LSPs with explicit paths and optional bandwidth reservation; RFC 3209</td>
+</tr>
+<tr>
+<td><strong>LSP</strong></td>
+<td>Label Switched Path</td>
+<td>The end-to-end path a labeled packet takes through the MPLS network</td>
+</tr>
+<tr>
+<td><strong>FEC</strong></td>
+<td>Forwarding Equivalence Class</td>
+<td>A group of packets forwarded identically — typically one prefix per FEC</td>
+</tr>
+<tr>
+<td><strong>LER</strong></td>
+<td>Label Edge Router</td>
+<td>The ingress or egress PE — pushes labels on entry, pops on exit</td>
+</tr>
+<tr>
+<td><strong>LSR</strong></td>
+<td>Label Switch Router</td>
+<td>A transit P router — swaps incoming label for outgoing label</td>
+</tr>
+<tr>
+<td><strong>LFIB</strong></td>
+<td>Label Forwarding Information Base</td>
+<td>Per-router table mapping incoming labels to outgoing label + interface</td>
+</tr>
+<tr>
+<td><strong>PHP</strong></td>
+<td>Penultimate Hop Popping</td>
+<td>The second-to-last router pops the label before forwarding to the egress PE, reducing one label lookup on the PE</td>
+</tr>
+<tr>
+<td><strong>inet.3</strong></td>
+<td>MPLS Routing Table</td>
+<td>Junos routing table holding MPLS-resolved next-hops; used by BGP for next-hop resolution</td>
+</tr>
+<tr>
+<td><strong>mpls.0</strong></td>
+<td>MPLS Forwarding Table</td>
+<td>Junos routing table that is the LFIB — shows label swap/pop/receive entries</td>
+</tr>
+<tr>
+<td><strong>TC</strong></td>
+<td>Traffic Class</td>
+<td>3-bit field in MPLS label header used for QoS marking (formerly called EXP)</td>
+</tr>
+<tr>
+<td><strong>TTL</strong></td>
+<td>Time to Live</td>
+<td>8-bit field in MPLS label header; decremented at each hop; controls traceroute visibility through MPLS</td>
+</tr>
+<tr>
+<td><strong>CSPF</strong></td>
+<td>Constrained Shortest Path First</td>
+<td>Algorithm used by RSVP-TE to compute the explicit LSP path considering bandwidth and TE constraints</td>
+</tr>
+<tr>
+<td><strong>TE</strong></td>
+<td>Traffic Engineering</td>
+<td>The practice of routing traffic along non-IGP paths for bandwidth control or optimization</td>
+</tr>
+<tr>
+<td><strong>DU</strong></td>
+<td>Downstream Unsolicited</td>
+<td>LDP advertisement mode — labels are distributed to neighbors without being requested (the default)</td>
+</tr>
+<tr>
+<td><strong>LSR-ID</strong></td>
+<td>Label Switch Router ID</td>
+<td>The identifier for a router in the LDP domain — always the loopback address in Junos</td>
+</tr>
+<tr>
+<td><strong>TLV</strong></td>
+<td>Type-Length-Value</td>
+<td>Encoding used by IS-IS, LDP, and RSVP to carry extensible information</td>
+</tr>
+<tr>
+<td><strong>PATH</strong></td>
+<td>RSVP PATH message</td>
+<td>Sent by the ingress toward the egress to signal an LSP setup request</td>
+</tr>
+<tr>
+<td><strong>RESV</strong></td>
+<td>RSVP RESV message</td>
+<td>Sent by the egress back to the ingress, allocating labels hop-by-hop</td>
+</tr>
+<tr>
+<td><strong>FRR</strong></td>
+<td>Fast Reroute</td>
+<td>RSVP-TE mechanism that pre-computes a backup LSP path, enabling sub-50ms failover</td>
+</tr>
+<tr>
+<td><strong>AF</strong></td>
+<td>Address Family</td>
+<td>inet.3 is used for the IPv4 address family; inet6.3 for IPv6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="session-7-wrap-up">Session 7 Wrap-Up</h2>
+<p>MPLS and LDP are now running across the provider backbone. P1 and P2 forward traffic using label swaps without any knowledge of customer prefixes. BGP next-hops are resolved via inet.3, giving every PE router a label-switched path to every other PE router. End-to-end CE-to-CE connectivity is established for the first time.</p>
+<p>The next session (Session 8) builds directly on this foundation. <strong>BGP/MPLS L3 VPN</strong> uses a <strong>two-label stack</strong>: an outer transport label (the LDP LSP to the remote PE — exactly what this session configured) and an inner <strong>VPN label</strong> that identifies which customer VRF the packet belongs to. The P routers see only the outer label and remain unaware of VPN routing, exactly as they are now unaware of customer prefixes.</p>
 
 
 
