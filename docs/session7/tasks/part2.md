@@ -134,15 +134,15 @@ Expected — all five replies succeed:
 
 ```text
 PING 10.0.0.12 (10.0.0.12): 56 data bytes
-64 bytes from 10.0.0.12: icmp_seq=0 ttl=60 time=3.2 ms
-64 bytes from 10.0.0.12: icmp_seq=1 ttl=60 time=2.9 ms
-64 bytes from 10.0.0.12: icmp_seq=2 ttl=60 time=3.1 ms
-64 bytes from 10.0.0.12: icmp_seq=3 ttl=60 time=2.8 ms
-64 bytes from 10.0.0.12: icmp_seq=4 ttl=60 time=3.0 ms
+64 bytes from 10.0.0.12: icmp_seq=0 ttl=60 time=28.351 ms
+64 bytes from 10.0.0.12: icmp_seq=1 ttl=60 time=47.681 ms
+64 bytes from 10.0.0.12: icmp_seq=2 ttl=60 time=23.684 ms
+64 bytes from 10.0.0.12: icmp_seq=3 ttl=60 time=74.369 ms
+64 bytes from 10.0.0.12: icmp_seq=4 ttl=60 time=13.464 ms
 
 --- 10.0.0.12 ping statistics ---
 5 packets transmitted, 5 packets received, 0% packet loss
-round-trip min/avg/max/stddev = 2.8/3.0/3.2/0.1 ms
+round-trip min/avg/max/stddev = 13.464/37.510/74.369/21.519 ms
 ```
 
 What is happening end-to-end:
