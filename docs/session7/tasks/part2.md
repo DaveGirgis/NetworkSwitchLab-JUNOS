@@ -17,32 +17,29 @@ Expected output:
 ```text
 Input label database, 10.0.0.1:0--10.0.0.2:0
   Label     Prefix
-      3       10.0.0.1/32
-  299776      10.0.0.2/32
-  299777      10.0.0.3/32
-  299778      10.0.0.4/32
-  299779      10.1.12.0/30
-  299780      10.1.23.0/30
-  299781      10.1.34.0/30
+ 299776      10.0.0.1/32
+      3      10.0.0.2/32
+ 299792      10.0.0.3/32
+ 299808      10.0.0.4/32
 
 Output label database, 10.0.0.1:0--10.0.0.2:0
   Label     Prefix
-      3       10.0.0.2/32
-  299792      10.0.0.1/32
-  299793      10.0.0.3/32
-  299794      10.0.0.4/32
-  299795      10.1.12.0/30
-  299796      10.1.23.0/30
-  299797      10.1.34.0/30
+      3      10.0.0.1/32
+ 299776      10.0.0.2/32
+ 299792      10.0.0.3/32
+ 299808      10.0.0.4/32
 ```
 
-**Input label database** — labels PE1 received from P1. These are the labels PE1 will use when pushing traffic toward P1:
-- Label `3` for 10.0.0.1/32 — PHP in action. P1 sends implicit-null (label 3) for PE1's own loopback, telling PE1 to pop the label before forwarding. Since PE1 is the egress for its own loopback, no label is needed.
-- Labels 299776–299781 for all other reachable prefixes — PE1 will push one of these when forwarding labeled traffic toward P1.
+LDP only distributes labels for loopback (host) prefixes — the /30 link subnets do not appear.
 
-**Output label database** — labels PE1 sent to P1. P1 will push these labels when sending traffic destined for PE1 to handle:
-- Label `3` for 10.0.0.2/32 — PE1 sends implicit-null for P1's loopback (PHP — PE1 is the penultimate hop for traffic arriving at P1's loopback from the PE1 side).
-- Labels 299792–299797 — PE1's own label assignments for all other prefixes P1 might send to PE1.
+**Input label database** — labels PE1 received from P1. These are the labels PE1 will use when pushing traffic toward P1:
+- Label `299776` for 10.0.0.1/32 — P1 assigns this label for traffic it needs to send back to PE1's loopback. PE1 uses it when traffic loops back, but more relevantly P1 advertises it upstream.
+- Label `3` for 10.0.0.2/32 — PHP in action. P1 sends implicit-null (label 3) for its own loopback, telling PE1 not to push a label for traffic destined to P1's loopback. PE1 forwards those packets to P1 as plain IP.
+- Labels `299792` and `299808` for 10.0.0.3/32 and 10.0.0.4/32 — PE1 pushes these labels when forwarding traffic toward P2 or PE2 via P1.
+
+**Output label database** — labels PE1 sent to P1. P1 uses these when sending traffic to PE1:
+- Label `3` for 10.0.0.1/32 — PE1 sends implicit-null for its own loopback. PHP: P1 pops before delivering to PE1. PE1 receives plain IP for traffic destined to itself.
+- Labels `299776`, `299792`, `299808` for the remaining loopbacks — PE1's label assignments for prefixes P1 might forward to PE1 as a transit hop.
 
 ## Step 2: Verify inet.3
 
@@ -61,16 +58,16 @@ inet.3: 3 destinations, 3 routes (3 active, 0 holddown, 0 hidden)
 10.0.0.2/32        *[LDP/9] 00:03:21, metric 1
                     > to 10.1.12.2 via ge-0/0/0.0
 10.0.0.3/32        *[LDP/9] 00:03:21, metric 2
-                    > to 10.1.12.2 via ge-0/0/0.0, Push 299777
+                    > to 10.1.12.2 via ge-0/0/0.0, Push 299792
 10.0.0.4/32        *[LDP/9] 00:03:21, metric 3
-                    > to 10.1.12.2 via ge-0/0/0.0, Push 299778
+                    > to 10.1.12.2 via ge-0/0/0.0, Push 299808
 ```
 
 Three entries — one for each provider loopback that PE1 can reach via LDP:
 
 - **10.0.0.2/32 (P1)** — directly adjacent; PHP applies. P1 sent implicit-null, so no label is pushed. Traffic arrives at P1 as a plain IP packet.
 - **10.0.0.3/32 (P2)** — two hops. PE1 pushes label 299777. P1 receives it, swaps or pops (PHP from P2), and forwards toward P2.
-- **10.0.0.4/32 (PE2)** — three hops. PE1 pushes label 299778. P1 swaps, P2 pops (PHP, as P2 is penultimate for PE2), PE2 receives a plain IP packet.
+- **10.0.0.4/32 (PE2)** — three hops. PE1 pushes label 299808. P1 swaps, P2 pops (PHP, as P2 is penultimate for PE2), PE2 receives a plain IP packet.
 
 The preference value is **LDP/9** — LDP routes in inet.3 have a preference of 9, which is lower (more preferred) than IS-IS (18), ensuring LDP routes are used when resolving BGP next-hops.
 
@@ -95,9 +92,9 @@ inet.0: 14 destinations, 14 routes (14 active, 0 holddown, 0 hidden)
                 Next-hop reference count: 1
                 Source: 10.0.0.4
                 Next hop: 10.1.12.2 via ge-0/0/0.0, selected
-                Label-stack { 299778 }; MPLS-label: Push 299778
+                Label-stack { 299808 }; MPLS-label: Push 299808
                 Protocol next hop: 10.0.0.4
-                Indirect next hop: 0x93474a0 299778 INH Session ID: 0x150001
+                Indirect next hop: 0x93474a0 299808 INH Session ID: 0x150001
                 State: <Active Ext>
                 Age: 4:07      Metric2: 3
                 Task: BGP_65001.10.0.0.4+179
@@ -106,12 +103,12 @@ inet.0: 14 destinations, 14 routes (14 active, 0 holddown, 0 hidden)
                 Router ID: 10.0.0.4
 ```
 
-The critical line is `Label-stack { 299778 }; MPLS-label: Push 299778`. This confirms:
+The critical line is `Label-stack { 299808 }; MPLS-label: Push 299808`. This confirms:
 
 - BGP found the route to CE2's loopback (10.0.0.12) via iBGP from PE2 (10.0.0.4)
 - BGP resolved the next-hop 10.0.0.4 using inet.3
-- inet.3 says: push label 299778 to reach 10.0.0.4 via P1 (10.1.12.2)
-- When PE1 forwards this packet, it will push label 299778 before handing off to P1
+- inet.3 says: push label 299808 to reach 10.0.0.4 via P1 (10.1.12.2)
+- When PE1 forwards this packet, it will push label 299808 before handing off to P1
 
 P1 and P2 will swap/pop the label without ever looking at the 10.0.0.12 destination IP.
 
@@ -141,8 +138,8 @@ round-trip min/avg/max/stddev = 2.8/3.0/3.2/0.1 ms
 The TTL of 60 reflects packet traversal across multiple hops (started at 64, decremented by each router). What is happening end-to-end:
 
 1. CE1 sends an ICMP packet destined for 10.0.0.12 toward its BGP next-hop PE1 (172.16.1.1)
-2. PE1 has a BGP route to 10.0.0.12 resolved via inet.3 — pushes label 299778 and forwards to P1
-3. P1 swaps label 299778 with its outgoing label for PE2 and forwards to P2
+2. PE1 has a BGP route to 10.0.0.12 resolved via inet.3 — pushes label 299808 and forwards to P1
+3. P1 swaps label 299808 with its outgoing label for PE2 and forwards to P2
 4. P2 performs PHP (pops the label) and forwards the bare IP packet to PE2
 5. PE2 receives an IP packet, looks up 10.0.0.12 in its BGP table, and forwards out ge-0/0/1 to CE2
 6. CE2 replies to CE1's IP (10.0.0.11 or 172.16.1.2), path reverses through the same LSP
@@ -169,7 +166,7 @@ P1> show route table mpls.0
 Expected on P1 (a transit LSR):
 
 ```text
-mpls.0: 8 destinations, 8 routes (8 active, 0 holddown, 0 hidden)
+mpls.0: 6 destinations, 6 routes (6 active, 0 holddown, 0 hidden)
 + = Active Route, - = Last Active, * = Both
 
 0                  *[MPLS/0] 2d 04:12:00, metric 1
@@ -179,21 +176,18 @@ mpls.0: 8 destinations, 8 routes (8 active, 0 holddown, 0 hidden)
 2                  *[MPLS/0] 2d 04:12:00, metric 1
                       Receive
 299776             *[LDP/9] 00:08:14, metric 1
-                    > to 10.1.23.2 via ge-0/0/1.0, Swap 299808
-299777             *[LDP/9] 00:08:14, metric 1
-                    > to 10.1.23.2 via ge-0/0/1.0, Swap 299809
-299778             *[LDP/9] 00:08:14, metric 1
-                    > to 10.1.23.2 via ge-0/0/1.0, Swap 299810
+                    > to 10.1.12.1 via ge-0/0/0.0, Pop
 299792             *[LDP/9] 00:08:14, metric 1
-                      Receive
-299793             *[LDP/9] 00:08:14, metric 1
-                    > to 10.1.12.1 via ge-0/0/0.0, Swap 299793
+                    > to 10.1.23.2 via ge-0/0/1.0, Pop
+299808             *[LDP/9] 00:08:14, metric 1
+                    > to 10.1.23.2 via ge-0/0/1.0, Pop
 ```
 
 Labels 0, 1, 2 are reserved (IPv4 Explicit Null, Router Alert, IPv6 Explicit Null) — any packet arriving with these labels is consumed locally.
 
-Labels 299776–299778 are labels P1 assigned for traffic arriving from PE1 destined for P2's and PE2's loopbacks — P1 swaps these to P2's outgoing labels (299808–299810) and forwards out ge-0/0/1 toward P2.
+The three LDP entries correspond to labels P1 assigned and advertised to its neighbors:
+- **299776** (PE1's loopback) — traffic arriving labeled 299776 is headed for PE1. P1 pops (PHP — PE1 sent implicit-null for its own loopback) and forwards bare IP to PE1 out ge-0/0/0.0.
+- **299792** (P2's loopback) — traffic arriving labeled 299792 from PE1 is headed for P2. P1 pops (PHP — P2 sent implicit-null for its own loopback to P1) and forwards bare IP to P2 out ge-0/0/1.0.
+- **299808** (PE2's loopback) — traffic arriving labeled 299808 from PE1 is headed for PE2. P1 pops (PHP — P2 sent implicit-null for PE2's loopback, as P2 is the penultimate hop for PE2) and forwards bare IP to P2 out ge-0/0/1.0.
 
-Label 299792 maps to Receive — this is P1's own label for its loopback (traffic labeled 299792 arriving at P1 is destined for P1 itself).
-
-The swap operations are the core of what makes P1 an LSR: no IP lookup, just label in → label out → forward.
+In this four-router linear topology, PHP removes the label at every hop — P1 never needs to Swap. P2 receives bare IP packets from P1 and makes the final IP forwarding decision. The key point holds: P1 makes every forwarding decision based on the incoming label, not the IP destination.
