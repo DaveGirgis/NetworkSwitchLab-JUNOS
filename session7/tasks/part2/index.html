@@ -5487,32 +5487,40 @@
 <p>Before MPLS, the BGP route to CE2's loopback on PE1 had no label — P routers would receive an IP packet destined for 10.0.0.12 and drop it. Now, check the route detail:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route 10.0.0.12 detail
 </code></pre></div>
-<p>Expected (key lines highlighted):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>inet.0: 14 destinations, 14 routes (14 active, 0 holddown, 0 hidden)
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>inet.0: 12 destinations, 12 routes (12 active, 0 holddown, 0 hidden)
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>10.0.0.12/32 (1 entry, 1 announced)
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        *BGP    Preference: 170/-101
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>                Next hop type: Indirect
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                Next-hop reference count: 1
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                Source: 10.0.0.4
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                Next hop: 10.1.12.2 via ge-0/0/0.0, selected
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                Label-stack { 299808 }; MPLS-label: Push 299808
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                Protocol next hop: 10.0.0.4
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>                Indirect next hop: 0x93474a0 299808 INH Session ID: 0x150001
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                State: &lt;Active Ext&gt;
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>                Age: 4:07      Metric2: 3
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                Task: BGP_65001.10.0.0.4+179
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>                AS path: 65100 I
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>                Localpref: 100
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>                Router ID: 10.0.0.4
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                Address: 0x96f0568
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                Next-hop reference count: 3
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                Source: 10.0.0.4
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                Next hop type: Router, Next hop index: 569
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                Next hop: 10.1.12.2 via ge-0/0/0.0, selected
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>                Label operation: Push 299808
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                Label TTL action: prop-ttl
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>                Load balance label: Label 299808: None;
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                Session Id: 0x140
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>                Protocol next hop: 10.0.0.4
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>                Indirect next hop: 0x9650110 1048574 INH Session ID: 0x143
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>                State: &lt;Active Int Ext&gt;
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>                Local AS: 65001 Peer AS: 65001
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>                Age: 22:22:05   Metric2: 1
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>                Validation State: unverified
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>                Task: BGP_65001.10.0.0.4+59859
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>                Announcement bits (3): 0-KRT 3-BGP_RT_Background 4-Resolve tree 4
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>                AS path: 65100 I
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>                Accepted
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>                Localpref: 100
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>                Router ID: 10.0.0.4
 </code></pre></div>
-<p>The critical line is <code>Label-stack { 299808 }; MPLS-label: Push 299808</code>. This confirms:</p>
+<p>The critical lines are <code>Label operation: Push 299808</code> and <code>State: &lt;Active Int Ext&gt;</code>. Together they confirm:</p>
 <ul>
-<li>BGP found the route to CE2's loopback (10.0.0.12) via iBGP from PE2 (10.0.0.4)</li>
-<li>BGP resolved the next-hop 10.0.0.4 using inet.3</li>
-<li>inet.3 says: push label 299808 to reach 10.0.0.4 via P1 (10.1.12.2)</li>
-<li>When PE1 forwards this packet, it will push label 299808 before handing off to P1</li>
+<li><strong><code>Label operation: Push 299808</code></strong> — PE1 will push label 299808 onto every packet headed for 10.0.0.12 before handing it to P1. P routers forward on the label without looking at the 10.0.0.12 destination IP.</li>
+<li><strong><code>State: &lt;Active Int Ext&gt;</code></strong> — <code>Int</code> means the BGP next-hop (10.0.0.4) was resolved through inet.3 (the MPLS/LDP table), not inet.0. <code>Ext</code> means this is an external route (received via iBGP). Before MPLS was enabled, <code>Int</code> would not appear here.</li>
+<li><strong><code>Protocol next hop: 10.0.0.4</code></strong> — the iBGP next-hop is PE2's loopback, which inet.3 maps to the label path.</li>
+<li><strong><code>Label TTL action: prop-ttl</code></strong> — IP TTL is copied into the MPLS label TTL on push, so traceroute sees each hop through the MPLS domain.</li>
 </ul>
-<p>P1 and P2 will swap/pop the label without ever looking at the 10.0.0.12 destination IP.</p>
 <h2 id="step-4-ce-to-ce-ping">Step 4: CE-to-CE Ping</h2>
 <p>This is the payoff of Session 7. A ping from CE1 to CE2's loopback was failing at the end of Session 6 because P routers had no route to CE prefixes. With LDP running, the label path carries the packet end-to-end.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>CE1&gt; ping 10.0.0.12 count 5
