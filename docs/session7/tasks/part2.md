@@ -177,28 +177,46 @@ P1> show route table mpls.0
 Expected on P1 (a transit LSR):
 
 ```text
-mpls.0: 6 destinations, 6 routes (6 active, 0 holddown, 0 hidden)
+mpls.0: 11 destinations, 11 routes (11 active, 0 holddown, 0 hidden)
 + = Active Route, - = Last Active, * = Both
 
-0                  *[MPLS/0] 2d 04:12:00, metric 1
+0                  *[MPLS/0] 00:24:03, metric 1
+                      to table inet.0
+0(S=0)             *[MPLS/0] 00:24:03, metric 1
+                      to table mpls.0
+1                  *[MPLS/0] 00:24:03, metric 1
                       Receive
-1                  *[MPLS/0] 2d 04:12:00, metric 1
+2                  *[MPLS/0] 00:24:03, metric 1
+                      to table inet6.0
+2(S=0)             *[MPLS/0] 00:24:03, metric 1
+                      to table mpls.0
+13                 *[MPLS/0] 00:24:03, metric 1
                       Receive
-2                  *[MPLS/0] 2d 04:12:00, metric 1
-                      Receive
-299776             *[LDP/9] 00:08:14, metric 1
+299776             *[LDP/9] 00:24:02, metric 1
                     > to 10.1.12.1 via ge-0/0/0.0, Pop
-299792             *[LDP/9] 00:08:14, metric 1
+299776(S=0)        *[LDP/9] 00:24:02, metric 1
+                    > to 10.1.12.1 via ge-0/0/0.0, Pop
+299792             *[LDP/9] 00:23:34, metric 1
                     > to 10.1.23.2 via ge-0/0/1.0, Pop
-299808             *[LDP/9] 00:08:14, metric 1
+299792(S=0)        *[LDP/9] 00:23:34, metric 1
                     > to 10.1.23.2 via ge-0/0/1.0, Pop
+299808             *[LDP/9] 00:23:07, metric 1
+                    > to 10.1.23.2 via ge-0/0/1.0, Swap 299808
 ```
 
-Labels 0, 1, 2 are reserved (IPv4 Explicit Null, Router Alert, IPv6 Explicit Null) — any packet arriving with these labels is consumed locally.
+**Reserved label entries (labels 0, 1, 2, 13):**
 
-The three LDP entries correspond to labels P1 assigned and advertised to its neighbors:
-- **299776** (PE1's loopback) — traffic arriving labeled 299776 is headed for PE1. P1 pops (PHP — PE1 sent implicit-null for its own loopback) and forwards bare IP to PE1 out ge-0/0/0.0.
-- **299792** (P2's loopback) — traffic arriving labeled 299792 from PE1 is headed for P2. P1 pops (PHP — P2 sent implicit-null for its own loopback to P1) and forwards bare IP to P2 out ge-0/0/1.0.
-- **299808** (PE2's loopback) — traffic arriving labeled 299808 from PE1 is headed for PE2. P1 pops (PHP — P2 sent implicit-null for PE2's loopback, as P2 is the penultimate hop for PE2) and forwards bare IP to P2 out ge-0/0/1.0.
+- **Label 0** (`to table inet.0`) — IPv4 Explicit Null. A packet arriving with label 0 is forwarded into the IPv4 routing table for normal IP lookup. Not the same as Receive — the packet is re-routed, not consumed.
+- **Label 0(S=0)** (`to table mpls.0`) — same label but with the bottom-of-stack bit clear, meaning more labels exist below. Forwarded back into mpls.0 to process the next label in the stack.
+- **Label 1** (Receive) — Router Alert. Consumed locally.
+- **Label 2** (`to table inet6.0`) — IPv6 Explicit Null. Forwarded into the IPv6 routing table.
+- **Label 2(S=0)** (`to table mpls.0`) — stacked variant of IPv6 Explicit Null.
+- **Label 13** (Receive) — Generic Associated Channel (G-ACh), used for MPLS OAM. Consumed locally.
 
-In this four-router linear topology, PHP removes the label at every hop — P1 never needs to Swap. P2 receives bare IP packets from P1 and makes the final IP forwarding decision. The key point holds: P1 makes every forwarding decision based on the incoming label, not the IP destination.
+**`(S=0)` entries** — in MPLS, the S-bit (bottom-of-stack flag) in a label indicates whether this is the innermost label. S=1 means bottom of stack (single label or innermost). S=0 means more labels exist below this one (label stack). Junos installs separate LFIB entries for the S=0 case so it can apply the correct action when a label stack is in use — relevant for L3 VPN in Session 8 where an inner VPN label sits below the transport label.
+
+**LDP label entries:**
+
+- **299776 / 299776(S=0)** (PE1's loopback) — P1 pops and forwards bare IP to PE1 out ge-0/0/0.0. PHP applies: PE1 sent implicit-null for its own loopback, so P1 strips the label before delivering to PE1.
+- **299792 / 299792(S=0)** (P2's loopback) — P1 pops and forwards bare IP to P2 out ge-0/0/1.0. PHP applies: P2 sent implicit-null for its own loopback, so P1 strips the label. P2 receives at its own address.
+- **299808** (PE2's loopback) — P1 **swaps** to outgoing label 299808 and forwards to P2. Note the outgoing label is also 299808 — P2 independently assigned 299808 for the same FEC. Labels are locally significant; two routers assigning the same numeric value for different purposes is a coincidence. P2 will receive a packet labeled 299808 and pop it (PHP — PE2 sent implicit-null to P2 for PE2's own loopback), delivering bare IP to PE2.
