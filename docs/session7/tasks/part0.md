@@ -112,17 +112,16 @@ commit
 On PE1, confirm ge-0/0/0 now shows both `inet` and `mpls` families:
 
 ```junos
-show interfaces ge-0/0/0 detail | match family
+show interfaces ge-0/0/0 detail | match Proto
 ```
 
 Expected:
 
 ```text
-    Input packets : 0
-    Output packets: 0
-    Protocol inet, MTU: 1500
-    Protocol mpls, MTU: 1488, Maximum labels: 3
-    Protocol iso, MTU: 1497
+    Protocol inet, MTU: 1500, Generation: 154, Route table: 0
+    Protocol iso, MTU: 1497, Generation: 155, Route table: 0
+    Protocol mpls, MTU: 1488, Maximum labels: 3, Generation: 159,
+    Protocol multiservice, MTU: Unlimited, Generation: 156, Route table: 0
 ```
 
 The `mpls` line confirms the interface is ready to receive labeled frames. The MTU of 1488 accounts for the 4-byte MPLS label header reducing the usable payload space below the 1492 Ethernet MTU.
