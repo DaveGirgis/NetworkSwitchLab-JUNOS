@@ -5532,14 +5532,13 @@
 </code></pre></div>
 <h2 id="step-3-confirm-interface-configuration">Step 3: Confirm Interface Configuration</h2>
 <p>On PE1, confirm ge-0/0/0 now shows both <code>inet</code> and <code>mpls</code> families:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>show interfaces ge-0/0/0 detail | match family
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>show interfaces ge-0/0/0 detail | match Proto
 </code></pre></div>
 <p>Expected:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>    Input packets : 0
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    Output packets: 0
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    Protocol inet, MTU: 1500
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    Protocol mpls, MTU: 1488, Maximum labels: 3
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    Protocol iso, MTU: 1497
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>    Protocol inet, MTU: 1500, Generation: 154, Route table: 0
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    Protocol iso, MTU: 1497, Generation: 155, Route table: 0
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    Protocol mpls, MTU: 1488, Maximum labels: 3, Generation: 159,
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    Protocol multiservice, MTU: Unlimited, Generation: 156, Route table: 0
 </code></pre></div>
 <p>The <code>mpls</code> line confirms the interface is ready to receive labeled frames. The MTU of 1488 accounts for the 4-byte MPLS label header reducing the usable payload space below the 1492 Ethernet MTU.</p>
 <div class="admonition note">
