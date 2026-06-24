@@ -5514,8 +5514,8 @@
 </ul>
 <h2 id="end-to-end-ce-reachability">End-to-End CE Reachability</h2>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 10.0.0.12 count 5</code> — 5/5 replies, 0% packet loss</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 10.0.0.11 count 5</code> — 5/5 replies, 0% packet loss</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5</code> — 5/5 replies, 0% packet loss</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 10.0.0.11 source 10.0.0.12 count 5</code> — 5/5 replies, 0% packet loss</li>
 </ul>
 <h2 id="mpls-forwarding-table-p-routers">MPLS Forwarding Table (P Routers)</h2>
 <ul class="task-list">

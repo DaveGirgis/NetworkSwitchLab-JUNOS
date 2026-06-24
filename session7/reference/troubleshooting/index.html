@@ -3983,6 +3983,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ce-to-ce-ping-fails-with-100-loss-no-source-specified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE-to-CE Ping Fails with 100% Loss — No Source Specified
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ce-to-ce-ping-still-failing-after-mpls-is-up" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5505,31 +5516,41 @@
 </li>
 </ol>
 <hr />
+<h2 id="ce-to-ce-ping-fails-with-100-loss-no-source-specified">CE-to-CE Ping Fails with 100% Loss — No Source Specified</h2>
+<p><strong>Symptom:</strong> <code>CE1&gt; ping 10.0.0.12 count 5</code> returns 100% packet loss immediately (no replies at all).</p>
+<p><strong>Cause:</strong> Junos uses the outgoing interface address (172.16.1.2) as the source when no <code>source</code> is specified. The forward path works — CE2 receives the ping — but CE2 has no route to 172.16.1.2 (only loopback prefixes were advertised into BGP) and drops the reply.</p>
+<p><strong>Fix:</strong> Always specify the loopback as source:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>CE2&gt; ping 10.0.0.11 source 10.0.0.12 count 5
+</code></pre></div>
+<p>CE2 has a BGP route to 10.0.0.11 via PE2, and CE1 has a BGP route to 10.0.0.12 via PE1 — both reply paths exist when loopbacks are used as the source.</p>
+<hr />
 <h2 id="ce-to-ce-ping-still-failing-after-mpls-is-up">CE-to-CE Ping Still Failing After MPLS Is Up</h2>
 <p><strong>Symptom:</strong> <code>show route table inet.3</code> has LDP entries, BGP routes show a label-stack, but <code>CE1&gt; ping 10.0.0.12</code> fails.</p>
 <p><strong>Cause and fix — check in this order:</strong></p>
 <ol>
 <li>
 <p><strong>Confirm BGP is still up</strong> — MPLS configuration does not affect BGP, but confirm sessions did not drop during the changes:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>PE1&gt; show bgp summary
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PE1&gt; show bgp summary
 </code></pre></div>
    Both CE1 and PE2 sessions must be <code>Establ</code>. If BGP dropped, wait for sessions to re-establish.</p>
 </li>
 <li>
 <p><strong>Confirm CE1 has the BGP route</strong>:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>CE1&gt; show route 10.0.0.12
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>CE1&gt; show route 10.0.0.12
 </code></pre></div>
    Must show a BGP route via 172.16.1.1 (PE1). If missing, check that the BGP export policy on CE1 is still applied and the iBGP session between PE1 and PE2 is carrying the prefix.</p>
 </li>
 <li>
 <p><strong>Confirm PE2 has a route back to CE1's loopback</strong>:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PE2&gt; show route 10.0.0.11
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>PE2&gt; show route 10.0.0.11
 </code></pre></div>
    The return path requires PE2 to have CE1's loopback via iBGP, and it must also be MPLS-resolved. Check <code>show route 10.0.0.11 detail</code> on PE2 for a label-stack.</p>
 </li>
 <li>
 <p><strong>Check family mpls on all provider interfaces</strong> — a missing <code>family mpls</code> on any provider interface causes labeled packets to be dropped at that hop. A traceroute from CE1 can reveal where packets stop:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>CE1&gt; traceroute 10.0.0.12
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>CE1&gt; traceroute 10.0.0.12
 </code></pre></div>
    If traceroute shows a hop then stops, the next router is dropping the labeled packet. Confirm <code>family mpls</code> on the interface that connects to the dropping router.</p>
 </li>
@@ -5547,25 +5568,25 @@
 <ol>
 <li>
 <p>Confirm RSVP is enabled on all provider interfaces on all four routers:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>show rsvp interface
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>show rsvp interface
 </code></pre></div>
    On P1, must show both ge-0/0/0.0 and ge-0/0/1.0. If an interface is missing, add it (<code>set protocols rsvp interface ge-0/0/x.0</code>, commit).</p>
 </li>
 <li>
 <p>Confirm IS-IS TE extensions are active on all four routers:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>show isis database detail | match TE
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>show isis database detail | match TE
 </code></pre></div>
    If no TE information appears, run <code>set protocols isis traffic-engineering</code> on the missing router and commit.</p>
 </li>
 <li>
 <p>Confirm IS-IS reachability to PE2's loopback from PE1:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ping 10.0.0.4 count 3
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ping 10.0.0.4 count 3
 </code></pre></div>
    If this fails, fix IS-IS first — RSVP cannot establish an LSP to an unreachable destination.</p>
 </li>
 <li>
 <p>Check RSVP error messages in detail:
-   <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>show rsvp session detail
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>show rsvp session detail
 </code></pre></div>
    Look for an error code in the PathErr or ResvErr fields — this identifies which router rejected the PATH message and why.</p>
 </li>
