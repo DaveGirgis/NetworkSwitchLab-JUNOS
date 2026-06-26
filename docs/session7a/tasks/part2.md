@@ -198,30 +198,7 @@ VPLS-100.l2vpn.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
 
 The second route shows the BGP-learned VPLS membership from PE2: two labels are being pushed — the inner VPLS VC label (299872) and the outer LDP transport label (299808) for reaching PE2.
 
-## Step 6: Check the MAC Table
-
-After CE1 sends traffic, PE1 will learn its MAC address.
-
-```junos
-PE1> show vpls mac-table instance VPLS-100
-```
-
-Expected after at least one frame from CE1:
-
-```text
-MAC flags (S-static MAC, D-dynamic MAC, L-locally learned, C-Control MAC,
-           SE-Statistics enabled, NM-Non-configured MAC, R-Remote PE MAC)
-
-Routing instance : VPLS-100
- Bridging domain : __VPLS-100__, VLAN : NA
-   MAC                 MAC      Logical          NH     RTR
-   address             flags    interface        Index  ID
-   aa:bb:cc:dd:ee:11   DL       ge-0/0/2.0
-```
-
-The `DL` flags indicate this MAC was **D**ynamically learned on a **L**ocal interface. After CE1 pings CE2 in Step 7, CE2's MAC will also appear in the table on PE2 with the `DL` flag, and PE1 will learn CE2's MAC as a remote entry (flag `R`) via the VPLS pseudowire.
-
-## Step 7: Test CE-to-CE Connectivity
+## Step 6: Test CE-to-CE Connectivity
 
 The test is identical to Part 1 — CE1 pings CE2 on the 192.168.1.0/24 subnet. The path is now through the VPLS instance rather than the L2circuit, but CE1 and CE2 see no difference.
 
@@ -244,19 +221,31 @@ PING 192.168.1.2 (192.168.1.2): 56 data bytes
 round-trip min/avg/max/stddev = 31.298/36.272/42.037/3.759 ms
 ```
 
-After the ping, check the MAC table again on PE1:
+## Step 7: Check the MAC Table
+
+After the ping, PE1 has learned both CE MAC addresses. Run the MAC table on PE1:
 
 ```junos
-PE1> show vpls mac-table instance VPLS-100
+show vpls mac-table instance VPLS-100
 ```
 
-Now CE2's MAC should appear as a remote entry — PE1 learned it from PE2 via the VPLS pseudowire:
+Expected:
 
 ```text
+MAC flags       (S -static MAC, D -dynamic MAC, L -locally learned, C -Control MAC
+    O -OVSDB MAC, SE -Statistics enabled, NM -Non configured MAC, R -Remote PE MAC)
+
+Routing instance : VPLS-100
+ Bridging domain : __VPLS-100__, VLAN : NA
    MAC                 MAC      Logical          NH     RTR
    address             flags    interface        Index  ID
-   aa:bb:cc:dd:ee:11   DL       ge-0/0/2.0
-   aa:bb:cc:dd:ee:22   R        vtep.32769
+   00:05:86:xx:xx:xx   D        lsi.1048576
+   00:05:86:xx:xx:xx   D        ge-0/0/2.0
 ```
 
-The `R` flag indicates a **R**emote MAC learned via the VPLS pseudowire. Future frames destined for CE2's MAC will be forwarded directly to the pseudowire without flooding — exactly how an Ethernet switch learns and optimizes forwarding.
+Two entries appear — both show flag `D` (dynamically learned):
+
+- **`ge-0/0/2.0`** — CE1's MAC, learned locally on PE1's CE-facing interface when CE1 sent the ARP request
+- **`lsi.1048576`** — CE2's MAC, learned remotely via the VPLS pseudowire. In vMX, the pseudowire endpoint appears as an `lsi` (Logical Services Interface) rather than a physical interface. This is the internal interface the vMX kernel uses for VPLS label processing.
+
+Future frames destined for CE2's MAC are forwarded directly to the `lsi` pseudowire interface without flooding — exactly how an Ethernet switch learns and optimizes forwarding. The VPLS instance has converged.

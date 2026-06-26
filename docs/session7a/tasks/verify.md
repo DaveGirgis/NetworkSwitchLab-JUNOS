@@ -47,8 +47,9 @@
 
 ### MAC Table
 
-- [ ] After pinging: `PE1> show vpls mac-table instance VPLS-100` — CE1's MAC shows flag `DL` (dynamic, local)
-- [ ] After pinging: `PE1> show vpls mac-table instance VPLS-100` — CE2's MAC shows flag `R` (remote)
+- [ ] After pinging: `PE1> show vpls mac-table instance VPLS-100` — two entries present
+- [ ] After pinging: CE1's MAC shows interface `ge-0/0/2.0` (locally learned)
+- [ ] After pinging: CE2's MAC shows interface `lsi.1048576` (learned via VPLS pseudowire)
 
 ### End-to-End Connectivity
 
