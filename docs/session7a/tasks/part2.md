@@ -40,17 +40,17 @@ VPLS uses the same two-label stack as L2circuit:
 
 P routers only process the outer label, as in Session 7.
 
-## Step 1: Remove L2circuit Configuration
+## Step 1: Remove L2circuit and Set VPLS Encapsulation
 
-Part 2 reconfigures the same interfaces used in Part 1. Remove the L2circuit configuration first.
+Part 2 reconfigures the same interfaces used in Part 1. VPLS requires `ethernet-vpls` encapsulation rather than `ethernet-ccc` — Junos will reject adding the interface to a VPLS routing instance if the encapsulation is wrong or missing.
 
 On **PE1**:
 
 ```junos
 configure
 
-delete interfaces ge-0/0/2 encapsulation
 delete protocols l2circuit
+set interfaces ge-0/0/2 encapsulation ethernet-vpls
 
 commit
 ```
@@ -60,8 +60,8 @@ On **PE2**:
 ```junos
 configure
 
-delete interfaces ge-0/0/2 encapsulation
 delete protocols l2circuit
+set interfaces ge-0/0/2 encapsulation ethernet-vpls
 
 commit
 ```
