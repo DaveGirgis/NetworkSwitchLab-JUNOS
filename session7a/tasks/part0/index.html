@@ -5530,6 +5530,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Interface               Admin Link Proto    Local                 Remote
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>ge-0/0/1                up    up
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>ge-0/0/1.0              up    up   inet     192.168.1.1/24
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>                                   multiservice
 </code></pre></div>
 <p>On <strong>CE2</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>show interfaces ge-0/0/1 terse
@@ -5538,6 +5539,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Interface               Admin Link Proto    Local                 Remote
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>ge-0/0/1                up    up
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>ge-0/0/1.0              up    up   inet     192.168.1.2/24
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>                                   multiservice
 </code></pre></div>
 <h2 id="step-5-confirm-ce1-cannot-reach-ce2-yet">Step 5: Confirm CE1 Cannot Reach CE2 Yet</h2>
 <p>At this point the physical links are up and the CE interfaces have addresses, but no L2 service is configured on the PE side. CE1 cannot reach CE2.</p>
