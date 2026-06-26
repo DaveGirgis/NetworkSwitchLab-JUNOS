@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6a-troubleshooting" class="md-skip">
+        <a href="#session-7a-troubleshooting" class="md-skip">
           Skip to content
         </a>
       
@@ -4335,6 +4335,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4351,6 +4369,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#l2circuit-stays-in-dn-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2circuit Stays in Dn State
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#targeted-ldp-session-shows-operational-but-l2circuit-is-still-dn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targeted LDP Session Shows Operational but L2circuit Is Still Dn
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce1-cannot-ping-ce2-after-l2circuit-shows-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE1 Cannot Ping CE2 After L2circuit Shows Up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpls-instance-stays-dn-after-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS Instance Stays Dn After Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce-to-ce-ping-works-through-l2circuit-but-not-vpls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE-to-CE Ping Works Through L2circuit but Not VPLS
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5416,123 @@
   
 
 
-<h1 id="session-6a-troubleshooting">Session 6a — Troubleshooting</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-7a-troubleshooting">Session 7a — Troubleshooting</h1>
+<h2 id="l2circuit-stays-in-dn-state">L2circuit Stays in <code>Dn</code> State</h2>
+<p><strong>Symptom:</strong> <code>show l2circuit connections</code> shows State <code>Dn</code> or <code>VC-Dn</code> instead of <code>Up</code>.</p>
+<p><strong>Cause and fix — check in this order:</strong></p>
+<ol>
+<li><strong>Targeted LDP session not established</strong></li>
+</ol>
+<p>The targeted LDP session between PE1 and PE2 loopbacks must be <code>Operational</code>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>PE1&gt; show ldp session
+</code></pre></div>
+   If only one session appears (the link LDP to P1), the targeted LDP session to PE2 has not formed. This usually means PE2's <code>protocols l2circuit</code> has not been committed yet, or the loopback is not reachable. Confirm PE2 also has <code>set protocols l2circuit neighbor 10.0.0.1 interface ge-0/0/2.0 virtual-circuit-id 100</code>.</p>
+<ol>
+<li><strong>virtual-circuit-id mismatch</strong></li>
+</ol>
+<p>Both PEs must configure the same virtual-circuit-id:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>PE1&gt; show configuration protocols l2circuit
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>PE2&gt; show configuration protocols l2circuit
+</code></pre></div>
+   If PE1 has <code>virtual-circuit-id 100</code> and PE2 has <code>virtual-circuit-id 200</code>, the session will show <code>VM -- vlan id mismatch</code> or stay <code>Dn</code>. Correct and commit to the same ID on both PEs.</p>
+<ol>
+<li><strong>Wrong neighbor address</strong></li>
+</ol>
+<p>PE1 must use PE2's loopback (10.0.0.4) as the neighbor, and PE2 must use PE1's loopback (10.0.0.1). Using a physical interface address or typo will prevent the targeted LDP session from matching the L2circuit configuration.</p>
+<ol>
+<li><strong>CCC encapsulation missing on one or both PEs</strong></li>
+</ol>
+<p>If one PE is missing <code>encapsulation ethernet-ccc</code>, the pseudowire negotiation will show <code>EI -- encapsulation invalid</code>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show configuration interfaces ge-0/0/2
+</code></pre></div>
+   Must show <code>encapsulation ethernet-ccc</code>. If missing, add it and commit.</p>
+<ol>
+<li><strong>LDP transport not functioning</strong></li>
+</ol>
+<p>The targeted LDP session runs over the existing LDP path. If <code>show route table inet.3</code> on PE1 does not show a Push label for PE2 loopback (10.0.0.4), LDP transport is broken — fix LDP from Session 7 first.</p>
+<hr />
+<h2 id="targeted-ldp-session-shows-operational-but-l2circuit-is-still-dn">Targeted LDP Session Shows <code>Operational</code> but L2circuit Is Still <code>Dn</code></h2>
+<p><strong>Symptom:</strong> <code>show ldp session</code> shows two sessions (link LDP + targeted LDP), both <code>Operational</code>, but <code>show l2circuit connections</code> still shows <code>Dn</code>.</p>
+<p><strong>Cause:</strong> The targeted LDP session has established but the VC label exchange failed. This typically means an encapsulation mismatch or virtual-circuit-id mismatch was detected at the L2circuit signaling layer even though the LDP transport session is healthy.</p>
+<p><strong>Fix:</strong></p>
+<p>Check the detail output for the specific failure reason:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show l2circuit connections detail
+</code></pre></div></p>
+<p>Look for a status code in the legend at the top of the output. Common codes after <code>Dn</code>:
+- <code>MM</code> — MTU mismatch (unlikely in this lab with identical vMX images)
+- <code>EM</code> — encapsulation mismatch (one side is not <code>ethernet-ccc</code>)
+- <code>CM</code> — control-word mismatch (one side negotiated a control word, the other did not)
+- <code>VM</code> — virtual-circuit-id mismatch</p>
+<p>Resolve the mismatch on the indicated side and commit.</p>
+<hr />
+<h2 id="ce1-cannot-ping-ce2-after-l2circuit-shows-up">CE1 Cannot Ping CE2 After L2circuit Shows Up</h2>
+<p><strong>Symptom:</strong> <code>show l2circuit connections</code> shows State <code>Up</code> on both PEs, but <code>CE1&gt; ping 192.168.1.2</code> returns 100% packet loss.</p>
+<p><strong>Cause and fix — check in this order:</strong></p>
+<ol>
+<li><strong>CE interfaces not configured</strong></li>
+</ol>
+<p>Confirm CE1 and CE2 ge-0/0/1 are up with correct addresses:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>CE1&gt; show interfaces ge-0/0/1 terse
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>CE2&gt; show interfaces ge-0/0/1 terse
+</code></pre></div>
+   Both must show <code>up up</code> with addresses 192.168.1.1/24 and 192.168.1.2/24 respectively. If an interface is <code>down</code> or missing an address, return to Part 0 and reconfigure.</p>
+<ol>
+<li><strong>GNS3 link not connected</strong></li>
+</ol>
+<p>Even if the pseudowire is up, traffic from CE1 will not reach it if the physical GNS3 link between CE1 and PE1 is not drawn. Stop the topology, verify both new links are connected (PE1 Adapter 4 ↔ CE1 Adapter 3, PE2 Adapter 4 ↔ CE2 Adapter 3), and restart.</p>
+<ol>
+<li><strong>ARP not resolving</strong></li>
+</ol>
+<p>Because L2circuit is a transparent pseudowire, CE1 sends ARP for 192.168.1.2. If CE2's ARP response is not making it back, there may be a unidirectional issue. Test with:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>CE2&gt; ping 192.168.1.1 count 3
+</code></pre></div>
+   If CE2 can reach CE1 but not the reverse, the pseudowire is unidirectional — check that the CCC encapsulation and l2circuit configuration are symmetric on both PEs.</p>
+<hr />
+<h2 id="vpls-instance-stays-dn-after-configuration">VPLS Instance Stays <code>Dn</code> After Configuration</h2>
+<p><strong>Symptom:</strong> <code>show vpls connections</code> shows no connections or shows State <code>Dn</code>.</p>
+<p><strong>Cause and fix — check in this order:</strong></p>
+<ol>
+<li><strong>BGP l2vpn family not negotiated</strong></li>
+</ol>
+<p>Verify the iBGP session is carrying the l2vpn address family:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PE1&gt; show bgp neighbor 10.0.0.4 | match NLRI
+</code></pre></div>
+   If <code>l2vpn</code> does not appear, the BGP session did not negotiate the family. Confirm <code>set protocols bgp group IBGP family l2vpn signaling</code> is committed on both PE1 and PE2. After committing, the BGP session may need a moment to re-advertise — wait 30 seconds and re-check.</p>
+<ol>
+<li><strong>vrf-target mismatch</strong></li>
+</ol>
+<p>The route target used for export on one PE must match the import target on the other:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>PE1&gt; show configuration routing-instances VPLS-100
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>PE2&gt; show configuration routing-instances VPLS-100
+</code></pre></div>
+   Both must have <code>vrf-target target:65001:100</code> (the same value). If one uses <code>target:65001:100</code> and the other uses <code>target:65001:200</code>, VPLS routes will not be imported.</p>
+<ol>
+<li><strong>no-tunnel-services missing</strong></li>
+</ol>
+<p>On vMX, VPLS requires <code>no-tunnel-services</code> under <code>protocols vpls</code>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>show configuration routing-instances VPLS-100 protocols vpls
+</code></pre></div>
+   Must show <code>no-tunnel-services</code>. If missing, add it and commit. The VPLS instance will typically remain in a non-functional state without this on vMX.</p>
+<ol>
+<li><strong>site-identifier conflict</strong></li>
+</ol>
+<p>Each PE's VPLS site must have a unique <code>site-identifier</code>. If both PEs configure <code>site-identifier 1</code>, BGP will accept the routes but the VPLS instance may not build pseudowires correctly. PE1 must use <code>site-identifier 1</code> and PE2 must use <code>site-identifier 2</code>.</p>
+<ol>
+<li><strong>L2circuit config not removed</strong></li>
+</ol>
+<p>If <code>protocols l2circuit</code> and <code>encapsulation ethernet-ccc</code> were not deleted before configuring VPLS, ge-0/0/2 may still be in CCC mode and cannot be added to a VPLS instance. Verify:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>show configuration interfaces ge-0/0/2
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>show configuration protocols l2circuit
+</code></pre></div>
+   Both should return empty (no config). If l2circuit is still present, delete it and commit before re-checking VPLS.</p>
+<hr />
+<h2 id="ce-to-ce-ping-works-through-l2circuit-but-not-vpls">CE-to-CE Ping Works Through L2circuit but Not VPLS</h2>
+<p><strong>Symptom:</strong> Part 1 (L2circuit) worked fine. After configuring VPLS in Part 2, CE1 cannot ping CE2.</p>
+<p><strong>Cause:</strong> This is almost always a VPLS misconfiguration rather than a transport issue — the underlying LDP path is still working. Work through the VPLS troubleshooting items above (vrf-target mismatch, no-tunnel-services, site-identifier conflict).</p>
+<p>A quick sanity check: confirm the VPLS pseudowire itself is up before testing CE pings:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>PE1&gt; show vpls connections
+</code></pre></div>
+<p>If the connection-site shows <code>Dn</code>, fix the VPLS configuration first. If it shows <code>Up</code> but CE pings still fail, the issue is at the CE interface layer — check ge-0/0/1 on CE1 and CE2.</p>
 
 
 

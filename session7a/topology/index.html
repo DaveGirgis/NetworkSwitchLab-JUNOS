@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6a-topology" class="md-skip">
+        <a href="#session-7a-topology" class="md-skip">
           Skip to content
         </a>
       
@@ -4015,6 +4015,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4031,6 +4049,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,9 +5392,126 @@
   
 
 
-<h1 id="session-6a-topology">Session 6a — Topology</h1>
+<h1 id="session-7a-topology">Session 7a — Topology</h1>
+<h2 id="diagram">Diagram</h2>
+<p>The Session 7a topology extends the existing six-router backbone with two new L2 service links. All other connections remain exactly as configured in Sessions 5–7.</p>
+<pre class="mermaid"><code>graph LR
+    CE1 -- "172.16.1.0/30" --&gt; PE1
+    PE1 -- "10.1.12.0/30" --&gt; P1
+    P1 -- "10.1.23.0/30" --&gt; P2
+    P2 -- "10.1.34.0/30" --&gt; PE2
+    PE2 -- "172.16.2.0/30" --&gt; CE2
+    CE1 -. "192.168.1.0/24 -- L2 service" .-&gt; PE1
+    CE2 -. "192.168.1.0/24 -- L2 service" .-&gt; PE2</code></pre>
+<p>The dashed links carry L2 service traffic. The subnet 192.168.1.0/24 is assigned to the CE interfaces — from the CE's perspective this is a direct Ethernet connection to the remote CE. The PE interfaces on these links have no IP address; they are configured as Layer 2 cross-connects.</p>
+<h2 id="device-summary">Device Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Role</th>
+<th>Loopback</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>Provider Edge (ingress)</td>
+<td>10.0.0.1/32</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Provider Core (transit)</td>
+<td>10.0.0.2/32</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Provider Core (transit)</td>
+<td>10.0.0.3/32</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>Provider Edge (egress)</td>
+<td>10.0.0.4/32</td>
+</tr>
+<tr>
+<td>CE1</td>
+<td>Customer Edge (Site 1)</td>
+<td>10.0.0.11/32</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>Customer Edge (Site 2)</td>
+<td>10.0.0.12/32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="link-summary">Link Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface (A)</th>
+<th>Interface (B)</th>
+<th>Subnet</th>
+<th>Used Since</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 - PE1 (BGP)</td>
+<td>CE1 ge-0/0/0.0</td>
+<td>PE1 ge-0/0/1.0</td>
+<td>172.16.1.0/30</td>
+<td>Session 5</td>
+</tr>
+<tr>
+<td>PE1 - P1</td>
+<td>PE1 ge-0/0/0.0</td>
+<td>P1 ge-0/0/0.0</td>
+<td>10.1.12.0/30</td>
+<td>Session 4</td>
+</tr>
+<tr>
+<td>P1 - P2</td>
+<td>P1 ge-0/0/1.0</td>
+<td>P2 ge-0/0/0.0</td>
+<td>10.1.23.0/30</td>
+<td>Session 4</td>
+</tr>
+<tr>
+<td>P2 - PE2</td>
+<td>P2 ge-0/0/1.0</td>
+<td>PE2 ge-0/0/0.0</td>
+<td>10.1.34.0/30</td>
+<td>Session 4</td>
+</tr>
+<tr>
+<td>PE2 - CE2 (BGP)</td>
+<td>PE2 ge-0/0/1.0</td>
+<td>CE2 ge-0/0/0.0</td>
+<td>172.16.2.0/30</td>
+<td>Session 5</td>
+</tr>
+<tr>
+<td>CE1 - PE1 (L2 service)</td>
+<td>CE1 ge-0/0/1.0</td>
+<td>PE1 ge-0/0/2.0</td>
+<td>192.168.1.0/24 (CE side only)</td>
+<td>Session 7a</td>
+</tr>
+<tr>
+<td>CE2 - PE2 (L2 service)</td>
+<td>CE2 ge-0/0/1.0</td>
+<td>PE2 ge-0/0/2.0</td>
+<td>192.168.1.0/24 (CE side only)</td>
+<td>Session 7a</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">PE interface has no IP address</p>
+<p>PE1 ge-0/0/2 and PE2 ge-0/0/2 are configured as Circuit Cross-Connect (CCC) interfaces in Part 1 and as VPLS access interfaces in Part 2. Neither carries an IP address on the provider side — they are pure Layer 2 ingress/egress points.</p>
 </div>
 
 

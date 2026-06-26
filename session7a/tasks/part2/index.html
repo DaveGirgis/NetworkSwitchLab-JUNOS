@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-2-vpls" class="md-skip">
+        <a href="#part-2-vpls-virtual-private-lan-service" class="md-skip">
           Skip to content
         </a>
       
@@ -4188,6 +4188,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — VPLS
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4204,6 +4222,152 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-vpls-differs-from-l2circuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How VPLS Differs from L2circuit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-vpls-works-in-junos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How VPLS Works in Junos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#label-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Label Stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-remove-l2circuit-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Remove L2circuit Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-add-l2vpn-signaling-to-bgp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Add L2VPN Signaling to BGP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-configure-the-vpls-routing-instance-on-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Configure the VPLS Routing Instance on PE1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-configure-the-vpls-routing-instance-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Configure the VPLS Routing Instance on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-verify-the-vpls-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Verify the VPLS Instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-check-the-mac-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Check the MAC Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-test-ce-to-ce-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Test CE-to-CE Connectivity
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5488,219 @@
   
 
 
-<h1 id="part-2-vpls">Part 2 — VPLS</h1>
+<h1 id="part-2-vpls-virtual-private-lan-service">Part 2 — VPLS (Virtual Private LAN Service)</h1>
+<h2 id="overview">Overview</h2>
+<p>L2circuit in Part 1 provided a point-to-point pseudowire between exactly two sites. <strong>VPLS</strong> (Virtual Private LAN Service) generalizes this to a multipoint service: any number of CE sites can connect to the same virtual LAN, and all sites appear to be on the same Ethernet segment.</p>
+<h3 id="how-vpls-differs-from-l2circuit">How VPLS Differs from L2circuit</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>L2circuit</th>
+<th>VPLS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Topology</td>
+<td>Point-to-point (two sites)</td>
+<td>Multipoint (any number of sites)</td>
+</tr>
+<tr>
+<td>Signaling</td>
+<td>Targeted LDP</td>
+<td>BGP (l2vpn signaling)</td>
+</tr>
+<tr>
+<td>MAC learning</td>
+<td>None (transparent wire)</td>
+<td>Full MAC table per VPLS instance</td>
+</tr>
+<tr>
+<td>Flooding</td>
+<td>All traffic forwarded</td>
+<td>Unknown MACs flooded to all pseudowires</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td><code>protocols l2circuit</code></td>
+<td><code>routing-instances</code> type <code>vpls</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-vpls-works-in-junos">How VPLS Works in Junos</h3>
+<p>VPLS in Junos uses <strong>BGP signaling</strong> (sometimes called Kompella VPLS or RFC 4761). Each PE advertises its VPLS membership via iBGP using the <code>l2vpn signaling</code> address family. When PE1 receives a VPLS BGP update from PE2, it learns:</p>
+<ul>
+<li>PE2's loopback address (the pseudowire endpoint)</li>
+<li>The VC label PE2 has allocated for this VPLS instance</li>
+</ul>
+<p>From this information, PE1 automatically builds a pseudowire to PE2, using the existing LDP transport labels for the outer label.</p>
+<p>Within the VPLS instance, each PE runs a simple MAC learning bridge:</p>
+<ol>
+<li>When a frame arrives from CE1 on ge-0/0/2, PE1 records <code>source-MAC → ge-0/0/2.0</code> in the VPLS MAC table</li>
+<li>If the destination MAC is known, PE1 forwards directly (to the local CE port or the correct pseudowire)</li>
+<li>If unknown, PE1 floods the frame out all pseudowires (split-horizon prevents flooding back onto the incoming interface)</li>
+</ol>
+<p>CE1 and CE2 are completely unaware of the VPLS infrastructure. They see an Ethernet network with normal ARP and MAC learning behavior.</p>
+<h3 id="label-stack">Label Stack</h3>
+<p>VPLS uses the same two-label stack as L2circuit:</p>
+<ul>
+<li><strong>Outer label</strong> — LDP transport label (same path through the backbone as Session 7)</li>
+<li><strong>Inner label</strong> — VPLS VC label assigned by BGP, identifies the specific VPLS instance and source PE</li>
+</ul>
+<p>P routers only process the outer label, as in Session 7.</p>
+<h2 id="step-1-remove-l2circuit-configuration">Step 1: Remove L2circuit Configuration</h2>
+<p>Part 2 reconfigures the same interfaces used in Part 1. Remove the L2circuit configuration first.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>delete interfaces ge-0/0/2 encapsulation
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>delete protocols l2circuit
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>commit
+</code></pre></div>
+<p>On <strong>PE2</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>delete interfaces ge-0/0/2 encapsulation
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>delete protocols l2circuit
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>commit
+</code></pre></div>
+<p>After committing, verify the pseudowire is gone:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>PE1&gt; show l2circuit connections
+</code></pre></div>
+<p>Expected: no output (no active L2circuit connections).</p>
+<h2 id="step-2-add-l2vpn-signaling-to-bgp">Step 2: Add L2VPN Signaling to BGP</h2>
+<p>VPLS uses a BGP address family (<code>l2vpn signaling</code>) to distribute VPLS membership between PEs. Add this family to the existing iBGP group on both PEs.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set protocols bgp group IBGP family l2vpn signaling
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>commit
+</code></pre></div>
+<p>On <strong>PE2</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>configure
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>set protocols bgp group IBGP family l2vpn signaling
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>commit
+</code></pre></div>
+<p>Verify the BGP session is still up and now carries the L2VPN family:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>PE1&gt; show bgp neighbor 10.0.0.4 | match NLRI
+</code></pre></div>
+<p>Expected to show <code>l2vpn</code> in the negotiated NLRI families:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>  NLRI for restart configured on peer: inet-unicast l2vpn
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  NLRI advertised by peer: inet-unicast l2vpn
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  NLRI for this session: inet-unicast l2vpn
+</code></pre></div>
+<h2 id="step-3-configure-the-vpls-routing-instance-on-pe1">Step 3: Configure the VPLS Routing Instance on PE1</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>configure
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>set routing-instances VPLS-100 instance-type vpls
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>set routing-instances VPLS-100 interface ge-0/0/2.0
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>set routing-instances VPLS-100 route-distinguisher 65001:100
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>set routing-instances VPLS-100 vrf-target target:65001:100
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>set routing-instances VPLS-100 protocols vpls no-tunnel-services
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>set routing-instances VPLS-100 protocols vpls site CE1-SITE site-identifier 1
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>set routing-instances VPLS-100 protocols vpls site CE1-SITE interface ge-0/0/2.0
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>commit
+</code></pre></div>
+<h2 id="step-4-configure-the-vpls-routing-instance-on-pe2">Step 4: Configure the VPLS Routing Instance on PE2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>configure
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>set routing-instances VPLS-100 instance-type vpls
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>set routing-instances VPLS-100 interface ge-0/0/2.0
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>set routing-instances VPLS-100 route-distinguisher 65001:101
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>set routing-instances VPLS-100 vrf-target target:65001:100
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>set routing-instances VPLS-100 protocols vpls no-tunnel-services
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>set routing-instances VPLS-100 protocols vpls site CE2-SITE site-identifier 2
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>set routing-instances VPLS-100 protocols vpls site CE2-SITE interface ge-0/0/2.0
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>commit
+</code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">Route distinguisher vs vrf-target</p>
+<p>The <strong>route-distinguisher</strong> must be unique per PE per VPN (65001:100 on PE1, 65001:101 on PE2). It disambiguates BGP updates when two PEs advertise membership in the same VPN.</p>
+<p>The <strong>vrf-target</strong> (route target) must be identical on both PEs (target:65001:100). It controls which PEs import each other's VPLS membership updates. Both PEs export routes tagged with <code>target:65001:100</code> and import routes carrying the same tag — this is how PE1 discovers PE2 is part of VPLS-100 and vice versa.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">no-tunnel-services</p>
+<p>On vMX, VPLS requires <code>no-tunnel-services</code> to use native Ethernet interfaces for Layer 2 forwarding rather than relying on a physical Tunnel PIC (which does not exist in the virtual image). Omitting this command may cause the VPLS instance to remain down.</p>
+</div>
+<h2 id="step-5-verify-the-vpls-instance">Step 5: Verify the VPLS Instance</h2>
+<p>Allow 15–30 seconds for BGP to exchange VPLS membership and for the pseudowire to establish.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>show vpls connections
+</code></pre></div>
+<p>Expected when the VPLS pseudowire is up:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Instance: VPLS-100
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  Local site: CE1-SITE (1)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    connection-site           Type  St     Time last up          # Up trans
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    2                         rmt   Up     Jun 26 12:00:00               1
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>      Remote PE: 10.0.0.4, Negotiated control-word: No
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>      Incoming label: 299856, Outgoing label: 299872
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>      Local interface: ge-0/0/2.0, Status: Up, Encapsulation: ETHERNET
+</code></pre></div>
+<p>The <code>connection-site 2</code> entry represents the pseudowire to PE2's site (site-identifier 2). State <code>Up</code> confirms the pseudowire is active.</p>
+<p>On <strong>PE1</strong>, check the BGP VPLS routes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>show route table VPLS-100.l2vpn.0
+</code></pre></div>
+<p>Expected — two routes: PE1's own locally originated route, and PE2's route received via BGP:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>VPLS-100.l2vpn.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>65001:100:1/96
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>                   *[L2VPN/170] ...
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>                    Indirect
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>65001:101:2/96
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>                   *[BGP/170] ...
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push 299872, Push 299808
+</code></pre></div>
+<p>The second route shows the BGP-learned VPLS membership from PE2: two labels are being pushed — the inner VPLS VC label (299872) and the outer LDP transport label (299808) for reaching PE2.</p>
+<h2 id="step-6-check-the-mac-table">Step 6: Check the MAC Table</h2>
+<p>After CE1 sends traffic, PE1 will learn its MAC address.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>PE1&gt; show vpls mac-table instance VPLS-100
+</code></pre></div>
+<p>Expected after at least one frame from CE1:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>MAC flags (S-static MAC, D-dynamic MAC, L-locally learned, C-Control MAC,
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>           SE-Statistics enabled, NM-Non-configured MAC, R-Remote PE MAC)
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>Routing instance : VPLS-100
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a> Bridging domain : __VPLS-100__, VLAN : NA
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>   MAC                 MAC      Logical          NH     RTR
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>   address             flags    interface        Index  ID
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>   aa:bb:cc:dd:ee:11   DL       ge-0/0/2.0
+</code></pre></div>
+<p>The <code>DL</code> flags indicate this MAC was <strong>D</strong>ynamically learned on a <strong>L</strong>ocal interface. After CE1 pings CE2 in Step 7, CE2's MAC will also appear in the table on PE2 with the <code>DL</code> flag, and PE1 will learn CE2's MAC as a remote entry (flag <code>R</code>) via the VPLS pseudowire.</p>
+<h2 id="step-7-test-ce-to-ce-connectivity">Step 7: Test CE-to-CE Connectivity</h2>
+<p>The test is identical to Part 1 — CE1 pings CE2 on the 192.168.1.0/24 subnet. The path is now through the VPLS instance rather than the L2circuit, but CE1 and CE2 see no difference.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>CE1&gt; ping 192.168.1.2 count 5
+</code></pre></div>
+<p>Expected — all five replies succeed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>PING 192.168.1.2 (192.168.1.2): 56 data bytes
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>64 bytes from 192.168.1.2: icmp_seq=0 ttl=64 time=35.410 ms
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>64 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=42.037 ms
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>64 bytes from 192.168.1.2: icmp_seq=2 ttl=64 time=31.298 ms
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>64 bytes from 192.168.1.2: icmp_seq=3 ttl=64 time=38.851 ms
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>64 bytes from 192.168.1.2: icmp_seq=4 ttl=64 time=33.762 ms
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>--- 192.168.1.2 ping statistics ---
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>5 packets transmitted, 5 packets received, 0% packet loss
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>round-trip min/avg/max/stddev = 31.298/36.272/42.037/3.759 ms
+</code></pre></div>
+<p>After the ping, check the MAC table again on PE1:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>PE1&gt; show vpls mac-table instance VPLS-100
+</code></pre></div>
+<p>Now CE2's MAC should appear as a remote entry — PE1 learned it from PE2 via the VPLS pseudowire:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>   MAC                 MAC      Logical          NH     RTR
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>   address             flags    interface        Index  ID
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>   aa:bb:cc:dd:ee:11   DL       ge-0/0/2.0
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>   aa:bb:cc:dd:ee:22   R        vtep.32769
+</code></pre></div>
+<p>The <code>R</code> flag indicates a <strong>R</strong>emote MAC learned via the VPLS pseudowire. Future frames destined for CE2's MAC will be forwarded directly to the pseudowire without flooding — exactly how an Ethernet switch learns and optimizes forwarding.</p>
 
 
 

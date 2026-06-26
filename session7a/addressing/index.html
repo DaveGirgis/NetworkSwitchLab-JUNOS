@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6a-addressing" class="md-skip">
+        <a href="#session-7a-addressing" class="md-skip">
           Skip to content
         </a>
       
@@ -4043,6 +4043,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4059,6 +4077,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loopback-addresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loopback Addresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-point-to-point-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Point-to-Point Links
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce-pe-bgp-links-sessions-5-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE-PE BGP Links (Sessions 5-6)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l2-service-test-interfaces-session-7a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 Service Test Interfaces (Session 7a)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-autonomous-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP Autonomous Systems
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,10 +5414,180 @@
   
 
 
-<h1 id="session-6a-addressing">Session 6a — Addressing</h1>
+<h1 id="session-7a-addressing">Session 7a — Addressing</h1>
+<p>All addresses from Sessions 4–7 are unchanged. This session adds one new subnet for Layer 2 service testing.</p>
+<h2 id="loopback-addresses">Loopback Addresses</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>lo0.0</td>
+<td>10.0.0.1/32</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>lo0.0</td>
+<td>10.0.0.2/32</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>lo0.0</td>
+<td>10.0.0.3/32</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>lo0.0</td>
+<td>10.0.0.4/32</td>
+</tr>
+<tr>
+<td>CE1</td>
+<td>lo0.0</td>
+<td>10.0.0.11/32</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>lo0.0</td>
+<td>10.0.0.12/32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="provider-point-to-point-links">Provider Point-to-Point Links</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 ge-0/0/0</td>
+<td>PE1 - P1</td>
+<td>10.1.12.1/30</td>
+</tr>
+<tr>
+<td>P1 ge-0/0/0</td>
+<td>PE1 - P1</td>
+<td>10.1.12.2/30</td>
+</tr>
+<tr>
+<td>P1 ge-0/0/1</td>
+<td>P1 - P2</td>
+<td>10.1.23.1/30</td>
+</tr>
+<tr>
+<td>P2 ge-0/0/0</td>
+<td>P1 - P2</td>
+<td>10.1.23.2/30</td>
+</tr>
+<tr>
+<td>P2 ge-0/0/1</td>
+<td>P2 - PE2</td>
+<td>10.1.34.1/30</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/0</td>
+<td>P2 - PE2</td>
+<td>10.1.34.2/30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ce-pe-bgp-links-sessions-5-6">CE-PE BGP Links (Sessions 5-6)</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 ge-0/0/1</td>
+<td>PE1 - CE1</td>
+<td>172.16.1.1/30</td>
+</tr>
+<tr>
+<td>CE1 ge-0/0/0</td>
+<td>PE1 - CE1</td>
+<td>172.16.1.2/30</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/1</td>
+<td>PE2 - CE2</td>
+<td>172.16.2.1/30</td>
+</tr>
+<tr>
+<td>CE2 ge-0/0/0</td>
+<td>PE2 - CE2</td>
+<td>172.16.2.2/30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="l2-service-test-interfaces-session-7a">L2 Service Test Interfaces (Session 7a)</h2>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Address</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 ge-0/0/1.0</td>
+<td>192.168.1.1/24</td>
+<td>L2circuit / VPLS test source</td>
+</tr>
+<tr>
+<td>CE2 ge-0/0/1.0</td>
+<td>192.168.1.2/24</td>
+<td>L2circuit / VPLS test destination</td>
+</tr>
+<tr>
+<td>PE1 ge-0/0/2.0</td>
+<td>none</td>
+<td>L2 pass-through (CCC / VPLS access)</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/2.0</td>
+<td>none</td>
+<td>L2 pass-through (CCC / VPLS access)</td>
+</tr>
+</tbody>
+</table>
+<p>CE1 and CE2 use 192.168.1.0/24 as a test subnet. Because the L2 service is transparent at Layer 2, CE1 and CE2 appear to be directly connected on the same Ethernet segment. No routing is needed between them — they are in the same /24.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">The /24 only exists at the CE layer</p>
+<p>PE1 and PE2 do not have IP addresses on the L2 service interfaces and do not participate in the 192.168.1.0/24 subnet. The provider core has no awareness of this customer prefix.</p>
 </div>
+<h2 id="bgp-autonomous-systems">BGP Autonomous Systems</h2>
+<table>
+<thead>
+<tr>
+<th>AS</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>65001</td>
+<td>Provider (PE1, P1, P2, PE2)</td>
+</tr>
+<tr>
+<td>65100</td>
+<td>Customer A (CE1, CE2)</td>
+</tr>
+</tbody>
+</table>
 
 
 

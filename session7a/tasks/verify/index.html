@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6a-verification" class="md-skip">
+        <a href="#session-7a-verification-checklist" class="md-skip">
           Skip to content
         </a>
       
@@ -4216,6 +4216,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4232,6 +4250,169 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-0-baseline-and-ce-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 0 — Baseline and CE Interfaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-l2circuit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1 — L2circuit
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1 — L2circuit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pseudowire-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pseudowire State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#targeted-ldp-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Targeted LDP Session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Connectivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-vpls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2 — VPLS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2 — VPLS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#l2circuit-removed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2circuit Removed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bgp-l2vpn-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP L2VPN Family
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vpls-instance-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS Instance State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mac-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MAC Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-connectivity_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Connectivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5505,73 @@
   
 
 
-<h1 id="session-6a-verification">Session 6a — Verification</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-7a-verification-checklist">Session 7a — Verification Checklist</h1>
+<h2 id="part-0-baseline-and-ce-interfaces">Part 0 — Baseline and CE Interfaces</h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp session</code> — <code>10.0.0.2</code> shows <code>Operational</code> (link LDP to P1 from Session 7)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table inet.3</code> — three LDP routes present for 10.0.0.2, 10.0.0.3, 10.0.0.4</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; show interfaces ge-0/0/1 terse</code> — <code>ge-0/0/1.0</code> Up/Up with address 192.168.1.1/24</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; show interfaces ge-0/0/1 terse</code> — <code>ge-0/0/1.0</code> Up/Up with address 192.168.1.2/24</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 192.168.1.2 count 3</code> — 100% packet loss (L2 service not yet configured)</li>
+</ul>
+<h2 id="part-1-l2circuit">Part 1 — L2circuit</h2>
+<h3 id="pseudowire-state">Pseudowire State</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show l2circuit connections</code> — neighbor 10.0.0.4, ge-0/0/2.0 (vc 100), State: <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show l2circuit connections</code> — neighbor 10.0.0.1, ge-0/0/2.0 (vc 100), State: <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show l2circuit connections</code> — shows <code>Incoming label</code> and <code>Outgoing label</code> (non-zero values)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show l2circuit connections</code> — <code>Encapsulation: ETHERNET</code></li>
+</ul>
+<h3 id="targeted-ldp-session">Targeted LDP Session</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp session</code> — two sessions listed: 10.0.0.2 (link LDP to P1) and 10.0.0.4 (targeted LDP to PE2)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show ldp session</code> — two sessions listed: 10.0.0.3 (link LDP to P2) and 10.0.0.1 (targeted LDP to PE1)</li>
+</ul>
+<h3 id="end-to-end-connectivity">End-to-End Connectivity</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 192.168.1.2 count 5</code> — 5/5 replies, 0% packet loss</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 192.168.1.1 count 5</code> — 5/5 replies, 0% packet loss</li>
+</ul>
+<h2 id="part-2-vpls">Part 2 — VPLS</h2>
+<h3 id="l2circuit-removed">L2circuit Removed</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show l2circuit connections</code> — no output (L2circuit deleted)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show l2circuit connections</code> — no output</li>
+</ul>
+<h3 id="bgp-l2vpn-family">BGP L2VPN Family</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show bgp neighbor 10.0.0.4 | match NLRI</code> — <code>l2vpn</code> appears in negotiated NLRI families</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show bgp neighbor 10.0.0.1 | match NLRI</code> — <code>l2vpn</code> appears in negotiated NLRI families</li>
+</ul>
+<h3 id="vpls-instance-state">VPLS Instance State</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show vpls connections</code> — connection-site 2 (PE2's site), State: <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show vpls connections</code> — connection-site 1 (PE1's site), State: <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table VPLS-100.l2vpn.0</code> — two routes present (PE1's own route + BGP route from PE2)</li>
+</ul>
+<h3 id="mac-table">MAC Table</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: <code>PE1&gt; show vpls mac-table instance VPLS-100</code> — CE1's MAC shows flag <code>DL</code> (dynamic, local)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: <code>PE1&gt; show vpls mac-table instance VPLS-100</code> — CE2's MAC shows flag <code>R</code> (remote)</li>
+</ul>
+<h3 id="end-to-end-connectivity_1">End-to-End Connectivity</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 192.168.1.2 count 5</code> — 5/5 replies, 0% packet loss</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 192.168.1.1 count 5</code> — 5/5 replies, 0% packet loss</li>
+</ul>
+<h2 id="quick-commands">Quick Commands</h2>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show l2circuit connections
+</code></pre></div>
+Expected in Part 1: neighbor 10.0.0.4, State Up on PE1.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show ldp session
+</code></pre></div>
+Expected after Part 1: two sessions on each PE — one link LDP, one targeted LDP.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show vpls connections
+</code></pre></div>
+Expected in Part 2: one remote connection per PE, State Up.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show vpls mac-table instance VPLS-100
+</code></pre></div>
+Expected after traffic: CE1 MAC as local (DL), CE2 MAC as remote (R) on PE1.</p>
 
 
 

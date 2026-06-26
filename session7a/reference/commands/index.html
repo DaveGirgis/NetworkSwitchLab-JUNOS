@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-6a-command-reference" class="md-skip">
+        <a href="#session-7a-command-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -4307,6 +4307,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4323,6 +4341,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#l2circuit-configuration-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2circuit Configuration Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpls-configuration-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS Configuration Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acronym-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acronym Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Wrap-Up
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5416,196 @@
   
 
 
-<h1 id="session-6a-command-reference">Session 6a — Command Reference</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-7a-command-reference">Session 7a — Command Reference</h1>
+<h2 id="l2circuit-configuration-commands">L2circuit Configuration Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set interfaces ge-0/0/2 encapsulation ethernet-ccc</code></td>
+<td>Mark the CE-facing interface as a CCC (Circuit Cross-Connect) port — no IP, raw L2 forwarding</td>
+</tr>
+<tr>
+<td><code>set protocols l2circuit neighbor &lt;remote-lo0&gt; interface ge-0/0/2.0 virtual-circuit-id &lt;id&gt;</code></td>
+<td>Define a pseudowire to the remote PE, identified by a shared virtual-circuit-id</td>
+</tr>
+<tr>
+<td><code>delete interfaces ge-0/0/2 encapsulation</code></td>
+<td>Remove CCC encapsulation (when transitioning to VPLS)</td>
+</tr>
+<tr>
+<td><code>delete protocols l2circuit</code></td>
+<td>Remove all L2circuit configuration</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vpls-configuration-commands">VPLS Configuration Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set protocols bgp group IBGP family l2vpn signaling</code></td>
+<td>Enable L2VPN BGP address family for VPLS membership distribution</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; instance-type vpls</code></td>
+<td>Create a VPLS routing instance</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; interface ge-0/0/2.0</code></td>
+<td>Add CE-facing interface to the VPLS instance</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; route-distinguisher &lt;rd&gt;</code></td>
+<td>Unique per-PE identifier for BGP VPLS routes (format: ASN:id)</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; vrf-target target:&lt;rt&gt;</code></td>
+<td>Route target for VPLS export/import — must match on all participating PEs</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols vpls no-tunnel-services</code></td>
+<td>Use native Ethernet forwarding (required on vMX — no physical Tunnel PIC present)</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols vpls site &lt;site-name&gt; site-identifier &lt;n&gt;</code></td>
+<td>Name this PE's VPLS site and assign a unique site ID</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols vpls site &lt;site-name&gt; interface ge-0/0/2.0</code></td>
+<td>Bind the CE interface to this VPLS site</td>
+</tr>
+</tbody>
+</table>
+<h2 id="verification-commands">Verification Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show l2circuit connections</code></td>
+<td>PE</td>
+<td>Pseudowire state, VC labels, encapsulation (Part 1)</td>
+</tr>
+<tr>
+<td><code>show ldp session</code></td>
+<td>PE</td>
+<td>All LDP sessions including targeted LDP created by l2circuit</td>
+</tr>
+<tr>
+<td><code>show vpls connections</code></td>
+<td>PE</td>
+<td>VPLS pseudowire state and labels (Part 2)</td>
+</tr>
+<tr>
+<td><code>show vpls mac-table instance &lt;name&gt;</code></td>
+<td>PE</td>
+<td>MAC addresses learned per VPLS instance</td>
+</tr>
+<tr>
+<td><code>show route table &lt;name&gt;.l2vpn.0</code></td>
+<td>PE</td>
+<td>BGP-distributed VPLS routes</td>
+</tr>
+<tr>
+<td><code>show bgp neighbor &lt;ip&gt; \| match NLRI</code></td>
+<td>PE</td>
+<td>Negotiated BGP address families — confirms l2vpn is active</td>
+</tr>
+<tr>
+<td><code>show interfaces ge-0/0/2 terse</code></td>
+<td>PE</td>
+<td>Link state of L2 service interface</td>
+</tr>
+<tr>
+<td><code>show interfaces ge-0/0/1 terse</code></td>
+<td>CE</td>
+<td>Confirm CE test interface is up with correct IP</td>
+</tr>
+</tbody>
+</table>
+<h2 id="acronym-reference">Acronym Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Acronym</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L2VPN</td>
+<td>Layer 2 Virtual Private Network</td>
+</tr>
+<tr>
+<td>L2circuit</td>
+<td>Layer 2 Circuit — Junos name for a point-to-point pseudowire</td>
+</tr>
+<tr>
+<td>CCC</td>
+<td>Circuit Cross-Connect — Junos mechanism for raw L2 forwarding</td>
+</tr>
+<tr>
+<td>VC</td>
+<td>Virtual Circuit — the pseudowire identified by a virtual-circuit-id</td>
+</tr>
+<tr>
+<td>VPLS</td>
+<td>Virtual Private LAN Service — multipoint L2 VPN</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>Route Distinguisher — per-PE unique identifier for BGP VPN routes</td>
+</tr>
+<tr>
+<td>RT</td>
+<td>Route Target — community used to control import/export of VPN routes</td>
+</tr>
+<tr>
+<td>MAC</td>
+<td>Media Access Control — Layer 2 hardware address</td>
+</tr>
+<tr>
+<td>ARP</td>
+<td>Address Resolution Protocol — maps IP addresses to MAC addresses</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>Penultimate Hop Popping — removes outer MPLS label one hop before egress</td>
+</tr>
+<tr>
+<td>NLRI</td>
+<td>Network Layer Reachability Information — BGP prefix information</td>
+</tr>
+</tbody>
+</table>
+<h2 id="session-wrap-up">Session Wrap-Up</h2>
+<p>After completing Session 7a, the lab has demonstrated:</p>
+<ul>
+<li>
+<p><strong>L2circuit</strong>: A point-to-point pseudowire using targeted LDP signaling. One virtual-circuit-id ties PE1's CCC interface to PE2's, and LDP exchanges the VC labels. CE1 and CE2 communicate on the same /24 without any IP config on the PEs.</p>
+</li>
+<li>
+<p><strong>VPLS</strong>: A multipoint virtual LAN using BGP signaling. The <code>l2vpn signaling</code> address family distributes VPLS membership. Each PE runs a MAC bridge for the VPLS instance — MAC learning, flooding, and split-horizon are all handled by the PE. CE1 and CE2 again see a shared Ethernet segment, but the VPLS instance can scale to any number of PE sites.</p>
+</li>
+</ul>
+<p>Both services use the same two-label MPLS stack: outer transport label (LDP from Session 7) and inner VC label (signaled per-service). P1 and P2 process only the outer label and remain completely unaware of the L2 service running inside.</p>
+<p>The next step, Session 8, uses the same MP-BGP infrastructure (iBGP + address families) but shifts to <strong>Layer 3 VPN</strong> — where the provider takes ownership of IP routing via VRFs, route distinguishers, and route targets applied to IPv4 prefixes rather than L2 pseudowires.</p>
 
 
 

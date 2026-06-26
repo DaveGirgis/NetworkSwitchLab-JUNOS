@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-1-l2circuit" class="md-skip">
+        <a href="#part-1-l2circuit-pseudowire" class="md-skip">
           Skip to content
         </a>
       
@@ -4160,6 +4160,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — L2circuit (Pseudowire)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4176,6 +4194,97 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-configure-l2circuit-on-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Configure L2circuit on PE1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-configure-l2circuit-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Configure L2circuit on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-verify-the-pseudowire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify the Pseudowire
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-test-ce-to-ce-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Test CE-to-CE Connectivity
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5433,116 @@
   
 
 
-<h1 id="part-1-l2circuit">Part 1 — L2circuit</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<h1 id="part-1-l2circuit-pseudowire">Part 1 — L2circuit (Pseudowire)</h1>
+<h2 id="overview">Overview</h2>
+<p>An <strong>L2circuit</strong> (also called a pseudowire) is a point-to-point Layer 2 connection across an MPLS backbone. The provider stretches a single Ethernet segment between two CE-facing interfaces — CE1 and CE2 behave as if there is a direct cable between them, even though their traffic crosses the entire provider backbone.</p>
+<h3 id="how-it-works">How It Works</h3>
+<p>Two configuration elements are required on each PE:</p>
+<p><strong>1. CCC encapsulation on the CE-facing interface</strong></p>
+<p>Setting <code>encapsulation ethernet-ccc</code> on the PE's CE-facing interface marks it as a Circuit Cross-Connect (CCC) port. The router stops processing the arriving Ethernet frames as IP packets and instead treats them as raw Layer 2 data to be forwarded across a pseudowire. The interface has no IP address.</p>
+<p><strong>2. L2circuit neighbor statement</strong></p>
+<p>The <code>protocols l2circuit neighbor</code> statement identifies the remote PE (by loopback address) and assigns a <strong>virtual-circuit-id</strong> — a locally significant number that both ends must agree on. This triggers an automatic targeted LDP session between the two PE loopbacks. Through that targeted LDP session, each PE signals a VC label to its peer.</p>
+<p>When PE1 receives a frame on ge-0/0/2:
+1. Looks up the L2circuit for virtual-circuit-id 100 toward neighbor 10.0.0.4
+2. Pushes the <strong>VC label</strong> (inner, identifies the pseudowire on PE2)
+3. Pushes the <strong>LDP transport label</strong> (outer, carries the packet to PE2 via P1 and P2)
+4. Forwards out ge-0/0/0 toward P1</p>
+<p>P1 and P2 swap the outer transport label as in any MPLS-forwarded packet. They never see or process the inner VC label.</p>
+<p>When PE2 receives the labeled packet:
+1. LDP pops the outer transport label (PHP or explicit pop)
+2. PE2 looks up the VC label in its LFIB
+3. Strips the VC label and delivers the original Ethernet frame out ge-0/0/2 to CE2</p>
+<p>CE2 receives an unmodified Ethernet frame — no MPLS headers, no encapsulation overhead visible to the customer device.</p>
+<h2 id="step-1-configure-l2circuit-on-pe1">Step 1: Configure L2circuit on PE1</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set interfaces ge-0/0/2 encapsulation ethernet-ccc
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>set protocols l2circuit neighbor 10.0.0.4 interface ge-0/0/2.0 virtual-circuit-id 100
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>commit
+</code></pre></div>
+<h2 id="step-2-configure-l2circuit-on-pe2">Step 2: Configure L2circuit on PE2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set interfaces ge-0/0/2 encapsulation ethernet-ccc
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>set protocols l2circuit neighbor 10.0.0.1 interface ge-0/0/2.0 virtual-circuit-id 100
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>commit
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">virtual-circuit-id must match on both PEs</p>
+<p>PE1 uses <code>neighbor 10.0.0.4</code> (PE2's loopback) and PE2 uses <code>neighbor 10.0.0.1</code> (PE1's loopback). Both use <code>virtual-circuit-id 100</code>. If the IDs do not match, the pseudowire will not come up — the targeted LDP negotiation will reject the mismatch.</p>
 </div>
+<h2 id="step-3-verify-the-pseudowire">Step 3: Verify the Pseudowire</h2>
+<p>Allow 10–20 seconds for the targeted LDP session to establish and the VC labels to be exchanged.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show l2circuit connections
+</code></pre></div>
+<p>Expected output when the pseudowire is up:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Layer-2 Circuit Connections:
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Legend for connection status (St)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>EI -- encapsulation invalid      NP -- interface h/w not present
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>MM -- mtu mismatch               Dn -- down
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>EM -- encapsulation mismatch     VC-Dn -- Virtual circuit down
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>CM -- control word mismatch      Up -- operational
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>VM -- vlan id mismatch
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>CN -- circuit not provisioned    OL -- no outgoing label
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>OO -- out of range label         NC -- encapsulation not CCC/TCC
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>Legend for interface status
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>Up -- operational
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>Dn -- down
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>Neighbor: 10.0.0.4
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    Interface                 Type  St     Time last up          # Up trans
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    ge-0/0/2.0(vc 100)        rmt   Up     Jun 26 12:00:00               1
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>      Remote PE: 10.0.0.4, Negotiated control-word: No
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>      Incoming label: 299824, Outgoing label: 299840
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>      Local interface: ge-0/0/2.0, Status: Up, Encapsulation: ETHERNET
+</code></pre></div>
+<p>Key fields:</p>
+<ul>
+<li><strong><code>St: Up</code></strong> — the pseudowire is operational. Any other state (Dn, VC-Dn, OL, CM) indicates a configuration or transport problem.</li>
+<li><strong><code>Incoming label</code></strong> — the VC label PE2 assigned for this pseudowire and signaled to PE1. PE1 pushes this as the inner label when forwarding frames toward PE2.</li>
+<li><strong><code>Outgoing label</code></strong> — the VC label PE1 assigned and signaled to PE2. PE2 pushes this when forwarding frames toward PE1.</li>
+<li><strong><code>Encapsulation: ETHERNET</code></strong> — both ends agreed on Ethernet encapsulation (matching <code>ethernet-ccc</code>).</li>
+<li><strong><code>Negotiated control-word: No</code></strong> — the control word (an optional 4-byte header for pseudowire sequencing and fragmentation) was not negotiated. This is the expected default for Ethernet pseudowires.</li>
+</ul>
+<p>Also verify the targeted LDP session that was automatically created:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show ldp session
+</code></pre></div>
+<p>Expected — now two sessions on PE1: the original link LDP session to P1, and a new targeted LDP session to PE2's loopback:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Address                          State       Connection  Hold time  I/F
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>10.0.0.2                         Operational Open          27        3
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>10.0.0.4                         Operational Open          27        1
+</code></pre></div>
+<p>The second session (to 10.0.0.4) is the targeted LDP session. It was created automatically when <code>protocols l2circuit neighbor 10.0.0.4</code> was configured.</p>
+<h2 id="step-4-test-ce-to-ce-connectivity">Step 4: Test CE-to-CE Connectivity</h2>
+<p>With the pseudowire up, CE1 and CE2 can reach each other as if directly connected on the same Ethernet segment.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>CE1&gt; ping 192.168.1.2 count 5
+</code></pre></div>
+<p>Expected — all five replies succeed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>PING 192.168.1.2 (192.168.1.2): 56 data bytes
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>64 bytes from 192.168.1.2: icmp_seq=0 ttl=64 time=32.140 ms
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>64 bytes from 192.168.1.2: icmp_seq=1 ttl=60 time=41.872 ms
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>64 bytes from 192.168.1.2: icmp_seq=2 ttl=64 time=28.654 ms
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>64 bytes from 192.168.1.2: icmp_seq=3 ttl=64 time=37.221 ms
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>64 bytes from 192.168.1.2: icmp_seq=4 ttl=64 time=29.508 ms
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>--- 192.168.1.2 ping statistics ---
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>5 packets transmitted, 5 packets received, 0% packet loss
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>round-trip min/avg/max/stddev = 28.654/33.879/41.872/4.688 ms
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">TTL behavior through the pseudowire</p>
+<p>Unlike the CE-to-CE ping in Session 7, no <code>source</code> flag is required here. CE1 and CE2 are in the same /24 subnet — ARP resolves CE2's MAC address and the ICMP request goes directly via Layer 2. The provider backbone is invisible to CE1 and CE2 at the IP level.</p>
+<p>The TTL seen in replies may be 64 (if the provider core does not decrement TTL during label swap) or lower depending on the vMX tunnel TTL propagation setting. Both are acceptable.</p>
+</div>
+<p>Verify the reverse direction:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>CE2&gt; ping 192.168.1.1 count 5
+</code></pre></div>
+<p>Expected: all five replies succeed.</p>
 
 
 
