@@ -109,6 +109,7 @@ Expected:
 Interface               Admin Link Proto    Local                 Remote
 ge-0/0/1                up    up
 ge-0/0/1.0              up    up   inet     192.168.1.1/24
+                                   multiservice
 ```
 
 On **CE2**:
@@ -123,6 +124,7 @@ Expected:
 Interface               Admin Link Proto    Local                 Remote
 ge-0/0/1                up    up
 ge-0/0/1.0              up    up   inet     192.168.1.2/24
+                                   multiservice
 ```
 
 ## Step 5: Confirm CE1 Cannot Reach CE2 Yet
