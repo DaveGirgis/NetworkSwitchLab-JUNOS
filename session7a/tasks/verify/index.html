@@ -5551,8 +5551,9 @@
 </ul>
 <h3 id="mac-table">MAC Table</h3>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: <code>PE1&gt; show vpls mac-table instance VPLS-100</code> — CE1's MAC shows flag <code>DL</code> (dynamic, local)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: <code>PE1&gt; show vpls mac-table instance VPLS-100</code> — CE2's MAC shows flag <code>R</code> (remote)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: <code>PE1&gt; show vpls mac-table instance VPLS-100</code> — two entries present</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: CE1's MAC shows interface <code>ge-0/0/2.0</code> (locally learned)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> After pinging: CE2's MAC shows interface <code>lsi.1048576</code> (learned via VPLS pseudowire)</li>
 </ul>
 <h3 id="end-to-end-connectivity_1">End-to-End Connectivity</h3>
 <ul class="task-list">
