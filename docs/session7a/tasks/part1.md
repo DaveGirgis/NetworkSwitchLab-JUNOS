@@ -37,6 +37,7 @@ CE2 receives an unmodified Ethernet frame — no MPLS headers, no encapsulation 
 configure
 
 set interfaces ge-0/0/2 encapsulation ethernet-ccc
+set interfaces ge-0/0/2 unit 0
 set protocols l2circuit neighbor 10.0.0.4 interface ge-0/0/2.0 virtual-circuit-id 100
 
 commit
@@ -48,6 +49,7 @@ commit
 configure
 
 set interfaces ge-0/0/2 encapsulation ethernet-ccc
+set interfaces ge-0/0/2 unit 0
 set protocols l2circuit neighbor 10.0.0.1 interface ge-0/0/2.0 virtual-circuit-id 100
 
 commit

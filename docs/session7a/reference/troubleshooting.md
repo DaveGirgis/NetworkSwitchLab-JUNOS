@@ -1,5 +1,23 @@
 # Session 7a — Troubleshooting
 
+## L2circuit Shows `NP` (Interface Not Present)
+
+**Symptom:** `show l2circuit connections` shows State `NP` and the legend reads `NP -- interface h/w not present`. The targeted LDP session is `Operational` in `show ldp session`.
+
+**Cause:** The logical unit 0 on the PE's CCC interface was never explicitly configured. Setting `encapsulation ethernet-ccc` on the physical interface is not sufficient — Junos also requires the unit to exist before it can bind the l2circuit to it.
+
+**Fix:** Add unit 0 on both PEs and commit:
+
+```junos
+configure
+set interfaces ge-0/0/2 unit 0
+commit
+```
+
+Verify `show interfaces ge-0/0/2 terse` now shows `ge-0/0/2.0` as a listed unit. The l2circuit should transition to `Up` within a few seconds.
+
+---
+
 ## L2circuit Stays in `Dn` State
 
 **Symptom:** `show l2circuit connections` shows State `Dn` or `VC-Dn` instead of `Up`.
