@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-0-base-config" class="md-skip">
+        <a href="#part-0-baseline-verification" class="md-skip">
           Skip to content
         </a>
       
@@ -4570,6 +4570,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Base Config
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4586,6 +4604,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cli-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-verify-mpls-is-operational" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Verify MPLS Is Operational
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-verify-existing-bgp-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Verify Existing BGP State
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-understand-what-is-about-to-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Understand What Is About to Change
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5405,101 @@
   
 
 
-<h1 id="part-0-base-config">Part 0 — Base Config</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<h1 id="part-0-baseline-verification">Part 0 — Baseline Verification</h1>
+<h2 id="cli-setup">CLI Setup</h2>
+<p>Before pasting any configuration, run these two commands at the operational prompt (<code>&gt;</code>) on each router:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>set cli screen-length 0
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set cli complete-on-space off
+</code></pre></div>
+<p>Re-run these at the start of every console session — they do not persist across reconnects.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pasting large config blocks</p>
+<p>Use <code>load set terminal</code> in config mode to paste multiple set commands at once. Press <strong>Ctrl+D</strong> when done.</p>
 </div>
+<h2 id="step-1-verify-mpls-is-operational">Step 1: Verify MPLS Is Operational</h2>
+<p>Session 8 builds directly on the LDP transport from Session 7. Confirm LDP is healthy before making any changes.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show ldp session
+</code></pre></div>
+<p>Expected — session to P1 in <code>Operational</code> state:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Address                          State       Connection  Hold time  I/F
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>10.0.0.2                         Operational Open          27        3
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show route table inet.3
+</code></pre></div>
+<p>Expected — three LDP-resolved routes, 10.0.0.4 shows Push label:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>inet.3: 3 destinations, 3 routes (3 active, 0 holddown, 0 hidden)
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>10.0.0.2/32        *[LDP/9] ...
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>10.0.0.3/32        *[LDP/9] ...
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push 299792
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>10.0.0.4/32        *[LDP/9] ...
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push 299808
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Fix MPLS before continuing</p>
+<p>If <code>inet.3</code> is empty or PE2's loopback is missing, return to Session 7 and restore LDP. The VPN label stack in Session 8 requires the outer transport label from LDP. Without it, VPN packets will not reach the egress PE.</p>
+</div>
+<h2 id="step-2-verify-existing-bgp-state">Step 2: Verify Existing BGP State</h2>
+<p>Session 6's BGP is still running. Confirm both eBGP (to CE1) and iBGP (to PE2) are up on PE1.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Expected — two sessions, both established:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Groups: 2 Peers: 2 Down peers: 0
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>inet.0
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>                       2          2          0          0          0          0
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>10.0.0.4              65001         42         41       0       0       20:11 1/1/1/0              0/0/0/0
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>172.16.1.2            65100         89        105       0       0       44:22 1/1/1/0              0/0/0/0
+</code></pre></div>
+<p>Both peers show established counts. If either session shows <code>Active</code> or <code>Idle</code>, restore Session 6 BGP first.</p>
+<h2 id="step-3-understand-what-is-about-to-change">Step 3: Understand What Is About to Change</h2>
+<p>Before proceeding, note what the next three parts will do to the existing configuration:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Session 6 state</th>
+<th>After Session 8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 <code>EBGP-CE1</code> group</td>
+<td>Global eBGP to CE1 in <code>inet.0</code></td>
+<td>Deleted — replaced by VRF eBGP</td>
+</tr>
+<tr>
+<td>PE2 <code>EBGP-CE2</code> group</td>
+<td>Global eBGP to CE2 in <code>inet.0</code></td>
+<td>Deleted — replaced by VRF eBGP</td>
+</tr>
+<tr>
+<td>PE iBGP group <code>IBGP</code></td>
+<td>Carries <code>inet-unicast</code> only</td>
+<td>Gains <code>inet-vpn unicast</code> family</td>
+</tr>
+<tr>
+<td>Customer routes</td>
+<td>In <code>inet.0</code> (global table)</td>
+<td>In <code>VPN-A.inet.0</code> (VRF table)</td>
+</tr>
+<tr>
+<td>CE1 and CE2 config</td>
+<td>eBGP to PE neighbor addresses</td>
+<td><strong>Unchanged</strong> — CEs are unaware of VRF</td>
+</tr>
+<tr>
+<td>P1 and P2 config</td>
+<td>MPLS transit</td>
+<td><strong>Unchanged</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The CE routers do not need to be reconfigured. They will see their BGP session briefly drop when the global eBGP group is removed from the PE, then come back up when the VRF-based eBGP is configured in Part 3.</p>
 
 
 

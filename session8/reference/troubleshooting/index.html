@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-7-troubleshooting" class="md-skip">
+        <a href="#session-8-troubleshooting" class="md-skip">
           Skip to content
         </a>
       
@@ -4801,6 +4801,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4817,6 +4835,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vrf-table-is-empty-after-part-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VRF Table Is Empty After Part 1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgpl3vpn0-has-no-routes-after-part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bgp.l3vpn.0 Has No Routes After Part 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vrf-ebgp-session-not-establishing-ce-session-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VRF eBGP Session Not Establishing (CE Session Down)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vrf-table-missing-remote-ce-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VRF Table Missing Remote CE Prefix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce-to-ce-ping-fails-100-loss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE-to-CE Ping Fails — 100% Loss
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customer-routes-appearing-in-inet0-route-leaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Customer Routes Appearing in inet.0 (Route Leaking)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5427,134 @@
   
 
 
-<h1 id="session-7-troubleshooting">Session 7 — Troubleshooting</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-8-troubleshooting">Session 8 — Troubleshooting</h1>
+<h2 id="vrf-table-is-empty-after-part-1">VRF Table Is Empty After Part 1</h2>
+<p><strong>Symptom:</strong> <code>show route table VPN-A.inet.0</code> returns no output or "0 destinations".</p>
+<p><strong>Cause and fix — check in this order:</strong></p>
+<ol>
+<li><strong>Interface not assigned to the VRF</strong></li>
+</ol>
+<p>Confirm <code>ge-0/0/1.0</code> appears in the VRF configuration:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show configuration routing-instances VPN-A
+</code></pre></div>
+   Must show <code>interface ge-0/0/1.0</code>. If missing, add it and commit.</p>
+<ol>
+<li><strong>Interface link down</strong></li>
+</ol>
+<p>If the CE-facing link is physically down, no direct route will appear:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show interfaces ge-0/0/1 terse
+</code></pre></div>
+   Must show <code>up up</code>. If the link is down, check the GNS3 connection between PE and CE.</p>
+<ol>
+<li><strong>Route showing in inet.0 instead of VPN-A.inet.0</strong></li>
+</ol>
+<p>If the interface was assigned to the VRF but <code>vrf-target</code> is missing or the VRF commit failed, the interface may still contribute to <code>inet.0</code>. Check:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show route table inet.0 172.16.1.0/30
+</code></pre></div>
+   If the route appears here, the VRF assignment did not take effect. Verify <code>instance-type vrf</code> is set and <code>commit</code> completed without errors.</p>
+<hr />
+<h2 id="bgpl3vpn0-has-no-routes-after-part-2">bgp.l3vpn.0 Has No Routes After Part 2</h2>
+<p><strong>Symptom:</strong> <code>show route table bgp.l3vpn.0</code> shows 0 destinations after adding <code>family inet-vpn unicast</code>.</p>
+<p><strong>Cause:</strong> The CE eBGP sessions inside the VRF are not yet configured (this is expected at the end of Part 2). VPN routes cannot enter <code>bgp.l3vpn.0</code> until CE routes are present in the VRF. Proceed to Part 3.</p>
+<p>If <code>bgp.l3vpn.0</code> is still empty after completing Part 3, check that:</p>
+<ol>
+<li>
+<p>The iBGP session has negotiated <code>inet-vpn</code>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show bgp neighbor 10.0.0.4 | match NLRI
+</code></pre></div>
+   Must show <code>inet-vpn</code> in "NLRI for this session". If missing, confirm <code>family inet-vpn unicast</code> is configured on both PEs.</p>
+</li>
+<li>
+<p>The VRF BGP session to CE is up (see next section).</p>
+</li>
+</ol>
+<hr />
+<h2 id="vrf-ebgp-session-not-establishing-ce-session-down">VRF eBGP Session Not Establishing (CE Session Down)</h2>
+<p><strong>Symptom:</strong> <code>show bgp summary instance VPN-A</code> shows CE peer in <code>Active</code> or <code>Idle</code> state.</p>
+<p><strong>Cause and fix:</strong></p>
+<ol>
+<li><strong>CE still configured toward the old global session</strong></li>
+</ol>
+<p>CE1 is configured to peer with <code>172.16.1.1</code> (PE1's interface address). That address has not changed — it is still on PE1's ge-0/0/1.0, now inside the VRF. If CE1's session shows <code>Active</code>, the CE may still be trying to connect. Wait up to 60 seconds for the TCP session to be established from the VRF side.</p>
+<ol>
+<li><strong>Group not configured inside the VRF</strong></li>
+</ol>
+<p>Confirm the eBGP group exists under the routing instance (not under global <code>protocols bgp</code>):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show configuration routing-instances VPN-A protocols bgp
+</code></pre></div>
+   Must show the group with <code>neighbor 172.16.1.2</code> and <code>peer-as 65100</code>. If the group is under global <code>protocols bgp</code> instead, it is not part of the VRF — delete it there and recreate it under <code>routing-instances VPN-A</code>.</p>
+<ol>
+<li><strong>as-override missing</strong></li>
+</ol>
+<p>If CE1 and CE2 share an AS (AS 65100), <code>as-override</code> is required on the PE neighbor statement. Without it, CE2 will receive CE1's route with AS 65100 in the path and suppress it as a loop.</p>
+<hr />
+<h2 id="vrf-table-missing-remote-ce-prefix">VRF Table Missing Remote CE Prefix</h2>
+<p><strong>Symptom:</strong> <code>show route table VPN-A.inet.0</code> on PE1 shows CE1's loopback (10.0.0.11/32) but not CE2's (10.0.0.12/32).</p>
+<p><strong>Cause and fix — check in this order:</strong></p>
+<ol>
+<li><strong>iBGP inet-vpn not negotiated on PE2</strong></li>
+</ol>
+<p>PE2 must also have <code>family inet-vpn unicast</code> on its IBGP group. If only PE1 has it, VPN routes will not be exchanged:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>PE2&gt; show bgp neighbor 10.0.0.1 | match NLRI
+</code></pre></div>
+   Must show <code>inet-vpn</code> in "NLRI for this session".</p>
+<ol>
+<li><strong>vrf-target mismatch</strong></li>
+</ol>
+<p>PE1 and PE2 must import and export the same route target. If PE2 was configured with a different RT (e.g. <code>target:65001:200</code>), PE1 will not import PE2's routes:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>show configuration routing-instances VPN-A vrf-target
+</code></pre></div>
+   Both must show <code>target:65001:100</code>. If they differ, correct and commit.</p>
+<ol>
+<li><strong>CE2 not advertising its loopback</strong></li>
+</ol>
+<p>Confirm CE2's eBGP session is up and the ADVERTISE-LOOPBACK policy is exporting the loopback:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>PE2&gt; show route receive-protocol bgp 172.16.2.2
+</code></pre></div>
+   Must show <code>10.0.0.12/32</code>. If empty, CE2's export policy is not working — check <code>show configuration protocols bgp</code> on CE2.</p>
+<ol>
+<li><strong>ADVERTISE-VPN policy not applied on PE2</strong></li>
+</ol>
+<p>Without this policy, PE2 will receive CE2's route in <code>VPN-A.inet.0</code> but not advertise it to the iBGP peer. Confirm:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE2&gt; show configuration routing-instances VPN-A protocols bgp group EBGP-CE2
+</code></pre></div>
+   Must show <code>export ADVERTISE-VPN</code>.</p>
+<hr />
+<h2 id="ce-to-ce-ping-fails-100-loss">CE-to-CE Ping Fails — 100% Loss</h2>
+<p><strong>Symptom:</strong> <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5</code> returns 100% packet loss.</p>
+<p><strong>Cause and fix — check in this order:</strong></p>
+<ol>
+<li><strong>No source specified or wrong source</strong></li>
+</ol>
+<p>Only loopback prefixes are in the VPN. If source is omitted, Junos uses the outgoing interface address (172.16.1.2). PE2 has a route to 172.16.1.2 in the VRF (it's a direct subnet imported from PE1), but CE2 may not have a return route. Always use <code>source 10.0.0.11</code>.</p>
+<ol>
+<li><strong>CE route missing from VRF table</strong></li>
+</ol>
+<p>Work through the "VRF Table Missing Remote CE Prefix" steps above. CE2's loopback must appear in PE1's <code>VPN-A.inet.0</code> with a two-label stack before the ping can work.</p>
+<ol>
+<li><strong>CE not receiving remote loopback</strong></li>
+</ol>
+<p>CE1 must have a BGP route to <code>10.0.0.12/32</code>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>CE1&gt; show route 10.0.0.12
+</code></pre></div>
+   If missing, PE1 is not advertising it to CE1 via the VRF eBGP group. Check that <code>export ADVERTISE-VPN</code> is applied on PE1's VRF eBGP group and that <code>10.0.0.12/32</code> is present as a BGP route in <code>VPN-A.inet.0</code>.</p>
+<ol>
+<li><strong>LDP transport broken</strong></li>
+</ol>
+<p>The outer label path must be intact. Verify:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>PE1&gt; show route table inet.3 10.0.0.4
+</code></pre></div>
+   Must show a Push label entry for PE2. If missing, LDP has failed — return to Session 7 to restore it.</p>
+<hr />
+<h2 id="customer-routes-appearing-in-inet0-route-leaking">Customer Routes Appearing in inet.0 (Route Leaking)</h2>
+<p><strong>Symptom:</strong> <code>show route table inet.0 10.0.0.11</code> on PE1 shows a BGP route to CE1's loopback.</p>
+<p><strong>Cause:</strong> The global <code>EBGP-CE1</code> group from Session 6 was not deleted, so CE1 has two eBGP sessions: one in the VRF and one globally. The global session is installing routes into <code>inet.0</code>.</p>
+<p><strong>Fix:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>PE1&gt; configure
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>PE1# delete protocols bgp group EBGP-CE1
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>PE1# commit
+</code></pre></div>
+<p>After deleting the global group, verify <code>inet.0</code> no longer contains CE prefixes.</p>
 
 
 

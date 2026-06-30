@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-7-command-reference" class="md-skip">
+        <a href="#session-8-command-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -4773,6 +4773,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4789,6 +4807,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vrf-configuration-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VRF Configuration Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mp-bgp-configuration-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MP-BGP Configuration Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vrf-ebgp-configuration-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VRF eBGP Configuration Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acronym-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acronym Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Wrap-Up
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5427,216 @@
   
 
 
-<h1 id="session-7-command-reference">Session 7 — Command Reference</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-8-command-reference">Session 8 — Command Reference</h1>
+<h2 id="vrf-configuration-commands">VRF Configuration Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set routing-instances &lt;name&gt; instance-type vrf</code></td>
+<td>Create a VRF routing instance</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; interface ge-0/0/1.0</code></td>
+<td>Assign CE-facing interface to the VRF</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; route-distinguisher &lt;rd&gt;</code></td>
+<td>Set the RD for VPN prefix uniqueness (format ASN:id, unique per PE per VPN)</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; vrf-target target:&lt;rt&gt;</code></td>
+<td>Set RT for both export and import (must match on all PEs in the same VPN)</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; vrf-table-label</code></td>
+<td>Allocate a single MPLS label for the VRF (the inner VPN label)</td>
+</tr>
+<tr>
+<td><code>delete protocols bgp group EBGP-CE1</code></td>
+<td>Remove the global eBGP group before migrating to VRF-based eBGP</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mp-bgp-configuration-commands">MP-BGP Configuration Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set protocols bgp group IBGP family inet-vpn unicast</code></td>
+<td>Add VPN-IPv4 address family to the iBGP session — enables bgp.l3vpn.0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vrf-ebgp-configuration-commands">VRF eBGP Configuration Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols bgp group &lt;grp&gt; type external</code></td>
+<td>Configure eBGP group inside the VRF</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols bgp group &lt;grp&gt; peer-as &lt;as&gt;</code></td>
+<td>Set the CE's AS number</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols bgp group &lt;grp&gt; neighbor &lt;ip&gt;</code></td>
+<td>Add CE neighbor address</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols bgp group &lt;grp&gt; neighbor &lt;ip&gt; as-override</code></td>
+<td>Replace customer AS in AS_PATH — required when CE sites share an ASN</td>
+</tr>
+<tr>
+<td><code>set routing-instances &lt;name&gt; protocols bgp group &lt;grp&gt; export ADVERTISE-VPN</code></td>
+<td>Apply export policy to advertise remote VPN routes to CE</td>
+</tr>
+<tr>
+<td><code>set policy-options policy-statement ADVERTISE-VPN term 1 from protocol bgp</code></td>
+<td>Match BGP routes in the VRF (imported VPN routes from remote PE)</td>
+</tr>
+<tr>
+<td><code>set policy-options policy-statement ADVERTISE-VPN term 1 then accept</code></td>
+<td>Accept and advertise them to the CE</td>
+</tr>
+</tbody>
+</table>
+<h2 id="verification-commands">Verification Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show route table VPN-A.inet.0</code></td>
+<td>PE</td>
+<td>All routes in the VRF: direct, CE eBGP, and imported VPN routes</td>
+</tr>
+<tr>
+<td><code>show route table VPN-A.inet.0 &lt;prefix&gt; detail</code></td>
+<td>PE</td>
+<td>Two-label stack detail for a specific VPN route</td>
+</tr>
+<tr>
+<td><code>show route table bgp.l3vpn.0</code></td>
+<td>PE</td>
+<td>VPN-IPv4 entries in RD:prefix format from bgp.l3vpn.0</td>
+</tr>
+<tr>
+<td><code>show bgp summary instance VPN-A</code></td>
+<td>PE</td>
+<td>BGP session state for CE eBGP sessions inside the VRF</td>
+</tr>
+<tr>
+<td><code>show bgp neighbor &lt;ip&gt; \| match NLRI</code></td>
+<td>PE</td>
+<td>Negotiated address families — confirms inet-vpn is active</td>
+</tr>
+<tr>
+<td><code>show route table inet.0 &lt;prefix&gt;</code></td>
+<td>PE</td>
+<td>Confirm VPN routes are NOT leaking into the global table</td>
+</tr>
+<tr>
+<td><code>show route receive-protocol bgp &lt;ip&gt;</code></td>
+<td>CE</td>
+<td>Prefixes received from PE — confirms as-override AS_PATH</td>
+</tr>
+<tr>
+<td><code>show route protocol bgp</code></td>
+<td>CE</td>
+<td>All BGP routes on CE — CE1 should see CE2's loopback and vice versa</td>
+</tr>
+</tbody>
+</table>
+<h2 id="acronym-reference">Acronym Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Acronym</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L3 VPN</td>
+<td>Layer 3 Virtual Private Network — provider routes customer IP traffic between sites</td>
+</tr>
+<tr>
+<td>VRF</td>
+<td>Virtual Routing and Forwarding — isolated routing table per customer per PE</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>Route Distinguisher — 64-bit value prepended to VPN prefixes for global BGP uniqueness</td>
+</tr>
+<tr>
+<td>RT</td>
+<td>Route Target — BGP extended community controlling which VRFs import which VPN routes</td>
+</tr>
+<tr>
+<td>MP-BGP</td>
+<td>Multiprotocol BGP — BGP extension carrying address families beyond IPv4 unicast</td>
+</tr>
+<tr>
+<td>VPN-IPv4</td>
+<td>BGP address family carrying (RD, IPv4 prefix) tuples — lives in bgp.l3vpn.0</td>
+</tr>
+<tr>
+<td>NLRI</td>
+<td>Network Layer Reachability Information — the prefix information carried in a BGP update</td>
+</tr>
+<tr>
+<td>PE</td>
+<td>Provider Edge — the router that hosts VRFs and connects to CE routers</td>
+</tr>
+<tr>
+<td>CE</td>
+<td>Customer Edge — the customer router; unaware of the VRF on the PE</td>
+</tr>
+<tr>
+<td>P</td>
+<td>Provider core router — MPLS transit only, no VRF, no customer prefix knowledge</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>Penultimate Hop Popping — P2 pops the outer transport label before delivering to PE2</td>
+</tr>
+<tr>
+<td>VC Label</td>
+<td>Virtual Circuit label — the inner MPLS label identifying the VRF on the egress PE</td>
+</tr>
+</tbody>
+</table>
+<h2 id="session-wrap-up">Session Wrap-Up</h2>
+<p>Session 8 completes the BGP/MPLS L3 VPN stack:</p>
+<ul>
+<li><strong>Session 4–5</strong>: IS-IS and eBGP establish IP reachability between provider and customer</li>
+<li><strong>Session 7</strong>: LDP builds the outer MPLS transport label path between PEs (inn inet.3)</li>
+<li><strong>Session 8</strong>: VRFs isolate customer routes; MP-BGP carries them as VPN-IPv4; the inner VPN label identifies the VRF on the egress PE</li>
+</ul>
+<p>The two-label stack ties Sessions 7 and 8 together: the outer LDP label (from Session 7, unchanged) carries VPN packets through the provider backbone; the inner VPN label (from <code>vrf-table-label</code>) is processed only by the egress PE. P1 and P2 required zero changes in Session 8 — this is the scalability property of the architecture.</p>
+<p>In production, this same framework supports thousands of VPN customers on a single set of PE routers. Each VPN gets its own VRF, its own RD/RT, and its own label. The provider backbone remains oblivious to customer addressing.</p>
 
 
 

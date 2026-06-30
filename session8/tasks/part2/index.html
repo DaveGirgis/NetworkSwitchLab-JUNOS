@@ -4626,6 +4626,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — MP-BGP & Route Targets
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4642,6 +4660,108 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bgpl3vpn0-the-vpn-route-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bgp.l3vpn.0 — The VPN Route Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-add-inet-vpn-unicast-to-ibgp-on-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Add inet-vpn unicast to iBGP on PE1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-add-inet-vpn-unicast-to-ibgp-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Add inet-vpn unicast to iBGP on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-verify-nlri-negotiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify NLRI Negotiation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-verify-bgpl3vpn0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Verify bgp.l3vpn.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-confirm-the-ibgp-session-is-still-healthy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Confirm the iBGP Session Is Still Healthy
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5325,9 +5445,64 @@
 
 
 <h1 id="part-2-mp-bgp-route-targets">Part 2 — MP-BGP &amp; Route Targets</h1>
+<h2 id="overview">Overview</h2>
+<p>The VRFs exist and have their CE-facing interfaces. The next step is to enable the PEs to exchange VPN routes over iBGP. Standard iBGP (from Session 6) carries IPv4 unicast prefixes in <code>inet.0</code>. To carry VPN-IPv4 prefixes — the (RD, prefix) tuples from the VRFs — the iBGP session needs an additional address family: <code>inet-vpn unicast</code>.</p>
+<p>Adding <code>family inet-vpn unicast</code> to the iBGP group on both PEs does three things:</p>
+<ol>
+<li><strong>Negotiates the capability</strong> — during BGP OPEN, both peers advertise support for the VPN-IPv4 NLRI. If only one side has the family configured, VPN routes will not be exchanged.</li>
+<li><strong>Creates <code>bgp.l3vpn.0</code></strong> — Junos creates a new BGP table specifically for VPN-IPv4 routes. VPN routes received from the remote PE land here first, then are evaluated for import into the local VRF based on route target matching.</li>
+<li><strong>Enables route export</strong> — VRF routes tagged with the configured <code>vrf-target</code> RT community are automatically advertised to iBGP peers in the VPN-IPv4 NLRI.</li>
+</ol>
+<p>No configuration is needed on P1, P2, CE1, or CE2. The <code>inet-vpn unicast</code> family is strictly between PE routers.</p>
+<h3 id="bgpl3vpn0-the-vpn-route-table">bgp.l3vpn.0 — The VPN Route Table</h3>
+<p><code>bgp.l3vpn.0</code> is the MP-BGP Loc-RIB for VPN-IPv4 routes. Each entry has the format <code>RD:prefix</code> — for example, <code>65001:200:10.0.0.12/32</code> is CE2's loopback as originated by PE2 (with PE2's RD of 65001:200).</p>
+<p>This table is populated after Part 3 when the CE eBGP sessions inside the VRFs are up and CE routes are being exchanged. At the end of Part 2, <code>bgp.l3vpn.0</code> may still be empty — that is expected.</p>
+<h2 id="step-1-add-inet-vpn-unicast-to-ibgp-on-pe1">Step 1: Add inet-vpn unicast to iBGP on PE1</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>set protocols bgp group IBGP family inet-vpn unicast
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
+</code></pre></div>
+<h2 id="step-2-add-inet-vpn-unicast-to-ibgp-on-pe2">Step 2: Add inet-vpn unicast to iBGP on PE2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols bgp group IBGP family inet-vpn unicast
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
+</code></pre></div>
+<h2 id="step-3-verify-nlri-negotiation">Step 3: Verify NLRI Negotiation</h2>
+<p>After committing on both PEs, the iBGP session will briefly re-negotiate capabilities. Wait ~15 seconds, then confirm both address families are active on the session.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bgp neighbor 10.0.0.4 | match NLRI
+</code></pre></div>
+<p>Expected — both <code>inet-unicast</code> and <code>inet-vpn</code> appear in the negotiated families:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>  NLRI for restart configured on peer: inet-unicast inet-vpn
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  NLRI advertised by peer: inet-unicast inet-vpn
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  NLRI for this session: inet-unicast inet-vpn
+</code></pre></div>
+<p>If <code>inet-vpn</code> is missing from "NLRI for this session", the capability was not successfully negotiated. Confirm PE2 also has <code>family inet-vpn unicast</code> configured under the IBGP group and that the BGP session is <code>Established</code>.</p>
+<h2 id="step-4-verify-bgpl3vpn0">Step 4: Verify bgp.l3vpn.0</h2>
+<p>At this stage the VPN-IPv4 table exists but is likely empty — no CE routes have been learned yet because the VRF eBGP sessions to CE1 and CE2 haven't been configured.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route table bgp.l3vpn.0
+</code></pre></div>
+<p>Expected at end of Part 2 — empty or no output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>bgp.l3vpn.0: 0 destinations, 0 routes (0 active, 0 holddown, 0 hidden)
+</code></pre></div>
+<p>This is correct. The VPN route table will populate in Part 3 once CE routes enter the VRFs and are redistributed to MP-BGP.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">Why bgp.l3vpn.0 may already have entries</p>
+<p>If the PE's VRF already has direct routes (the CE-facing subnet) and the vrf-target export is active, Junos may have already originated those direct routes as VPN-IPv4 entries into bgp.l3vpn.0. This is fine — it means the export mechanism is working.</p>
 </div>
+<h2 id="step-5-confirm-the-ibgp-session-is-still-healthy">Step 5: Confirm the iBGP Session Is Still Healthy</h2>
+<p>The iBGP session between PE1 and PE2 should remain established throughout this part. Adding a new address family to an established BGP session causes a brief capability re-negotiation but does not tear the session down in Junos 14.1.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Expected — iBGP to PE2 still shows established (numeric counts, not <code>Active</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>10.0.0.4              65001         52         51       0       0       22:34 0/0/0/0              0/0/0/0
+</code></pre></div>
+<p>The prefix counts are 0/0/0/0 — expected, since CE routes are not yet in the VRFs. The session itself is established.</p>
 
 
 

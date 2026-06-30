@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-7-topology" class="md-skip">
+        <a href="#session-8-topology" class="md-skip">
           Skip to content
         </a>
       
@@ -4451,6 +4451,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4467,6 +4485,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Link Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-changes-in-session-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Changes in Session 8
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,10 +5403,116 @@
   
 
 
-<h1 id="session-7-topology">Session 7 — Topology</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-8-topology">Session 8 — Topology</h1>
+<h2 id="diagram">Diagram</h2>
+<p>Session 8 uses the same six-router topology as Sessions 4–7. No new GNS3 links are required. The change is logical: the PE routers gain a VRF that wraps the CE-facing interfaces.</p>
+<pre class="mermaid"><code>graph LR
+    CE1 -- "ge-0/0/0 &lt;-&gt; ge-0/0/1" --&gt; PE1
+    PE1 -- "ge-0/0/0 &lt;-&gt; ge-0/0/0" --&gt; P1
+    P1 -- "ge-0/0/1 &lt;-&gt; ge-0/0/0" --&gt; P2
+    P2 -- "ge-0/0/1 &lt;-&gt; ge-0/0/0" --&gt; PE2
+    PE2 -- "ge-0/0/1 &lt;-&gt; ge-0/0/0" --&gt; CE2</code></pre>
+<h2 id="device-summary">Device Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Role</th>
+<th>Loopback</th>
+<th>VRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>Provider Edge — VPN gateway (Site 1)</td>
+<td>10.0.0.1/32</td>
+<td>VPN-A (ge-0/0/1)</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Provider Core — MPLS transit</td>
+<td>10.0.0.2/32</td>
+<td>none</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Provider Core — MPLS transit</td>
+<td>10.0.0.3/32</td>
+<td>none</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>Provider Edge — VPN gateway (Site 2)</td>
+<td>10.0.0.4/32</td>
+<td>VPN-A (ge-0/0/1)</td>
+</tr>
+<tr>
+<td>CE1</td>
+<td>Customer Edge — Site 1</td>
+<td>10.0.0.11/32</td>
+<td>none</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>Customer Edge — Site 2</td>
+<td>10.0.0.12/32</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<p>P1 and P2 require no configuration changes in this session. They forward on MPLS labels (outer transport label) exactly as in Session 7.</p>
+<h2 id="link-summary">Link Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface (A)</th>
+<th>Interface (B)</th>
+<th>Subnet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 - PE1</td>
+<td>CE1 ge-0/0/0.0</td>
+<td>PE1 ge-0/0/1.0</td>
+<td>172.16.1.0/30</td>
+</tr>
+<tr>
+<td>PE1 - P1</td>
+<td>PE1 ge-0/0/0.0</td>
+<td>P1 ge-0/0/0.0</td>
+<td>10.1.12.0/30</td>
+</tr>
+<tr>
+<td>P1 - P2</td>
+<td>P1 ge-0/0/1.0</td>
+<td>P2 ge-0/0/0.0</td>
+<td>10.1.23.0/30</td>
+</tr>
+<tr>
+<td>P2 - PE2</td>
+<td>P2 ge-0/0/1.0</td>
+<td>PE2 ge-0/0/0.0</td>
+<td>10.1.34.0/30</td>
+</tr>
+<tr>
+<td>PE2 - CE2</td>
+<td>PE2 ge-0/0/1.0</td>
+<td>CE2 ge-0/0/0.0</td>
+<td>172.16.2.0/30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-changes-in-session-8">What Changes in Session 8</h2>
+<p>In Session 6, the CE-facing interface on each PE (<code>ge-0/0/1</code>) was a global interface — its routes went into <code>inet.0</code>. In Session 8:</p>
+<ul>
+<li><code>ge-0/0/1</code> is assigned to the <code>VPN-A</code> routing instance on both PE1 and PE2</li>
+<li>Routes learned from CE on this interface go into <code>VPN-A.inet.0</code> instead of <code>inet.0</code></li>
+<li>The PE's global table (<code>inet.0</code>) never sees customer prefixes</li>
+<li>P1 and P2 see no change — they continue to forward on LDP transport labels</li>
+</ul>
 
 
 

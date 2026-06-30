@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-7-addressing" class="md-skip">
+        <a href="#session-8-addressing" class="md-skip">
           Skip to content
         </a>
       
@@ -4479,6 +4479,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4495,6 +4513,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loopback-addresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loopback Addresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-point-to-point-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Point-to-Point Links
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce-pe-links-vpn-a-vrf" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE-PE Links (VPN-A VRF)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpn-a-identifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPN-A Identifiers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-autonomous-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP Autonomous Systems
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,10 +5414,175 @@
   
 
 
-<h1 id="session-7-addressing">Session 7 — Addressing</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-8-addressing">Session 8 — Addressing</h1>
+<p>All IP addresses are unchanged from Sessions 4–7. Session 8 introduces VPN identifiers (RD and RT) rather than new IP addresses.</p>
+<h2 id="loopback-addresses">Loopback Addresses</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>lo0.0</td>
+<td>10.0.0.1/32</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>lo0.0</td>
+<td>10.0.0.2/32</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>lo0.0</td>
+<td>10.0.0.3/32</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>lo0.0</td>
+<td>10.0.0.4/32</td>
+</tr>
+<tr>
+<td>CE1</td>
+<td>lo0.0</td>
+<td>10.0.0.11/32</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>lo0.0</td>
+<td>10.0.0.12/32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="provider-point-to-point-links">Provider Point-to-Point Links</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 ge-0/0/0</td>
+<td>PE1 - P1</td>
+<td>10.1.12.1/30</td>
+</tr>
+<tr>
+<td>P1 ge-0/0/0</td>
+<td>PE1 - P1</td>
+<td>10.1.12.2/30</td>
+</tr>
+<tr>
+<td>P1 ge-0/0/1</td>
+<td>P1 - P2</td>
+<td>10.1.23.1/30</td>
+</tr>
+<tr>
+<td>P2 ge-0/0/0</td>
+<td>P1 - P2</td>
+<td>10.1.23.2/30</td>
+</tr>
+<tr>
+<td>P2 ge-0/0/1</td>
+<td>P2 - PE2</td>
+<td>10.1.34.1/30</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/0</td>
+<td>P2 - PE2</td>
+<td>10.1.34.2/30</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ce-pe-links-vpn-a-vrf">CE-PE Links (VPN-A VRF)</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface</th>
+<th>Address</th>
+<th>VRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 ge-0/0/1</td>
+<td>PE1 - CE1</td>
+<td>172.16.1.1/30</td>
+<td>VPN-A</td>
+</tr>
+<tr>
+<td>CE1 ge-0/0/0</td>
+<td>PE1 - CE1</td>
+<td>172.16.1.2/30</td>
+<td>global</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/1</td>
+<td>PE2 - CE2</td>
+<td>172.16.2.1/30</td>
+<td>VPN-A</td>
+</tr>
+<tr>
+<td>CE2 ge-0/0/0</td>
+<td>PE2 - CE2</td>
+<td>172.16.2.2/30</td>
+<td>global</td>
+</tr>
+</tbody>
+</table>
+<p>PE1 and PE2's CE-facing interfaces are assigned to the <code>VPN-A</code> routing instance. The physical addresses are unchanged; only their routing context moves from <code>inet.0</code> to <code>VPN-A.inet.0</code>.</p>
+<h2 id="vpn-a-identifiers">VPN-A Identifiers</h2>
+<table>
+<thead>
+<tr>
+<th>PE</th>
+<th>Route Distinguisher</th>
+<th>Route Target (export)</th>
+<th>Route Target (import)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>65001:100</td>
+<td>target:65001:100</td>
+<td>target:65001:100</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>65001:200</td>
+<td>target:65001:100</td>
+<td>target:65001:100</td>
+</tr>
+</tbody>
+</table>
+<p>Route distinguishers are unique per PE per VPN. The route target is identical on both PEs — both export and import <code>target:65001:100</code>, which causes VPN-A routes from PE1 to be imported by PE2's VPN-A and vice versa.</p>
+<h2 id="bgp-autonomous-systems">BGP Autonomous Systems</h2>
+<table>
+<thead>
+<tr>
+<th>AS</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>65001</td>
+<td>Provider (PE1, P1, P2, PE2)</td>
+</tr>
+<tr>
+<td>65100</td>
+<td>Customer A (CE1, CE2)</td>
+</tr>
+</tbody>
+</table>
 
 
 

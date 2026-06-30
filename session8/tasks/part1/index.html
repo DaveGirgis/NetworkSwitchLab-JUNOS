@@ -4598,6 +4598,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 — VRF & Route Distinguishers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4614,6 +4632,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-remove-global-ebgp-groups-from-pes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Remove Global eBGP Groups from PEs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-create-the-vrf-on-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Create the VRF on PE1
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-create-the-vrf-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Create the VRF on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-verify-the-vrf-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Verify the VRF Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-verify-the-vpn-label-was-allocated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Verify the VPN Label Was Allocated
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5325,9 +5428,101 @@
 
 
 <h1 id="part-1-vrf-route-distinguishers">Part 1 — VRF &amp; Route Distinguishers</h1>
+<h2 id="overview">Overview</h2>
+<p>A <strong>VRF</strong> (Virtual Routing and Forwarding instance) is a separate, isolated routing table within a single router. Junos calls these <strong>routing instances</strong>. Every interface assigned to a routing instance, and every route learned or generated through that interface, belongs exclusively to that instance — invisible to <code>inet.0</code> and to other instances.</p>
+<p>In this part you will:</p>
+<ol>
+<li>Remove the global eBGP groups from PE1 and PE2 — these placed customer routes into <code>inet.0</code> and are not compatible with VRF-based L3 VPN</li>
+<li>Create a VRF named <code>VPN-A</code> on each PE and assign the CE-facing interface to it</li>
+<li>Verify the VRF table contains the CE-facing link subnet as a direct route</li>
+</ol>
+<p>The VRF parameters:</p>
+<p><strong><code>instance-type vrf</code></strong> — tells Junos this is a Layer 3 VPN routing instance, not a regular table or VPLS instance.</p>
+<p><strong><code>interface ge-0/0/1.0</code></strong> — moves the CE-facing interface into the VRF. Once assigned, this interface's routes (direct, connected) go into <code>VPN-A.inet.0</code> rather than <code>inet.0</code>.</p>
+<p><strong><code>route-distinguisher</code></strong> — the RD prepended to every VPN prefix this PE originates into MP-BGP. It must be unique per PE per VPN. PE1 uses <code>65001:100</code>, PE2 uses <code>65001:200</code>. The RD makes VPN prefixes globally unique in BGP so two customers using the same address space don't collide.</p>
+<p><strong><code>vrf-target</code></strong> — sets both the export and import route target to <code>target:65001:100</code>. Routes exported from this VRF carry that RT community. The VRF imports routes from MP-BGP that carry the same RT. Since both PEs use the same RT, they exchange each other's VPN routes automatically.</p>
+<p><strong><code>vrf-table-label</code></strong> — instructs Junos to allocate a single MPLS label for the entire VRF. This is the inner VPN label that appears in the two-label stack. When the egress PE receives a packet with this label, it identifies the VRF, strips the label, and performs an IP lookup inside <code>VPN-A.inet.0</code> to find the CE next-hop. Without this command the VRF will not have a label to advertise to remote PEs.</p>
+<h2 id="step-1-remove-global-ebgp-groups-from-pes">Step 1: Remove Global eBGP Groups from PEs</h2>
+<p>The existing global eBGP groups (configured in Session 6) place CE routes directly into <code>inet.0</code>. They must be removed before the VRF takes ownership of the CE-facing interface.</p>
+<p>On <strong>PE1</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>configure
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>delete protocols bgp group EBGP-CE1
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>commit
+</code></pre></div>
+<p>On <strong>PE2</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>delete protocols bgp group EBGP-CE2
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
+</code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">CE sessions will drop briefly</p>
+<p>CE1 and CE2 will lose their BGP sessions to the PEs when these groups are deleted. This is expected. The sessions will re-establish after Part 3 when the VRF-based eBGP groups are configured.</p>
 </div>
+<h2 id="step-2-create-the-vrf-on-pe1">Step 2: Create the VRF on PE1</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set routing-instances VPN-A instance-type vrf
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set routing-instances VPN-A interface ge-0/0/1.0
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>set routing-instances VPN-A route-distinguisher 65001:100
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>set routing-instances VPN-A vrf-target target:65001:100
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>set routing-instances VPN-A vrf-table-label
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>commit
+</code></pre></div>
+<h2 id="step-3-create-the-vrf-on-pe2">Step 3: Create the VRF on PE2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>configure
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set routing-instances VPN-A instance-type vrf
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>set routing-instances VPN-A interface ge-0/0/1.0
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>set routing-instances VPN-A route-distinguisher 65001:200
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>set routing-instances VPN-A vrf-target target:65001:100
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>set routing-instances VPN-A vrf-table-label
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>commit
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">RD is unique per PE; RT is shared</p>
+<p>PE1 uses <code>route-distinguisher 65001:100</code> and PE2 uses <code>65001:200</code> — these must differ. Both use <code>vrf-target target:65001:100</code> — this must match. The RT is what binds the two PEs into the same VPN; the RD just keeps their BGP advertisements distinct.</p>
+</div>
+<h2 id="step-4-verify-the-vrf-table">Step 4: Verify the VRF Table</h2>
+<p>On <strong>PE1</strong>, check that the VRF routing table has been created and contains the CE-facing link subnet as a direct route:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>show route table VPN-A.inet.0
+</code></pre></div>
+<p>Expected — the CE-facing link subnet appears as a direct route:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>VPN-A.inet.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>172.16.1.0/30      *[Direct/0] 00:00:42
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                    &gt; via ge-0/0/1.0
+</code></pre></div>
+<p>The route <code>172.16.1.0/30</code> is the directly connected subnet on the CE-facing interface, now living in the VRF rather than <code>inet.0</code>. This confirms the interface has been successfully assigned to the VRF.</p>
+<p>Run the same check on <strong>PE2</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>show route table VPN-A.inet.0
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>VPN-A.inet.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>172.16.2.0/30      *[Direct/0] 00:00:21
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>                    &gt; via ge-0/0/1.0
+</code></pre></div>
+<p>Also confirm the global table <strong>does not</strong> contain the CE-facing subnets anymore:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE1&gt; show route table inet.0 172.16.1.0/30
+</code></pre></div>
+<p>Expected: no output. The route is now in <code>VPN-A.inet.0</code>, not <code>inet.0</code>.</p>
+<h2 id="step-5-verify-the-vpn-label-was-allocated">Step 5: Verify the VPN Label Was Allocated</h2>
+<p><code>vrf-table-label</code> causes Junos to allocate an MPLS label for the VRF. Confirm the label was assigned:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>PE1&gt; show route table VPN-A.inet.0 detail | match VPN-Label
+</code></pre></div>
+<p>Expected to return no output at this stage — the VPN label appears on routes imported from the remote PE (it shows PE2's label in PE1's route table, and vice versa). The local label allocation is visible on the remote PE once MP-BGP is configured in Part 2.</p>
+<p>Alternatively, verify the label indirectly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>PE2&gt; show route table mpls.0 | match VPN
+</code></pre></div>
+<p>If <code>vrf-table-label</code> allocated a label correctly, it will appear in the MPLS forwarding table. The label number will vary.</p>
 
 
 

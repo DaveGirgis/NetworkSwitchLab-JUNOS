@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-7-bgpmpls-l3-vpn" class="md-skip">
+        <a href="#session-8-bgpmpls-l3-vpn" class="md-skip">
           Skip to content
         </a>
       
@@ -5312,13 +5312,87 @@
   
 
 
-<h1 id="session-7-bgpmpls-l3-vpn">Session 7 — BGP/MPLS L3 VPN</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-<p>Complete Sessions 1–6 first.</p>
-</div>
-<h2 id="preview">Preview</h2>
-<p>You will configure VRFs on PE1 and PE2, establish MP-BGP between the PEs, and verify that Customer A's routes are exchanged across the provider backbone without leaking into the global routing table.</p>
+<h1 id="session-8-bgpmpls-l3-vpn">Session 8 — BGP/MPLS L3 VPN</h1>
+<h2 id="overview">Overview</h2>
+<p>In Sessions 6 and 7 you built a BGP network and an MPLS backbone. The BGP in Session 6 worked — CE1 and CE2 exchanged loopback prefixes — but it had a critical weakness: customer routes lived directly in the PE's global routing table (<code>inet.0</code>). Any route PE1 learned from CE1 was visible to every process on the router. In a real service provider network with hundreds of VPN customers, this fails in two ways:</p>
+<ul>
+<li><strong>No isolation</strong> — if two customers happen to use the same IP address space, their routes collide in <code>inet.0</code> and one overwrites the other</li>
+<li><strong>No scalability</strong> — the global table grows without bound as customers are added</li>
+</ul>
+<p><strong>BGP/MPLS Layer 3 VPN</strong> (RFC 4364, formerly RFC 2547) solves both problems. Each customer gets a dedicated <strong>VRF</strong> (Virtual Routing and Forwarding instance) — a completely separate routing table per customer per PE. Customer A's routes go into <code>VPN-A.inet.0</code> and never touch <code>inet.0</code> or any other customer's VRF.</p>
+<h3 id="the-three-building-blocks">The Three Building Blocks</h3>
+<p><strong>VRF — Virtual Routing and Forwarding</strong></p>
+<p>A VRF is a separate routing table with its own forwarding instance. On PE1, the CE1-facing interface (<code>ge-0/0/1</code>) is assigned to the VRF rather than the global table. All routes learned from CE1 land in the VRF. All routes advertised to CE1 come from the VRF. The global <code>inet.0</code> table never sees customer routes.</p>
+<p><strong>Route Distinguisher (RD)</strong></p>
+<p>Two different customers could both use the prefix <code>10.1.1.0/24</code>. If PE1 and PE2 both receive that prefix via iBGP, the BGP process needs to tell them apart. The RD is a 64-bit value prepended to each VPN prefix to make it globally unique: <code>65001:100:10.1.1.0/24</code> and <code>65001:200:10.1.1.0/24</code> are distinct entries in BGP even if the raw prefix is identical. The RD has no semantic meaning beyond uniqueness — it does not control which VRFs import the route.</p>
+<p><strong>Route Target (RT)</strong></p>
+<p>The RT is a BGP extended community that controls VPN membership. When a PE exports a VPN route to iBGP, it tags the route with an RT. When the receiving PE's VRF has a matching import RT, it pulls the route into its local VRF table. RT is the mechanism that determines which VRFs "belong together" — that is, which customer sites can reach each other.</p>
+<p>In this lab, both PE1 and PE2 use <code>target:65001:100</code> for Customer A. PE1 exports with that RT, PE2 imports routes carrying that RT — and vice versa. The result: both PEs have the same VPN routes in their VPN-A VRF.</p>
+<h3 id="mp-bgp-the-vpn-route-carrier">MP-BGP — The VPN Route Carrier</h3>
+<p>Standard iBGP from Session 6 carries <code>inet-unicast</code> (IPv4 prefixes). To carry VPN routes, the iBGP session is extended with the <code>inet-vpn unicast</code> address family. VPN routes appear in a separate BGP table: <code>bgp.l3vpn.0</code>. This is the MP-BGP RIB for VPN-IPv4 (RD + prefix) routes.</p>
+<p>The iBGP session itself is unchanged — same loopback-to-loopback peers, same AS. Only the address family list expands.</p>
+<h3 id="the-two-label-stack">The Two-Label Stack</h3>
+<p>Every packet forwarded through the L3 VPN carries two MPLS labels:</p>
+<ul>
+<li><strong>Outer label</strong> — the LDP transport label, exactly as in Session 7. P routers swap or pop this label to deliver the packet to the egress PE. P1 and P2 do not change at all in Session 8.</li>
+<li><strong>Inner label</strong> — the VPN label, allocated by <code>vrf-table-label</code> on the egress PE. When the egress PE receives the packet (after the outer label is popped by PHP), it looks up the VPN label in its LFIB to identify the VRF, then performs an IP lookup within that VRF to find the CE next-hop.</li>
+</ul>
+<p>This two-label stack is why P routers require no knowledge of customer prefixes. They see only the outer label and forward accordingly. The VPN label is invisible to them.</p>
+<h3 id="how-this-session-differs-from-session-6">How This Session Differs from Session 6</h3>
+<p>Session 6 BGP was a useful stepping stone but not production-quality. In this session:</p>
+<ul>
+<li>The global eBGP groups on PE1 and PE2 (EBGP-CE1, EBGP-CE2) are <strong>removed</strong> and replaced with VRF-based eBGP</li>
+<li>Customer routes move from <code>inet.0</code> to <code>VPN-A.inet.0</code> — they are no longer in the global table</li>
+<li>The iBGP session gains the <code>inet-vpn unicast</code> address family</li>
+<li>CE1 and CE2 are <strong>not reconfigured</strong> — they still peer with the same PE addresses; the VRF is transparent to them</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Sessions 1–7 complete</li>
+<li>IS-IS adjacencies up on all four provider routers</li>
+<li>LDP operational — <code>show route table inet.3</code> shows PE2 loopback reachable from PE1</li>
+<li>Session 6 BGP still running — iBGP between PE1 and PE2, eBGP to CE1/CE2</li>
+</ul>
+<h2 id="session-parts">Session Parts</h2>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Topic</th>
+<th>New Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Part 0</td>
+<td>Verify baseline; plan the transition</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Part 1</td>
+<td>VRF and Route Distinguishers</td>
+<td><code>routing-instances VPN-A</code> on PE1 and PE2</td>
+</tr>
+<tr>
+<td>Part 2</td>
+<td>MP-BGP and Route Targets</td>
+<td><code>family inet-vpn unicast</code> on iBGP group</td>
+</tr>
+<tr>
+<td>Part 3</td>
+<td>PE-CE Routing in the VRF</td>
+<td>VRF-based eBGP; <code>ADVERTISE-VPN</code> policy</td>
+</tr>
+</tbody>
+</table>
+<h2 id="topology">Topology</h2>
+<pre class="mermaid"><code>graph LR
+    CE1 -- "172.16.1.0/30 -- VRF: VPN-A" --&gt; PE1
+    PE1 -- "10.1.12.0/30 -- MPLS" --&gt; P1
+    P1 -- "10.1.23.0/30 -- MPLS" --&gt; P2
+    P2 -- "10.1.34.0/30 -- MPLS" --&gt; PE2
+    PE2 -- "172.16.2.0/30 -- VRF: VPN-A" --&gt; CE2</code></pre>
+<p>PE1 and PE2 each host the <code>VPN-A</code> VRF. CE-facing interfaces are in the VRF. P1 and P2 are unchanged from Session 7 — they remain pure MPLS transit routers with no VPN awareness.</p>
 
 
 
