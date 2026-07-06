@@ -5467,7 +5467,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>set routing-instances VPN-A instance-type vrf
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>set routing-instances VPN-A interface ge-0/0/1.0
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>set routing-instances VPN-A route-distinguisher 65001:100
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>set routing-instances VPN-A route-distinguisher 65001:1000
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>set routing-instances VPN-A vrf-target target:65001:100
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>set routing-instances VPN-A vrf-table-label
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
@@ -5478,7 +5478,7 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>set routing-instances VPN-A instance-type vrf
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>set routing-instances VPN-A interface ge-0/0/1.0
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>set routing-instances VPN-A route-distinguisher 65001:200
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>set routing-instances VPN-A route-distinguisher 65001:2000
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>set routing-instances VPN-A vrf-target target:65001:100
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>set routing-instances VPN-A vrf-table-label
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
@@ -5486,7 +5486,7 @@
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">RD is unique per PE; RT is shared</p>
-<p>PE1 uses <code>route-distinguisher 65001:100</code> and PE2 uses <code>65001:200</code> — these must differ. Both use <code>vrf-target target:65001:100</code> — this must match. The RT is what binds the two PEs into the same VPN; the RD just keeps their BGP advertisements distinct.</p>
+<p>PE1 uses <code>route-distinguisher 65001:1000</code> and PE2 uses <code>65001:2000</code> — these must differ, and must not collide with any other routing instance on the same router (VPLS-100 from Session 7a uses 65001:100 and 65001:101). Both PEs use <code>vrf-target target:65001:100</code> — this must match. The RT is what binds the two PEs into the same VPN; the RD just keeps their BGP advertisements distinct.</p>
 </div>
 <h2 id="step-4-verify-the-vrf-table">Step 4: Verify the VRF Table</h2>
 <p>On <strong>PE1</strong>, check that the VRF routing table has been created and contains the CE-facing link subnet as a direct route:</p>

@@ -5598,17 +5598,17 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>bgp.l3vpn.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>+ = Active Route, - = Last Active, * = Both
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>65001:100:10.0.0.11/32
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>65001:1000:10.0.0.11/32
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>                   *[BGP/170] 00:01:15, localpref 100
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>                      AS path: 65100 I
 <a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>                    &gt; Indirect
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>65001:200:10.0.0.12/32
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>65001:2000:10.0.0.12/32
 <a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>                   *[BGP/170] 00:00:52, localpref 100, from 10.0.0.4
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>                      AS path: 65100 I
 <a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
 </code></pre></div>
-<p>The first route (<code>65001:100:10.0.0.11/32</code>) is PE1's own locally originated VPN route — CE1's loopback with PE1's RD prepended. It shows as <code>Indirect</code> because it was originated from the VRF and redistributed into <code>bgp.l3vpn.0</code>.</p>
-<p>The second route (<code>65001:200:10.0.0.12/32</code>) is PE2's VPN route — CE2's loopback with PE2's RD (<code>65001:200</code>) prepended. It was received via iBGP from PE2 and imported into VPN-A because the RT matched.</p>
+<p>The first route (<code>65001:1000:10.0.0.11/32</code>) is PE1's own locally originated VPN route — CE1's loopback with PE1's RD prepended. It shows as <code>Indirect</code> because it was originated from the VRF and redistributed into <code>bgp.l3vpn.0</code>.</p>
+<p>The second route (<code>65001:2000:10.0.0.12/32</code>) is PE2's VPN route — CE2's loopback with PE2's RD (<code>65001:2000</code>) prepended. It was received via iBGP from PE2 and imported into VPN-A because the RT matched.</p>
 <h2 id="step-6-inspect-the-two-label-stack-in-detail">Step 6: Inspect the Two-Label Stack in Detail</h2>
 <p>On <strong>PE1</strong>, view the detail for CE2's VPN route:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>show route table VPN-A.inet.0 10.0.0.12 detail
