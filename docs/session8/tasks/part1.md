@@ -88,17 +88,19 @@ On **PE1**, check that the VRF routing table has been created and contains the C
 show route table VPN-A.inet.0
 ```
 
-Expected — the CE-facing link subnet appears as a direct route:
+Expected — the CE-facing link subnet and local interface address appear:
 
 ```text
-VPN-A.inet.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
+VPN-A.inet.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
 + = Active Route, - = Last Active, * = Both
 
-172.16.1.0/30      *[Direct/0] 00:00:42
+172.16.1.0/30      *[Direct/0] 00:01:23
                     > via ge-0/0/1.0
+172.16.1.1/32      *[Local/0] 00:01:23
+                      Local via ge-0/0/1.0
 ```
 
-The route `172.16.1.0/30` is the directly connected subnet on the CE-facing interface, now living in the VRF rather than `inet.0`. This confirms the interface has been successfully assigned to the VRF.
+Both routes confirm the interface is in the VRF. The `Direct` route is the subnet; the `Local` route is PE1's own interface address — Junos installs this automatically so the router can receive packets addressed to itself on that interface.
 
 Run the same check on **PE2**:
 
@@ -109,11 +111,13 @@ show route table VPN-A.inet.0
 Expected:
 
 ```text
-VPN-A.inet.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
+VPN-A.inet.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
 + = Active Route, - = Last Active, * = Both
 
 172.16.2.0/30      *[Direct/0] 00:00:21
                     > via ge-0/0/1.0
+172.16.2.1/32      *[Local/0] 00:00:21
+                      Local via ge-0/0/1.0
 ```
 
 Also confirm the global table **does not** contain the CE-facing subnets anymore:

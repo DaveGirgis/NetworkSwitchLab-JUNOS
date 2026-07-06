@@ -15,8 +15,8 @@
 
 ### VRF Created
 
-- [ ] `PE1> show route table VPN-A.inet.0` — table exists; shows `172.16.1.0/30` as Direct route
-- [ ] `PE2> show route table VPN-A.inet.0` — table exists; shows `172.16.2.0/30` as Direct route
+- [ ] `PE1> show route table VPN-A.inet.0` — 2 destinations: `172.16.1.0/30` (Direct) and `172.16.1.1/32` (Local)
+- [ ] `PE2> show route table VPN-A.inet.0` — 2 destinations: `172.16.2.0/30` (Direct) and `172.16.2.1/32` (Local)
 - [ ] `PE1> show route table inet.0 172.16.1.0/30` — no output (route is now in VRF, not inet.0)
 - [ ] `PE2> show route table inet.0 172.16.2.0/30` — no output
 
