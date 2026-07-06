@@ -39,8 +39,8 @@ PE1 and PE2's CE-facing interfaces are assigned to the `VPN-A` routing instance.
 
 | PE | Route Distinguisher | Route Target (export) | Route Target (import) |
 |----|--------------------|-----------------------|-----------------------|
-| PE1 | 65001:100 | target:65001:100 | target:65001:100 |
-| PE2 | 65001:200 | target:65001:100 | target:65001:100 |
+| PE1 | 65001:1000 | target:65001:100 | target:65001:100 |
+| PE2 | 65001:2000 | target:65001:100 | target:65001:100 |
 
 Route distinguishers are unique per PE per VPN. The route target is identical on both PEs — both export and import `target:65001:100`, which causes VPN-A routes from PE1 to be imported by PE2's VPN-A and vice versa.
 

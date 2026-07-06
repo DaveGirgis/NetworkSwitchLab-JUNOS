@@ -46,8 +46,8 @@
 
 ### bgp.l3vpn.0
 
-- [ ] `PE1> show route table bgp.l3vpn.0` — two routes: `65001:100:10.0.0.11/32` and `65001:200:10.0.0.12/32`
-- [ ] `PE2> show route table bgp.l3vpn.0` — two routes: `65001:100:10.0.0.11/32` and `65001:200:10.0.0.12/32`
+- [ ] `PE1> show route table bgp.l3vpn.0` — two routes: `65001:1000:10.0.0.11/32` and `65001:2000:10.0.0.12/32`
+- [ ] `PE2> show route table bgp.l3vpn.0` — two routes: `65001:1000:10.0.0.11/32` and `65001:2000:10.0.0.12/32`
 
 ### No Route Leaking
 

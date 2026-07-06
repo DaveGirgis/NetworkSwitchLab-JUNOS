@@ -140,19 +140,19 @@ Expected — two VPN-IPv4 routes with their RDs:
 bgp.l3vpn.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
 + = Active Route, - = Last Active, * = Both
 
-65001:100:10.0.0.11/32
+65001:1000:10.0.0.11/32
                    *[BGP/170] 00:01:15, localpref 100
                       AS path: 65100 I
                     > Indirect
-65001:200:10.0.0.12/32
+65001:2000:10.0.0.12/32
                    *[BGP/170] 00:00:52, localpref 100, from 10.0.0.4
                       AS path: 65100 I
                     > to 10.1.12.2 via ge-0/0/0.0, Push <vpn-label>, Push 299808
 ```
 
-The first route (`65001:100:10.0.0.11/32`) is PE1's own locally originated VPN route — CE1's loopback with PE1's RD prepended. It shows as `Indirect` because it was originated from the VRF and redistributed into `bgp.l3vpn.0`.
+The first route (`65001:1000:10.0.0.11/32`) is PE1's own locally originated VPN route — CE1's loopback with PE1's RD prepended. It shows as `Indirect` because it was originated from the VRF and redistributed into `bgp.l3vpn.0`.
 
-The second route (`65001:200:10.0.0.12/32`) is PE2's VPN route — CE2's loopback with PE2's RD (`65001:200`) prepended. It was received via iBGP from PE2 and imported into VPN-A because the RT matched.
+The second route (`65001:2000:10.0.0.12/32`) is PE2's VPN route — CE2's loopback with PE2's RD (`65001:2000`) prepended. It was received via iBGP from PE2 and imported into VPN-A because the RT matched.
 
 ## Step 6: Inspect the Two-Label Stack in Detail
 

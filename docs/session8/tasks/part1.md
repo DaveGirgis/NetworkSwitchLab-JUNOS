@@ -56,7 +56,7 @@ configure
 
 set routing-instances VPN-A instance-type vrf
 set routing-instances VPN-A interface ge-0/0/1.0
-set routing-instances VPN-A route-distinguisher 65001:100
+set routing-instances VPN-A route-distinguisher 65001:1000
 set routing-instances VPN-A vrf-target target:65001:100
 set routing-instances VPN-A vrf-table-label
 
@@ -70,7 +70,7 @@ configure
 
 set routing-instances VPN-A instance-type vrf
 set routing-instances VPN-A interface ge-0/0/1.0
-set routing-instances VPN-A route-distinguisher 65001:200
+set routing-instances VPN-A route-distinguisher 65001:2000
 set routing-instances VPN-A vrf-target target:65001:100
 set routing-instances VPN-A vrf-table-label
 
@@ -78,7 +78,7 @@ commit
 ```
 
 !!! note "RD is unique per PE; RT is shared"
-    PE1 uses `route-distinguisher 65001:100` and PE2 uses `65001:200` — these must differ. Both use `vrf-target target:65001:100` — this must match. The RT is what binds the two PEs into the same VPN; the RD just keeps their BGP advertisements distinct.
+    PE1 uses `route-distinguisher 65001:1000` and PE2 uses `65001:2000` — these must differ, and must not collide with any other routing instance on the same router (VPLS-100 from Session 7a uses 65001:100 and 65001:101). Both PEs use `vrf-target target:65001:100` — this must match. The RT is what binds the two PEs into the same VPN; the RD just keeps their BGP advertisements distinct.
 
 ## Step 4: Verify the VRF Table
 
