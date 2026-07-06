@@ -4749,10 +4749,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-confirm-the-ibgp-session-is-still-healthy" class="md-nav__link">
+  <a href="#step-5-confirm-the-ibgp-session-is-healthy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5: Confirm the iBGP Session Is Still Healthy
+        Step 5: Confirm the iBGP Session Is Healthy
       
     </span>
   </a>
@@ -5487,26 +5487,37 @@
 <p>The key check is that <code>inet-vpn-unicast</code> appears in "NLRI for this session". The <code>l2vpn</code> family is the Session 7a VPLS configuration carried forward on the iBGP group — it is harmless and does not affect L3 VPN operation.</p>
 <p>If <code>inet-vpn-unicast</code> is missing entirely, confirm PE2 also has <code>family inet-vpn unicast</code> under its IBGP group and that the BGP session is <code>Established</code>.</p>
 <h2 id="step-4-verify-bgpl3vpn0">Step 4: Verify bgp.l3vpn.0</h2>
-<p>At this stage the VPN-IPv4 table exists but is likely empty — no CE routes have been learned yet because the VRF eBGP sessions to CE1 and CE2 haven't been configured.</p>
+<p>Check the VPN-IPv4 route table. Because the VRFs on both PEs already have direct and local routes for the CE-facing subnets, and the <code>vrf-target</code> export is immediately active, those subnet routes are already being exported and imported as VPN-IPv4 entries — even before the CE eBGP sessions are configured.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route table bgp.l3vpn.0
 </code></pre></div>
-<p>Expected at end of Part 2 — empty or no output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>bgp.l3vpn.0: 0 destinations, 0 routes (0 active, 0 holddown, 0 hidden)
+<p>Expected — one entry already present (PE2's CE-facing subnet exported as a VPN route):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>bgp.l3vpn.0: 1 destination, 1 route (1 active, 0 holddown, 0 hidden)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>65001:2000:172.16.2.0/30
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                   *[BGP/170] 00:04:37, localpref 100, from 10.0.0.4
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                      AS path: I, validation-state: unverified
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
 </code></pre></div>
-<p>This is correct. The VPN route table will populate in Part 3 once CE routes enter the VRFs and are redistributed to MP-BGP.</p>
-<div class="admonition note">
-<p class="admonition-title">Why bgp.l3vpn.0 may already have entries</p>
-<p>If the PE's VRF already has direct routes (the CE-facing subnet) and the vrf-target export is active, Junos may have already originated those direct routes as VPN-IPv4 entries into bgp.l3vpn.0. This is fine — it means the export mechanism is working.</p>
-</div>
-<h2 id="step-5-confirm-the-ibgp-session-is-still-healthy">Step 5: Confirm the iBGP Session Is Still Healthy</h2>
-<p>The iBGP session between PE1 and PE2 should remain established throughout this part. Adding a new address family to an established BGP session causes a brief capability re-negotiation but does not tear the session down in Junos 14.1.</p>
+<p>This confirms the VRF RT export/import mechanism is already working. The CE loopbacks will join this table in Part 3 once the CE eBGP sessions are brought up inside the VRFs.</p>
+<h2 id="step-5-confirm-the-ibgp-session-is-healthy">Step 5: Confirm the iBGP Session Is Healthy</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PE1&gt; show bgp summary
 </code></pre></div>
-<p>Expected — iBGP to PE2 still shows established (numeric counts, not <code>Active</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>10.0.0.4              65001         52         51       0       0       22:34 0/0/0/0              0/0/0/0
+<p>Expected — when multiple BGP address families are active, Junos shows per-table prefix counts on separate lines under the peer:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>bgp.l2vpn.0
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>                       1          1          0          0          0          0
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>bgp.l3vpn.0
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>                       1          1          0          0          0          0
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>10.0.0.4              65001         12         15       0       0        4:37 Establ
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  bgp.l2vpn.0: 1/1/1/0
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  VPLS-100.l2vpn.0: 1/1/1/0
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>  bgp.l3vpn.0: 1/1/1/0
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>  VPN-A.inet.0: 1/1/1/0
 </code></pre></div>
-<p>The prefix counts are 0/0/0/0 — expected, since CE routes are not yet in the VRFs. The session itself is established.</p>
+<p>The peer shows <code>Establ</code> (not <code>Active</code>) — the session is up. <code>bgp.l3vpn.0: 1/1/1/0</code> confirms one VPN-IPv4 route is being exchanged. <code>VPN-A.inet.0: 1/1/1/0</code> confirms PE1 has imported one VPN route into its local VRF table from PE2. The session is ready for Part 3.</p>
 
 
 
