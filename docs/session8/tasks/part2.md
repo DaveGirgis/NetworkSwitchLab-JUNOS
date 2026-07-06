@@ -65,36 +65,47 @@ If `inet-vpn-unicast` is missing entirely, confirm PE2 also has `family inet-vpn
 
 ## Step 4: Verify bgp.l3vpn.0
 
-At this stage the VPN-IPv4 table exists but is likely empty — no CE routes have been learned yet because the VRF eBGP sessions to CE1 and CE2 haven't been configured.
+Check the VPN-IPv4 route table. Because the VRFs on both PEs already have direct and local routes for the CE-facing subnets, and the `vrf-target` export is immediately active, those subnet routes are already being exported and imported as VPN-IPv4 entries — even before the CE eBGP sessions are configured.
 
 ```junos
 PE1> show route table bgp.l3vpn.0
 ```
 
-Expected at end of Part 2 — empty or no output:
+Expected — one entry already present (PE2's CE-facing subnet exported as a VPN route):
 
 ```text
-bgp.l3vpn.0: 0 destinations, 0 routes (0 active, 0 holddown, 0 hidden)
+bgp.l3vpn.0: 1 destination, 1 route (1 active, 0 holddown, 0 hidden)
++ = Active Route, - = Last Active, * = Both
+
+65001:2000:172.16.2.0/30
+                   *[BGP/170] 00:04:37, localpref 100, from 10.0.0.4
+                      AS path: I, validation-state: unverified
+                    > to 10.1.12.2 via ge-0/0/0.0, Push <vpn-label>, Push 299808
 ```
 
-This is correct. The VPN route table will populate in Part 3 once CE routes enter the VRFs and are redistributed to MP-BGP.
+This confirms the VRF RT export/import mechanism is already working. The CE loopbacks will join this table in Part 3 once the CE eBGP sessions are brought up inside the VRFs.
 
-!!! note "Why bgp.l3vpn.0 may already have entries"
-    If the PE's VRF already has direct routes (the CE-facing subnet) and the vrf-target export is active, Junos may have already originated those direct routes as VPN-IPv4 entries into bgp.l3vpn.0. This is fine — it means the export mechanism is working.
-
-## Step 5: Confirm the iBGP Session Is Still Healthy
-
-The iBGP session between PE1 and PE2 should remain established throughout this part. Adding a new address family to an established BGP session causes a brief capability re-negotiation but does not tear the session down in Junos 14.1.
+## Step 5: Confirm the iBGP Session Is Healthy
 
 ```junos
 PE1> show bgp summary
 ```
 
-Expected — iBGP to PE2 still shows established (numeric counts, not `Active`):
+Expected — when multiple BGP address families are active, Junos shows per-table prefix counts on separate lines under the peer:
 
 ```text
+Groups: 1 Peers: 1 Down peers: 0
+Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+bgp.l2vpn.0
+                       1          1          0          0          0          0
+bgp.l3vpn.0
+                       1          1          0          0          0          0
 Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-10.0.0.4              65001         52         51       0       0       22:34 0/0/0/0              0/0/0/0
+10.0.0.4              65001         12         15       0       0        4:37 Establ
+  bgp.l2vpn.0: 1/1/1/0
+  VPLS-100.l2vpn.0: 1/1/1/0
+  bgp.l3vpn.0: 1/1/1/0
+  VPN-A.inet.0: 1/1/1/0
 ```
 
-The prefix counts are 0/0/0/0 — expected, since CE routes are not yet in the VRFs. The session itself is established.
+The peer shows `Establ` (not `Active`) — the session is up. `bgp.l3vpn.0: 1/1/1/0` confirms one VPN-IPv4 route is being exchanged. `VPN-A.inet.0: 1/1/1/0` confirms PE1 has imported one VPN route into its local VRF table from PE2. The session is ready for Part 3.
