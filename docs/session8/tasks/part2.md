@@ -48,15 +48,20 @@ On **PE1**:
 show bgp neighbor 10.0.0.4 | match NLRI
 ```
 
-Expected — both `inet-unicast` and `inet-vpn` appear in the negotiated families:
+Expected — `inet-vpn-unicast` appears in the negotiated families. If Session 7a (VPLS) was completed, `l2vpn` will also appear:
 
 ```text
-  NLRI for restart configured on peer: inet-unicast inet-vpn
-  NLRI advertised by peer: inet-unicast inet-vpn
-  NLRI for this session: inet-unicast inet-vpn
+  NLRI for restart configured on peer: inet-vpn-unicast l2vpn
+  NLRI advertised by peer: inet-vpn-unicast l2vpn
+  NLRI for this session: inet-vpn-unicast l2vpn
+  NLRI that restart is negotiated for: inet-vpn-unicast l2vpn
+  NLRI of received end-of-rib markers: inet-vpn-unicast l2vpn
+  NLRI of all end-of-rib markers sent: inet-vpn-unicast l2vpn
 ```
 
-If `inet-vpn` is missing from "NLRI for this session", the capability was not successfully negotiated. Confirm PE2 also has `family inet-vpn unicast` configured under the IBGP group and that the BGP session is `Established`.
+The key check is that `inet-vpn-unicast` appears in "NLRI for this session". The `l2vpn` family is the Session 7a VPLS configuration carried forward on the iBGP group — it is harmless and does not affect L3 VPN operation.
+
+If `inet-vpn-unicast` is missing entirely, confirm PE2 also has `family inet-vpn unicast` under its IBGP group and that the BGP session is `Established`.
 
 ## Step 4: Verify bgp.l3vpn.0
 
