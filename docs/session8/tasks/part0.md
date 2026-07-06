@@ -60,19 +60,27 @@ Session 6's BGP is still running. Confirm both eBGP (to CE1) and iBGP (to PE2) a
 PE1> show bgp summary
 ```
 
-Expected — two sessions, both established:
+Expected — two sessions, both established. If Session 7a (VPLS) was completed, `bgp.l2vpn.0` will also appear in the table summary and the iBGP peer line will show per-family prefix counts:
 
 ```text
 Groups: 2 Peers: 2 Down peers: 0
 Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
 inet.0
                        2          2          0          0          0          0
+bgp.l2vpn.0
+                       1          1          0          0          0          0
 Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
-10.0.0.4              65001         42         41       0       0       20:11 1/1/1/0              0/0/0/0
+10.0.0.4              65001         42         41       0       0       20:11 Establ
+  inet.0: 1/1/1/0 0/0/0/0
+  bgp.l2vpn.0: 1/1/1/0
+  VPLS-100.l2vpn.0: 1/1/1/0
 172.16.1.2            65100         89        105       0       0       44:22 1/1/1/0              0/0/0/0
 ```
 
-Both peers show established counts. If either session shows `Active` or `Idle`, restore Session 6 BGP first.
+If Session 7a was not done, the output will show only `inet.0` in the table summary and the iBGP peer will show a single count line.
+
+!!! warning "CE session missing after a GNS3 restart or crash"
+    If `172.16.1.2` does not appear, the CE1 eBGP session has not re-established yet. vMX nodes take 3–5 minutes to fully boot after a restart. Wait and re-run `show bgp summary`. If the session still does not appear after 5 minutes, check that CE1 has finished booting and run `show bgp neighbor 172.16.1.2` to see the specific session state.
 
 ## Step 3: Understand What Is About to Change
 
