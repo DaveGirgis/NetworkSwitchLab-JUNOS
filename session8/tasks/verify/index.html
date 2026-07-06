@@ -5559,8 +5559,8 @@
 </ul>
 <h3 id="vrf-created">VRF Created</h3>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table VPN-A.inet.0</code> — table exists; shows <code>172.16.1.0/30</code> as Direct route</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table VPN-A.inet.0</code> — table exists; shows <code>172.16.2.0/30</code> as Direct route</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table VPN-A.inet.0</code> — 2 destinations: <code>172.16.1.0/30</code> (Direct) and <code>172.16.1.1/32</code> (Local)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table VPN-A.inet.0</code> — 2 destinations: <code>172.16.2.0/30</code> (Direct) and <code>172.16.2.1/32</code> (Local)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table inet.0 172.16.1.0/30</code> — no output (route is now in VRF, not inet.0)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table inet.0 172.16.2.0/30</code> — no output</li>
 </ul>
