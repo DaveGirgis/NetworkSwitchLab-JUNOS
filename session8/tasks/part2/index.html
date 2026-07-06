@@ -5476,12 +5476,16 @@
 <p>On <strong>PE1</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bgp neighbor 10.0.0.4 | match NLRI
 </code></pre></div>
-<p>Expected — both <code>inet-unicast</code> and <code>inet-vpn</code> appear in the negotiated families:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>  NLRI for restart configured on peer: inet-unicast inet-vpn
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  NLRI advertised by peer: inet-unicast inet-vpn
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  NLRI for this session: inet-unicast inet-vpn
+<p>Expected — <code>inet-vpn-unicast</code> appears in the negotiated families. If Session 7a (VPLS) was completed, <code>l2vpn</code> will also appear:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>  NLRI for restart configured on peer: inet-vpn-unicast l2vpn
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  NLRI advertised by peer: inet-vpn-unicast l2vpn
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  NLRI for this session: inet-vpn-unicast l2vpn
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  NLRI that restart is negotiated for: inet-vpn-unicast l2vpn
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  NLRI of received end-of-rib markers: inet-vpn-unicast l2vpn
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  NLRI of all end-of-rib markers sent: inet-vpn-unicast l2vpn
 </code></pre></div>
-<p>If <code>inet-vpn</code> is missing from "NLRI for this session", the capability was not successfully negotiated. Confirm PE2 also has <code>family inet-vpn unicast</code> configured under the IBGP group and that the BGP session is <code>Established</code>.</p>
+<p>The key check is that <code>inet-vpn-unicast</code> appears in "NLRI for this session". The <code>l2vpn</code> family is the Session 7a VPLS configuration carried forward on the iBGP group — it is harmless and does not affect L3 VPN operation.</p>
+<p>If <code>inet-vpn-unicast</code> is missing entirely, confirm PE2 also has <code>family inet-vpn unicast</code> under its IBGP group and that the BGP session is <code>Established</code>.</p>
 <h2 id="step-4-verify-bgpl3vpn0">Step 4: Verify bgp.l3vpn.0</h2>
 <p>At this stage the VPN-IPv4 table exists but is likely empty — no CE routes have been learned yet because the VRF eBGP sessions to CE1 and CE2 haven't been configured.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show route table bgp.l3vpn.0
