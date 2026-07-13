@@ -5036,6 +5036,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 0 — Project Import
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -5052,6 +5070,152 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CLI Setup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-restore-your-saved-configuration-if-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Restore Your Saved Configuration (If Needed)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-baseline-health-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Baseline Health Check
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Baseline Health Check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-is-all-four-provider-routers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS (all four provider routers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ldp-all-four-provider-routers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP (all four provider routers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bgp-pe1-and-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP (PE1 and PE2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vpn-a-vrf-table-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPN-A VRF Table (PE1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vpls-100-pe1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS-100 (PE1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-reachability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Reachability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-fault-1-is-injected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Fault 1 Is Injected
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5488,161 @@
   
 
 
-<h1 id="part-0-project-import">Part 0 — Project Import</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<h1 id="part-0-project-import">Part 0 - Project Import</h1>
+<h2 id="overview">Overview</h2>
+<p>This session does not add new configuration. It starts from the exact state you had at the end of Session 8 - IS-IS across the core, MPLS/LDP transport, iBGP between PE1 and PE2 carrying <code>inet-vpn unicast</code> and <code>l2vpn signaling</code>, the VPN-A L3VPN, and the VPLS-100 L2VPN from Session 7a - and then breaks it, one layer at a time.</p>
+<p>Part 0 has three jobs:</p>
+<ol>
+<li>Make sure every router is running its known-good end-of-Session-8 configuration.</li>
+<li>Run a quick health check across every layer so you have a "last known good" baseline to compare against once faults start appearing.</li>
+<li>Receive Fault 1.</li>
+</ol>
+<h2 id="cli-setup">CLI Setup</h2>
+<p>Before pasting any configuration, run these two commands at the operational prompt (<code>&gt;</code>) on each router:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>set cli screen-length 0
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>set cli complete-on-space off
+</code></pre></div>
+<p>Re-run these at the start of every console session - they do not persist across reconnects.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pasting large config blocks</p>
+<p>Use <code>load set terminal</code> in config mode instead of pasting directly at the <code>#</code> prompt. Junos buffers all input until you press <strong>Ctrl+D</strong>, then processes every set command at once.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>configure
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>load set terminal
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>set protocols isis interface ge-0/0/1.0
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>^D
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>commit
+</code></pre></div>
 </div>
+<h2 id="step-1-restore-your-saved-configuration-if-needed">Step 1: Restore Your Saved Configuration (If Needed)</h2>
+<p>If your GNS3 project has been running continuously since Session 8 and every router is still up, skip to Step 2 - there is nothing to restore.</p>
+<p>If a node crashed, or you are starting this session in a new GNS3 project, restore each router from the configuration you saved at the end of Session 8:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>configure
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>load override &lt;path-to-saved-config&gt;
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>commit
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Do not skip a broken node</p>
+<p>If any single router in the topology (CE1, PE1, P1, P2, PE2, CE2) fails to restore correctly, every later fault in this session will produce confusing, compounded symptoms. Confirm each router's config with <code>show configuration | display set | match "isis|bgp|ldp|routing-instances"</code> and compare against your Session 8 notes before proceeding.</p>
+</div>
+<p>If you do not have a saved configuration, work through Sessions 5-8 again to rebuild the required state. There is no shortcut - this session assumes a fully working starting point, because the entire point is to recognize what "working" looks like well enough to spot what changed.</p>
+<h2 id="step-2-baseline-health-check">Step 2: Baseline Health Check</h2>
+<p>Run this sequence on every router that participates in the layer being checked. Save the output somewhere (a text file, a second terminal) - you will compare against it after each fault is injected.</p>
+<h3 id="is-is-all-four-provider-routers">IS-IS (all four provider routers)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>PE1&gt; show isis adjacency
+</code></pre></div>
+<p>Expected - PE1 has one adjacency (P1):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Interface             System         L State        Hold (secs) SNPA
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>ge-0/0/0.0            P1             2  Up                   24
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>P1&gt; show isis adjacency
+</code></pre></div>
+<p>Expected - P1 has two adjacencies (PE1 and P2):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Interface             System         L State        Hold (secs) SNPA
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>ge-0/0/0.0            PE1            2  Up                   22
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>ge-0/0/1.0            P2             2  Up                   19
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>P2&gt; show isis adjacency
+</code></pre></div>
+<p>Expected - P2 has two adjacencies (P1 and PE2):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Interface             System         L State        Hold (secs) SNPA
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ge-0/0/0.0            P1             2  Up                   21
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ge-0/0/1.0            PE2            2  Up                   26
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>PE2&gt; show isis adjacency
+</code></pre></div>
+<p>Expected - PE2 has one adjacency (P2):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Interface             System         L State        Hold (secs) SNPA
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>ge-0/0/0.0            P2             2  Up                   18
+</code></pre></div>
+<h3 id="ldp-all-four-provider-routers">LDP (all four provider routers)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>PE1&gt; show ldp session
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Address                          State       Connection  Hold time  Adv. Mode
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>10.0.0.2                         Operational Open          28        DU
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>10.0.0.4                         Operational Open          26        DU
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Two LDP sessions on PE1</p>
+<p>PE1 shows both the link LDP session to P1 (10.0.0.2) and the targeted LDP session to PE2 (10.0.0.4) carried forward from Session 7a's L2 service work. Either one or two sessions in <code>Operational</code> state is a healthy baseline in this topology; anything other than <code>Operational</code> is not.</p>
+</div>
+<h3 id="bgp-pe1-and-pe2">BGP (PE1 and PE2)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Expected - iBGP to PE2 established, carrying multiple address families:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>bgp.l2vpn.0
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>                       1          1          0          0          0          0
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>bgp.l3vpn.0
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>                       2          2          0          0          0          0
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>10.0.0.4              65001        455        460       0       0     3:12:47 Establ
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>  bgp.l2vpn.0: 1/1/1/0
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>  VPLS-100.l2vpn.0: 1/1/1/0
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>  bgp.l3vpn.0: 2/2/2/0
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>  VPN-A.inet.0: 2/2/2/0
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>PE1&gt; show bgp summary instance VPN-A
+</code></pre></div>
+<p>Expected - CE1 established inside the VRF:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Instance: VPN-A
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>VPN-A.inet.0
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>                       2          2          0          0          0          0
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>172.16.1.2            65100        212        208       0       0     3:10:02 1/1/1/0              0/0/0/0
+</code></pre></div>
+<h3 id="vpn-a-vrf-table-pe1">VPN-A VRF Table (PE1)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>PE1&gt; show route table VPN-A.inet.0
+</code></pre></div>
+<p>Expected - four routes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>VPN-A.inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>10.0.0.11/32       *[BGP/170] 03:10:02, localpref 100
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>10.0.0.12/32       *[BGP/170] 03:09:40, localpref 100, from 10.0.0.4
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>172.16.1.0/30      *[Direct/0] 03:20:15
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>                    &gt; via ge-0/0/1.0
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>172.16.2.0/30      *[BGP/170] 03:09:40, localpref 100, from 10.0.0.4
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+</code></pre></div>
+<h3 id="vpls-100-pe1">VPLS-100 (PE1)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>PE1&gt; show vpls connections
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Instance: VPLS-100
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>  Local site: CE1-SITE (1)
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    connection-site           Type  St     Time last up          # Up trans
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>    2                         rmt   Up     Jul 10 09:15:00               1
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>      Remote PE: 10.0.0.4, Negotiated control-word: No
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>      Incoming label: 299856, Outgoing label: 299872
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>      Local interface: ge-0/0/2.0, Status: Up, Encapsulation: ETHERNET
+</code></pre></div>
+<h3 id="end-to-end-reachability">End-to-End Reachability</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 3
+</code></pre></div>
+<p>Expected - 3/3 replies, 0% packet loss (VPN-A).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>CE1&gt; ping 192.168.1.2 count 3
+</code></pre></div>
+<p>Expected - 3/3 replies, 0% packet loss (VPLS-100).</p>
+<div class="admonition warning">
+<p class="admonition-title">Fix the baseline before continuing</p>
+<p>If any command above does not match its expected output, this is not one of the three graded faults - it is leftover drift from an earlier session (a crashed node, an incomplete commit, a GNS3 restart that dropped a session). Fix it now using the troubleshooting references from Sessions 7, 7a, and 8. Every fault in Parts 1-3 assumes you are starting from a fully healthy network.</p>
+</div>
+<h2 id="step-3-fault-1-is-injected">Step 3: Fault 1 Is Injected</h2>
+<p>Your instructor (or the provided fault-injection script) now makes exactly one change to the IS-IS configuration on one router in the core. You will not be told what changed or which router.</p>
+<p>What you will be told:</p>
+<blockquote>
+<p>"The provider core has an IGP problem. Start troubleshooting from Part 1."</p>
+</blockquote>
+<p>Do not read ahead to Part 1's root-cause reveal before running the diagnostic steps yourself - the value of this session is in the process, not the answer.</p>
+<p>Proceed to <a href="../part1/">Part 1 - Fault 1 (IGP)</a>.</p>
 
 
 

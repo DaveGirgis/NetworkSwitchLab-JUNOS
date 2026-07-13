@@ -5092,6 +5092,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 — Fault 2 (BGP)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -5108,6 +5126,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#symptom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-confirm-the-transport-layer-first-do-not-skip-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Confirm the Transport Layer First (Do Not Skip This)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-check-the-ibgp-session-between-pe1-and-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Check the iBGP Session Between PE1 and PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-check-negotiated-nlri-families" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Check Negotiated NLRI Families
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-confirm-on-both-sides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Confirm on Both Sides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Fix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-verify-the-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Verify the Fix
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5438,172 @@
   
 
 
-<h1 id="part-2-fault-2-bgp">Part 2 — Fault 2 (BGP)</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<h1 id="part-2-fault-2-bgp">Part 2 - Fault 2 (BGP)</h1>
+<h2 id="symptom">Symptom</h2>
+<p>With Fault 1 fixed and verified, the network runs cleanly for a while. Then a second ticket arrives:</p>
+<blockquote>
+<p>"VPN-A between CE1 and CE2 has stopped working. The Layer 2 service between them still works fine."</p>
+</blockquote>
+<p>Start the same way - confirm the symptom precisely before touching anything.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>PING 10.0.0.12 (10.0.0.12): 56 data bytes
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>--- 10.0.0.12 ping statistics ---
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>5 packets transmitted, 0 packets received, 100% packet loss
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>CE1&gt; ping 192.168.1.2 count 5
+</code></pre></div>
+<p>Observed - VPLS-100 is unaffected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>PING 192.168.1.2 (192.168.1.2): 56 data bytes
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>64 bytes from 192.168.1.2: icmp_seq=0 ttl=64 time=33.912 ms
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>64 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=29.774 ms
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>64 bytes from 192.168.1.2: icmp_seq=2 ttl=64 time=41.203 ms
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>64 bytes from 192.168.1.2: icmp_seq=3 ttl=64 time=36.558 ms
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>64 bytes from 192.168.1.2: icmp_seq=4 ttl=64 time=30.116 ms
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>--- 192.168.1.2 ping statistics ---
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>5 packets transmitted, 5 packets received, 0% packet loss
+</code></pre></div>
+<p>This is the opposite pattern from Part 1. In Part 1, both services failed together - pointing at shared transport (IS-IS/LDP). Here, only VPN-A fails while VPLS-100 keeps working perfectly on the same physical path. That tells you the shared transport layer is healthy and the fault is specific to VPN-A's control plane.</p>
+<h2 id="step-1-confirm-the-transport-layer-first-do-not-skip-this">Step 1: Confirm the Transport Layer First (Do Not Skip This)</h2>
+<p>Even with a strong hypothesis, verify the layer below before assuming it is healthy - that is the discipline, not a suggestion.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show isis adjacency
+</code></pre></div>
+<p>Expected and observed - unchanged, healthy (both P1 adjacencies restored from Part 1's fix remain up, and P1-P2/P2-PE2 are healthy).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>PE1&gt; show route table inet.3
+</code></pre></div>
+<p>Expected and observed - three LDP routes present, PE2 loopback resolves with a Push label. Transport is confirmed healthy. The fault is above this layer.</p>
+<h2 id="step-2-check-the-ibgp-session-between-pe1-and-pe2">Step 2: Check the iBGP Session Between PE1 and PE2</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>bgp.l2vpn.0
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>                       1          1          0          0          0          0
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>10.0.0.4              65001        128        124       0       2       00:04:12 Establ
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  bgp.l2vpn.0: 1/1/1/0
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  VPLS-100.l2vpn.0: 1/1/1/0
+</code></pre></div>
+<p>The session to PE2 (10.0.0.4) shows <code>Establ</code> - it is up. But look carefully at what tables are listed: only <code>bgp.l2vpn.0</code> and <code>VPLS-100.l2vpn.0</code>. Compare this against the Part 0 baseline, which showed <code>bgp.l3vpn.0</code> and <code>VPN-A.inet.0</code> as additional lines under the same peer. Those lines are gone.</p>
+<p><strong>This is the key lesson of this fault: the BGP session itself is Established - it did not go down. A session-state check alone would tell you everything is fine.</strong> The problem is which address families are negotiated over that session, not whether the session exists.</p>
+<h2 id="step-3-check-negotiated-nlri-families">Step 3: Check Negotiated NLRI Families</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>PE1&gt; show bgp neighbor 10.0.0.4 | match NLRI
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>  NLRI for restart configured on peer: l2vpn
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  NLRI advertised by peer: l2vpn
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  NLRI for this session: l2vpn
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  NLRI that restart is negotiated for: l2vpn
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  NLRI of received end-of-rib markers: l2vpn
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  NLRI of all end-of-rib markers sent: l2vpn
+</code></pre></div>
+<p><code>inet-vpn-unicast</code> is completely absent from every NLRI line. In the Part 0 baseline this same command showed <code>inet-vpn-unicast l2vpn</code> on every line. Now it shows only <code>l2vpn</code>. The <code>inet-vpn unicast</code> address family has stopped being negotiated on this session.</p>
+<h2 id="step-4-confirm-on-both-sides">Step 4: Confirm on Both Sides</h2>
+<p>An address-family mismatch requires checking both PEs - if only one side lost the family, that side is where the fault lives.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>PE1&gt; show configuration protocols bgp group IBGP
+</code></pre></div>
+<p>Observed on PE1 - unchanged from Session 8:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>type internal;
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>local-address 10.0.0.1;
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>family inet-vpn {
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    unicast;
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>}
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>family l2vpn {
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    signaling;
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>}
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>neighbor 10.0.0.4;
+</code></pre></div>
+<p>PE1's configuration is intact - it still requests <code>inet-vpn unicast</code>. Check PE2:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PE2&gt; show configuration protocols bgp group IBGP
+</code></pre></div>
+<p>Observed on PE2:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>type internal;
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>local-address 10.0.0.4;
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>family l2vpn {
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    signaling;
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>}
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>neighbor 10.0.0.1;
+</code></pre></div>
+<p><strong>Root cause found.</strong> PE2's iBGP group no longer has <code>family inet-vpn unicast</code> configured at all - only <code>family l2vpn signaling</code> remains. Since BGP address family negotiation requires both sides to advertise support for a family during the session's capability exchange, removing it from PE2 alone is enough to drop <code>inet-vpn-unicast</code> from the session entirely, even though PE1 never changed.</p>
+<p>This explains every symptom observed:</p>
+<ul>
+<li>The BGP session stayed <code>Establ</code> - sessions do not go down just because one address family is removed; they simply stop negotiating that family and continue with whatever families both sides still agree on (here, <code>l2vpn</code>).</li>
+<li>VPLS-100 kept working, because it depends only on <code>l2vpn signaling</code>, which is untouched.</li>
+<li>VPN-A broke completely, because <code>bgp.l3vpn.0</code> has no way to receive VPN-IPv4 routes without the <code>inet-vpn unicast</code> family, so PE1 and PE2 stop exchanging VPN-A prefixes even though the VRFs themselves are still correctly configured.</li>
+</ul>
+<h2 id="step-5-fix">Step 5: Fix</h2>
+<p>Restore the missing address family on PE2's iBGP group.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>PE2&gt; configure
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>set protocols bgp group IBGP family inet-vpn unicast
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>commit
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Do not touch PE1</p>
+<p>PE1's configuration was never wrong. Adding or re-adding <code>family inet-vpn unicast</code> on PE1 changes nothing (it is idempotent) but wastes time and, more importantly, teaches the wrong lesson - always confirm which side actually changed before editing configuration on a router that was never broken.</p>
 </div>
+<h2 id="step-6-verify-the-fix">Step 6: Verify the Fix</h2>
+<p>Wait about 15-30 seconds for the session to renegotiate capabilities, then recheck.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>PE1&gt; show bgp neighbor 10.0.0.4 | match NLRI
+</code></pre></div>
+<p>Expected - <code>inet-vpn-unicast</code> restored on every line:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>  NLRI for restart configured on peer: inet-vpn-unicast l2vpn
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  NLRI advertised by peer: inet-vpn-unicast l2vpn
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  NLRI for this session: inet-vpn-unicast l2vpn
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  NLRI that restart is negotiated for: inet-vpn-unicast l2vpn
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  NLRI of received end-of-rib markers: inet-vpn-unicast l2vpn
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>  NLRI of all end-of-rib markers sent: inet-vpn-unicast l2vpn
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Expected - <code>bgp.l3vpn.0</code> and per-peer <code>VPN-A.inet.0</code> counts restored:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>bgp.l2vpn.0
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>                       1          1          0          0          0          0
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>bgp.l3vpn.0
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>                       2          2          0          0          0          0
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>10.0.0.4              65001        142        139       0       2       00:07:45 Establ
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>  bgp.l2vpn.0: 1/1/1/0
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>  VPLS-100.l2vpn.0: 1/1/1/0
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>  bgp.l3vpn.0: 2/2/2/0
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>  VPN-A.inet.0: 2/2/2/0
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>PE1&gt; show route table VPN-A.inet.0
+</code></pre></div>
+<p>Expected - four routes present again, including CE2's loopback with the two-label stack:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>VPN-A.inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>10.0.0.11/32       *[BGP/170] 03:41:02, localpref 100
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>10.0.0.12/32       *[BGP/170] 00:00:18, localpref 100, from 10.0.0.4
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>172.16.1.0/30      *[Direct/0] 03:51:15
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>                    &gt; via ge-0/0/1.0
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>172.16.2.0/30      *[BGP/170] 00:00:18, localpref 100, from 10.0.0.4
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+</code></pre></div>
+<p>Finally, confirm end-to-end reachability:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5
+</code></pre></div>
+<p>Expected - 5/5 replies, 0% packet loss.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>CE1&gt; ping 192.168.1.2 count 5
+</code></pre></div>
+<p>Expected - 5/5 replies, 0% packet loss (should never have stopped working, but confirm it still hasn't regressed).</p>
+<div class="admonition tip">
+<p class="admonition-title">Why this fault was placed second</p>
+<p>This fault only makes sense to diagnose once you trust the IGP is healthy - otherwise you cannot be confident the fault is in BGP and not a symptom of a lower-layer issue. It also teaches the most important lesson in BGP troubleshooting: a session showing <code>Establ</code> is necessary but not sufficient. You must check what address families are actually negotiated, not just whether the peer relationship exists.</p>
+</div>
+<p>Proceed to <a href="../part3/">Part 3 - Fault 3 (MPLS/L3VPN)</a>.</p>
 
 
 

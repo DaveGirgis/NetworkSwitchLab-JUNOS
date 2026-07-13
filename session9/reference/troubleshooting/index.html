@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-8-troubleshooting" class="md-skip">
+        <a href="#session-9-troubleshooting" class="md-skip">
           Skip to content
         </a>
       
@@ -5265,6 +5265,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -5281,6 +5299,119 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#graded-fault-1-is-is-adjacency-down-on-p1-p2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graded Fault 1 - IS-IS Adjacency Down on P1-P2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graded-fault-2-missing-inet-vpn-unicast-address-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graded Fault 2 - Missing inet-vpn unicast Address Family
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graded-fault-3-vpn-a-route-target-mismatch-on-pe2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graded Fault 3 - VPN-A Route Target Mismatch on PE2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general-mistakes-across-all-three-faults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Mistakes Across All Three Faults
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Mistakes Across All Three Faults">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#skipping-the-baseline-in-part-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skipping the Baseline in Part 0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-only-one-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Only One Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editing-configuration-before-forming-a-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editing Configuration Before Forming a Hypothesis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#forgetting-source-on-vpn-a-pings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Forgetting source on VPN-A Pings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,10 +5453,48 @@
   
 
 
-<h1 id="session-8-troubleshooting">Session 8 — Troubleshooting</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-9-troubleshooting">Session 9 - Troubleshooting</h1>
+<p>This page covers the three graded faults in this session plus the most common mistakes students make while working through them. Unlike prior sessions, the "cause" for each graded fault is intentionally not restated here in full - see Parts 1-3 for the complete diagnostic walkthrough. This page is a quick-reference for getting unstuck, not a shortcut to skip the process.</p>
+<h2 id="graded-fault-1-is-is-adjacency-down-on-p1-p2">Graded Fault 1 - IS-IS Adjacency Down on P1-P2</h2>
+<p><strong>Symptom:</strong> Both <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11</code> and <code>CE1&gt; ping 192.168.1.2</code> fail with 100% packet loss. Both services fail together.</p>
+<p><strong>Where to look:</strong> <code>show isis adjacency</code> on all four provider routers. The missing adjacency will appear on exactly one link, on both routers that terminate it.</p>
+<p><strong>Common student mistake:</strong> Jumping straight to <code>show bgp summary</code> or <code>show vpls connections</code> because the ticket mentions "VPN-A is down." Both services failing together is the tell that this is not a VPN-specific issue - always check IS-IS before BGP or VRF configuration when multiple independent services fail identically.</p>
+<p><strong>Second most common mistake:</strong> Seeing <code>show isis interface &lt;if&gt; detail</code> show <code>Adjacencies: 0</code> on one side and assuming the interface itself is down. Confirm with <code>show interfaces terse</code> first - in this fault, the interface is fully up. The problem is the IS-IS <code>Circuit type</code> (level) configured on the interface, not the physical link.</p>
+<p>See <a href="../../tasks/part1/">Part 1</a> for the full walkthrough.</p>
+<hr />
+<h2 id="graded-fault-2-missing-inet-vpn-unicast-address-family">Graded Fault 2 - Missing inet-vpn unicast Address Family</h2>
+<p><strong>Symptom:</strong> <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11</code> fails with 100% packet loss. <code>CE1&gt; ping 192.168.1.2</code> (VPLS-100) succeeds normally.</p>
+<p><strong>Where to look:</strong> <code>show bgp summary</code> - the session shows <code>Establ</code>, but <code>bgp.l3vpn.0</code> and the per-peer <code>VPN-A.inet.0</code> line are missing. Confirm with <code>show bgp neighbor &lt;ip&gt; | match NLRI</code> - <code>inet-vpn-unicast</code> will be absent from every NLRI line.</p>
+<p><strong>Common student mistake:</strong> Seeing <code>Establ</code> in <code>show bgp summary</code> and concluding "BGP is fine" without checking which address families are actually negotiated. An established session is not the same as a session carrying every expected family. Always run the NLRI check whenever a specific VPN service fails but the underlying BGP peer relationship looks healthy.</p>
+<p><strong>Second most common mistake:</strong> Editing PE1's configuration first. Confirm which PE actually lost the <code>family inet-vpn unicast</code> statement with <code>show configuration protocols bgp group IBGP</code> on both routers before touching either one - in this fault, PE1 was never wrong, and adding the family to PE1 a second time (while harmless) does not fix anything and wastes diagnostic time.</p>
+<p><strong>Third common mistake:</strong> Assuming the fix requires restarting the BGP session (<code>clear bgp neighbor</code>). It does not. Adding the missing <code>family</code> statement and committing is enough - Junos renegotiates capabilities automatically within about 15-30 seconds without a hard session reset.</p>
+<p>See <a href="../../tasks/part2/">Part 2</a> for the full walkthrough.</p>
+<hr />
+<h2 id="graded-fault-3-vpn-a-route-target-mismatch-on-pe2">Graded Fault 3 - VPN-A Route Target Mismatch on PE2</h2>
+<p><strong>Symptom:</strong> <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11</code> fails with 100% packet loss. <code>CE1&gt; ping 192.168.1.2</code> (VPLS-100) succeeds normally. Symptom is identical to Fault 2 from the CE's point of view.</p>
+<p><strong>Where to look:</strong> <code>show bgp summary</code> shows the session <code>Establ</code> with <code>bgp.l3vpn.0</code> populated correctly (2 paths) - the address family is fine, unlike Fault 2. The tell is a <strong>mismatch between two specific commands</strong>: <code>show route table bgp.l3vpn.0</code> shows both PE1's and PE2's VPN-IPv4 routes, but <code>show route table VPN-A.inet.0</code> on PE1 is missing the route learned from PE2. A route present in the BGP table but absent from the VRF table is the signature of a route-target import failure.</p>
+<p><strong>Common student mistake:</strong> Concluding "BGP is broken again" and re-checking NLRI families (Fault 2's fix) instead of comparing the BGP table against the VRF table. If NLRI already shows <code>inet-vpn-unicast</code> correctly negotiated and <code>bgp.l3vpn.0</code> has the expected number of routes, the problem is downstream of BGP negotiation - in the VRF's route-target import policy, not the session itself.</p>
+<p><strong>Second most common mistake:</strong> Fixing the route target on the wrong PE, or fixing it under the wrong routing-instance. VPN-A and VPLS-100 both use <code>target:65001:100</code> as a coincidence of this lab's addressing plan (see <a href="../../addressing/">addressing.md</a>) - always run <code>show | compare</code> before committing to confirm the pending change is scoped to <code>routing-instances VPN-A</code> and not accidentally touching <code>routing-instances VPLS-100</code>.</p>
+<p><strong>Third common mistake:</strong> Assuming <code>vrf-target</code> sets only the export policy or only the import policy. It sets both simultaneously to the same value. A mismatch on one PE breaks import in both directions on that PE - it will fail to import the other PE's routes, and the other PE will fail to import this PE's routes, even though this PE's own export is technically "working" in the sense that the route reaches the remote <code>bgp.l3vpn.0</code> table.</p>
+<p>See <a href="../../tasks/part3/">Part 3</a> for the full walkthrough.</p>
+<hr />
+<h2 id="general-mistakes-across-all-three-faults">General Mistakes Across All Three Faults</h2>
+<h3 id="skipping-the-baseline-in-part-0">Skipping the Baseline in Part 0</h3>
+<p><strong>Symptom:</strong> Confusing or contradictory results while diagnosing Fault 1, 2, or 3 that do not match this session's expected output.</p>
+<p><strong>Cause:</strong> Part 0 was skipped or its health check commands were not actually run and compared. If the network was not fully healthy before the first fault was injected, later diagnostic steps compare against a baseline that was never actually correct.</p>
+<p><strong>Fix:</strong> Return to <a href="../../tasks/part0/">Part 0</a> and work through every baseline check. Do not proceed into Part 1 until every command in Part 0's Step 2 matches its expected output exactly.</p>
+<h3 id="testing-only-one-service">Testing Only One Service</h3>
+<p><strong>Symptom:</strong> Concluding a fault is fixed after testing only <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11</code>, without also testing <code>ping 192.168.1.2</code>.</p>
+<p><strong>Cause:</strong> Some students stop testing as soon as the specific symptom in the ticket resolves. This misses two things: (1) confirming the fix didn't collaterally break the other service, and (2) building the habit of using VPLS-100 as a permanent control group, which is the fastest way to scope a future fault to "VPN-A only" versus "shared infrastructure" in under 10 seconds.</p>
+<p><strong>Fix:</strong> After every fix in this session, test both <code>ping 10.0.0.12 source 10.0.0.11</code> (VPN-A) and <code>ping 192.168.1.2</code> (VPLS-100), in both directions, before moving to the next part.</p>
+<h3 id="editing-configuration-before-forming-a-hypothesis">Editing Configuration Before Forming a Hypothesis</h3>
+<p><strong>Symptom:</strong> Multiple unrelated <code>set</code> and <code>delete</code> commands committed in sequence, "trying things" until the symptom resolves - but without being able to explain afterward exactly which change fixed it.</p>
+<p><strong>Cause:</strong> Troubleshooting under pressure often turns into trial-and-error editing rather than diagnosis. This can accidentally fix the graded fault while leaving an unrelated new misconfiguration in place (or accidentally introduce one), which then surfaces as a confusing new symptom in the next part.</p>
+<p><strong>Fix:</strong> Before opening configuration mode, write down (even just in your own notes) the specific command output that led you to suspect a specific line of configuration on a specific router. Make exactly one change, commit, and verify the specific show command output changed as expected before moving on.</p>
+<h3 id="forgetting-source-on-vpn-a-pings">Forgetting <code>source</code> on VPN-A Pings</h3>
+<p><strong>Symptom:</strong> <code>CE1&gt; ping 10.0.0.12</code> (without a source) shows 100% packet loss even though every layer is actually healthy.</p>
+<p><strong>Cause:</strong> This is not a fault - it is the same behavior documented since Session 7. Only loopback prefixes are exported into VPN-A. Without <code>source 10.0.0.11</code>, Junos uses the outgoing interface address (172.16.1.2), which is not the prefix CE2 has a return route for.</p>
+<p><strong>Fix:</strong> Always test VPN-A reachability with <code>ping 10.0.0.12 source 10.0.0.11</code> (from CE1) and <code>ping 10.0.0.11 source 10.0.0.12</code> (from CE2). If you see 100% loss and every show command from Parts 1-3 looks healthy, check your ping syntax before assuming a fourth, ungraded fault exists.</p>
 
 
 

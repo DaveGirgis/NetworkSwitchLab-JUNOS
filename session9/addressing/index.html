@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-8-addressing" class="md-skip">
+        <a href="#session-9-addressing" class="md-skip">
           Skip to content
         </a>
       
@@ -4945,6 +4945,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addressing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -4961,6 +4979,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loopback-addresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loopback Addresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provider-point-to-point-links-is-is-mpls-ldp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Point-to-Point Links (IS-IS + MPLS + LDP)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce-pe-links-vpn-a-vrf-from-session-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CE-PE Links (VPN-A VRF, from Session 8)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpn-a-identifiers-from-session-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPN-A Identifiers (from Session 8)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpls-100-identifiers-from-session-7a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS-100 Identifiers (from Session 7a)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-autonomous-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP Autonomous Systems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#l2-service-test-interfaces-vpls-100-from-session-7a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L2 Service Test Interfaces (VPLS-100, from Session 7a)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5322,10 +5436,240 @@
   
 
 
-<h1 id="session-8-addressing">Session 8 — Addressing</h1>
+<h1 id="session-9-addressing">Session 9 - Addressing</h1>
+<p>No new IP addresses, ASNs, RDs, or RTs are introduced in this session. Every value below is inherited unchanged from Sessions 5-8 and Session 7a. This page exists so you have one reference while troubleshooting, without needing to flip back through five prior sessions.</p>
+<h2 id="loopback-addresses">Loopback Addresses</h2>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>lo0.0</td>
+<td>10.0.0.1/32</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>lo0.0</td>
+<td>10.0.0.2/32</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>lo0.0</td>
+<td>10.0.0.3/32</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>lo0.0</td>
+<td>10.0.0.4/32</td>
+</tr>
+<tr>
+<td>CE1</td>
+<td>lo0.0</td>
+<td>10.0.0.11/32</td>
+</tr>
+<tr>
+<td>CE2</td>
+<td>lo0.0</td>
+<td>10.0.0.12/32</td>
+</tr>
+</tbody>
+</table>
+<h2 id="provider-point-to-point-links-is-is-mpls-ldp">Provider Point-to-Point Links (IS-IS + MPLS + LDP)</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface</th>
+<th>Address</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 ge-0/0/0</td>
+<td>PE1 - P1</td>
+<td>10.1.12.1/30</td>
+</tr>
+<tr>
+<td>P1 ge-0/0/0</td>
+<td>PE1 - P1</td>
+<td>10.1.12.2/30</td>
+</tr>
+<tr>
+<td>P1 ge-0/0/1</td>
+<td>P1 - P2</td>
+<td>10.1.23.1/30</td>
+</tr>
+<tr>
+<td>P2 ge-0/0/0</td>
+<td>P1 - P2</td>
+<td>10.1.23.2/30</td>
+</tr>
+<tr>
+<td>P2 ge-0/0/1</td>
+<td>P2 - PE2</td>
+<td>10.1.34.1/30</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/0</td>
+<td>P2 - PE2</td>
+<td>10.1.34.2/30</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">Part 1's fault lives here</p>
+<p>The IGP fault in Part 1 is injected on the P1-P2 link (10.1.23.0/30). Nothing about the IP addressing changes - the fault is in the IS-IS protocol configuration, not the interface addressing. Do not "fix" this by changing IP addresses.</p>
 </div>
+<h2 id="ce-pe-links-vpn-a-vrf-from-session-8">CE-PE Links (VPN-A VRF, from Session 8)</h2>
+<table>
+<thead>
+<tr>
+<th>Link</th>
+<th>Interface</th>
+<th>Address</th>
+<th>VRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1 ge-0/0/1</td>
+<td>PE1 - CE1</td>
+<td>172.16.1.1/30</td>
+<td>VPN-A</td>
+</tr>
+<tr>
+<td>CE1 ge-0/0/0</td>
+<td>PE1 - CE1</td>
+<td>172.16.1.2/30</td>
+<td>global</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/1</td>
+<td>PE2 - CE2</td>
+<td>172.16.2.1/30</td>
+<td>VPN-A</td>
+</tr>
+<tr>
+<td>CE2 ge-0/0/0</td>
+<td>PE2 - CE2</td>
+<td>172.16.2.2/30</td>
+<td>global</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vpn-a-identifiers-from-session-8">VPN-A Identifiers (from Session 8)</h2>
+<table>
+<thead>
+<tr>
+<th>PE</th>
+<th>Route Distinguisher</th>
+<th>Route Target (export)</th>
+<th>Route Target (import)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>65001:1000</td>
+<td>target:65001:100</td>
+<td>target:65001:100</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>65001:2000</td>
+<td>target:65001:100</td>
+<td>target:65001:100</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Part 3's fault lives here</p>
+<p>The route-target values above are the <strong>correct</strong> baseline values. Part 3 injects a mismatch on PE2's <code>vrf-target</code>. When you reach Part 3, do not assume the values above are still what is configured - verify with <code>show configuration routing-instances VPN-A vrf-target</code> before assuming anything.</p>
+</div>
+<h2 id="vpls-100-identifiers-from-session-7a">VPLS-100 Identifiers (from Session 7a)</h2>
+<table>
+<thead>
+<tr>
+<th>PE</th>
+<th>Route Distinguisher</th>
+<th>Route Target (vrf-target)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PE1</td>
+<td>65001:100</td>
+<td>target:65001:100</td>
+</tr>
+<tr>
+<td>PE2</td>
+<td>65001:101</td>
+<td>target:65001:100</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition danger">
+<p class="admonition-title">VPLS-100 and VPN-A use different RD numbering but must not collide</p>
+<p>VPLS-100 uses route-distinguishers <code>65001:100</code> (PE1) and <code>65001:101</code> (PE2). VPN-A uses <code>65001:1000</code> (PE1) and <code>65001:2000</code> (PE2). These were deliberately chosen in Session 8 to avoid RD collision between the two services on the same router. Both services independently use <code>vrf-target target:65001:100</code> for their own import/export - this is not a conflict because RD and RT serve different purposes, and each routing instance (VPN-A vs. VPLS-100) only imports routes belonging to its own instance type and NLRI. If you ever see VPN-A and VPLS-100 routes bleeding into each other during troubleshooting, treat that as a strong signal that a route-distinguisher or vrf-target was typed into the wrong routing-instance stanza.</p>
+</div>
+<h2 id="bgp-autonomous-systems">BGP Autonomous Systems</h2>
+<table>
+<thead>
+<tr>
+<th>AS</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>65001</td>
+<td>Provider (PE1, P1, P2, PE2)</td>
+</tr>
+<tr>
+<td>65100</td>
+<td>Customer A (CE1, CE2)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="l2-service-test-interfaces-vpls-100-from-session-7a">L2 Service Test Interfaces (VPLS-100, from Session 7a)</h2>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Address</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CE1 ge-0/0/1.0</td>
+<td>192.168.1.1/24</td>
+<td>VPLS-100 test source</td>
+</tr>
+<tr>
+<td>CE2 ge-0/0/1.0</td>
+<td>192.168.1.2/24</td>
+<td>VPLS-100 test destination</td>
+</tr>
+<tr>
+<td>PE1 ge-0/0/2.0</td>
+<td>none</td>
+<td>VPLS-100 access port</td>
+</tr>
+<tr>
+<td>PE2 ge-0/0/2.0</td>
+<td>none</td>
+<td>VPLS-100 access port</td>
+</tr>
+</tbody>
+</table>
+<p>This subnet and its associated pseudowire are used throughout this session as a control group - if VPLS-100 (192.168.1.1 to 192.168.1.2) keeps working while VPN-A (10.0.0.11 to 10.0.0.12) breaks, that is strong evidence the fault is specific to VPN-A's control plane (BGP address family or route target) rather than the shared IS-IS/LDP transport underneath both services.</p>
 
 
 

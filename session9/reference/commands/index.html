@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-8-command-reference" class="md-skip">
+        <a href="#session-9-command-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -5239,6 +5239,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -5255,6 +5273,113 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#baseline-health-check-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baseline / Health Check Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bgp-mp-bgp-diagnostic-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP / MP-BGP Diagnostic Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vrf-l3vpn-diagnostic-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VRF / L3VPN Diagnostic Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vpls-100-control-group-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS-100 Control-Group Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-comparison-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Comparison Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#end-to-end-test-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Test Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acronym-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acronym Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-wrap-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session Wrap-Up
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5449,284 @@
   
 
 
-<h1 id="session-8-command-reference">Session 8 — Command Reference</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-9-command-reference">Session 9 - Command Reference</h1>
+<h2 id="baseline-health-check-commands">Baseline / Health Check Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show interfaces terse \| match ge-</code></td>
+<td>Any</td>
+<td>Quick up/down state of all data interfaces</td>
+</tr>
+<tr>
+<td><code>show isis adjacency</code></td>
+<td>PE1, P1, P2, PE2</td>
+<td>IS-IS neighbor state per interface - first stop for any core reachability issue</td>
+</tr>
+<tr>
+<td><code>show isis interface &lt;if&gt; detail</code></td>
+<td>Any provider router</td>
+<td>Per-interface IS-IS circuit type, level, timers - reveals level mismatches invisible in the adjacency summary</td>
+</tr>
+<tr>
+<td><code>show ldp session</code></td>
+<td>PE1, P1, P2, PE2</td>
+<td>LDP session state - <code>Operational</code> required for MPLS transport</td>
+</tr>
+<tr>
+<td><code>show ldp neighbor</code></td>
+<td>PE1, P1, P2, PE2</td>
+<td>LDP neighbor discovery state and label space ID</td>
+</tr>
+<tr>
+<td><code>show route table inet.3</code></td>
+<td>PE1, PE2</td>
+<td>MPLS-resolved next-hops used by BGP; confirms LDP end-to-end reachability</td>
+</tr>
+<tr>
+<td><code>show route table mpls.0</code></td>
+<td>Any provider router</td>
+<td>Local LFIB - incoming label to outgoing action (Swap/Pop/Push)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bgp-mp-bgp-diagnostic-commands">BGP / MP-BGP Diagnostic Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show bgp summary</code></td>
+<td>PE1, PE2</td>
+<td>Session state (<code>Establ</code>) and per-table path counts - the first BGP-layer command to run</td>
+</tr>
+<tr>
+<td><code>show bgp summary instance VPN-A</code></td>
+<td>PE1, PE2</td>
+<td>VRF-scoped eBGP session state to the local CE</td>
+</tr>
+<tr>
+<td><code>show bgp neighbor &lt;ip&gt; \| match NLRI</code></td>
+<td>PE1, PE2</td>
+<td>Negotiated address families on the iBGP session - the critical check for Fault 2</td>
+</tr>
+<tr>
+<td><code>show configuration protocols bgp group IBGP</code></td>
+<td>PE1, PE2</td>
+<td>Confirms which <code>family</code> statements are actually configured, not just negotiated</td>
+</tr>
+<tr>
+<td><code>show route table bgp.l3vpn.0</code></td>
+<td>PE1, PE2</td>
+<td>VPN-IPv4 (RD:prefix) routes received via MP-BGP - the critical check for Fault 3</td>
+</tr>
+<tr>
+<td><code>show route table bgp.l2vpn.0</code></td>
+<td>PE1, PE2</td>
+<td>L2VPN signaling routes (VPLS-100) - the control group for comparison</td>
+</tr>
+<tr>
+<td><code>show route receive-protocol bgp &lt;ip&gt;</code></td>
+<td>CE1, CE2</td>
+<td>Confirms the CE actually received the expected prefix with the expected AS path</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vrf-l3vpn-diagnostic-commands">VRF / L3VPN Diagnostic Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show route table VPN-A.inet.0</code></td>
+<td>PE1, PE2</td>
+<td>The VRF's local routing table - direct, CE eBGP, and imported VPN routes</td>
+</tr>
+<tr>
+<td><code>show route table VPN-A.inet.0 &lt;prefix&gt; detail</code></td>
+<td>PE1, PE2</td>
+<td>Two-label stack detail (<code>Label operation: Push &lt;vpn-label&gt;, Push &lt;transport-label&gt;</code>) for a specific route</td>
+</tr>
+<tr>
+<td><code>show configuration routing-instances VPN-A vrf-target</code></td>
+<td>PE1, PE2</td>
+<td>The single most important command for Fault 3 - confirms export/import RT match</td>
+</tr>
+<tr>
+<td><code>show configuration routing-instances VPN-A route-distinguisher</code></td>
+<td>PE1, PE2</td>
+<td>Confirms RD uniqueness per PE</td>
+</tr>
+<tr>
+<td><code>show route table inet.0 &lt;prefix&gt;</code></td>
+<td>PE1, PE2</td>
+<td>Confirms customer prefixes are NOT leaking into the global table</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vpls-100-control-group-commands">VPLS-100 Control-Group Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show vpls connections</code></td>
+<td>PE1, PE2</td>
+<td>VPLS-100 pseudowire state - use as a control group to rule shared transport in or out</td>
+</tr>
+<tr>
+<td><code>show route table VPLS-100.l2vpn.0</code></td>
+<td>PE1, PE2</td>
+<td>BGP-distributed VPLS membership routes</td>
+</tr>
+<tr>
+<td><code>show configuration routing-instances VPLS-100 vrf-target</code></td>
+<td>PE1, PE2</td>
+<td>Confirms VPLS-100's independent RT was not accidentally touched while fixing VPN-A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="configuration-comparison-commands">Configuration Comparison Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show \| compare</code></td>
+<td>Any, in config mode</td>
+<td>Diffs the candidate configuration against the active configuration - confirms a fix touches only the intended stanza</td>
+</tr>
+<tr>
+<td><code>show configuration protocols isis</code></td>
+<td>Any provider router</td>
+<td>Full IS-IS stanza - used to spot a per-interface level override</td>
+</tr>
+<tr>
+<td><code>show configuration protocols bgp group IBGP</code></td>
+<td>PE1, PE2</td>
+<td>Full iBGP group stanza - used to spot a missing <code>family</code> statement</td>
+</tr>
+<tr>
+<td><code>show configuration routing-instances VPN-A</code></td>
+<td>PE1, PE2</td>
+<td>Full VRF stanza - used to spot an RD or RT typo</td>
+</tr>
+</tbody>
+</table>
+<h2 id="end-to-end-test-commands">End-to-End Test Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Where to run</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ping 10.0.0.12 source 10.0.0.11 count 5</code></td>
+<td>CE1</td>
+<td>VPN-A end-to-end reachability (always specify <code>source</code>)</td>
+</tr>
+<tr>
+<td><code>ping 10.0.0.11 source 10.0.0.12 count 5</code></td>
+<td>CE2</td>
+<td>VPN-A reverse-direction reachability</td>
+</tr>
+<tr>
+<td><code>ping 192.168.1.2 count 5</code></td>
+<td>CE1</td>
+<td>VPLS-100 end-to-end reachability (no source needed - same subnet)</td>
+</tr>
+<tr>
+<td><code>ping 192.168.1.1 count 5</code></td>
+<td>CE2</td>
+<td>VPLS-100 reverse-direction reachability</td>
+</tr>
+</tbody>
+</table>
+<h2 id="acronym-reference">Acronym Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Acronym</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IGP</td>
+<td>Interior Gateway Protocol - IS-IS in this lab</td>
+</tr>
+<tr>
+<td>LSR-ID</td>
+<td>Label Switch Router ID - the loopback address LDP uses to identify a peer</td>
+</tr>
+<tr>
+<td>NLRI</td>
+<td>Network Layer Reachability Information - the prefix information carried in a BGP update, scoped per address family</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>Route Distinguisher - 64-bit value prepended to VPN prefixes for global BGP uniqueness</td>
+</tr>
+<tr>
+<td>RT</td>
+<td>Route Target - BGP extended community controlling which VRFs import which VPN routes</td>
+</tr>
+<tr>
+<td>VRF</td>
+<td>Virtual Routing and Forwarding - isolated routing table per customer per PE</td>
+</tr>
+<tr>
+<td>MP-BGP</td>
+<td>Multiprotocol BGP - BGP extension carrying address families beyond IPv4 unicast</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>Penultimate Hop Popping - the second-to-last router in an LSP pops the outer label</td>
+</tr>
+<tr>
+<td>LFIB</td>
+<td>Label Forwarding Information Base - the per-router table mapping incoming label to outgoing action</td>
+</tr>
+</tbody>
+</table>
+<h2 id="session-wrap-up">Session Wrap-Up</h2>
+<p>Session 9 closes the lab series by testing the same skill in three different forms: recognizing that a symptom (CE1 cannot reach CE2) can originate from any layer in the stack, and using a consistent, bottom-up diagnostic order to find out which one:</p>
+<ul>
+<li><strong>Fault 1 (IGP)</strong> broke the foundation every other protocol depends on. The signature was symptom breadth - both VPN-A and VPLS-100 failed together, pointing straight at shared transport.</li>
+<li><strong>Fault 2 (BGP)</strong> broke a control-plane capability while leaving the session itself up. The signature was a healthy session with a missing address family - a distinction only visible if you check NLRI negotiation, not just session state.</li>
+<li><strong>Fault 3 (MPLS/L3VPN)</strong> broke route import while leaving BGP, the address family, and the underlying transport all completely healthy. The signature was a route present in <code>bgp.l3vpn.0</code> but absent from the VRF table - the narrowest and hardest-to-spot fault of the three.</li>
+</ul>
+<p>In production, faults rarely announce their own layer. The discipline built across these three parts - confirm the symptom, start at the bottom of the stack, narrow by comparison, form a hypothesis before editing configuration, fix the smallest possible change, verify at the layer you fixed and then end-to-end - is the same discipline used on real service provider networks carrying real customer traffic.</p>
 
 
 

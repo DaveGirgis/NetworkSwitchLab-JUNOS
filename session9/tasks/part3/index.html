@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#part-3-fault-3-mpls-vpn" class="md-skip">
+        <a href="#part-3-fault-3-mplsl3vpn" class="md-skip">
           Skip to content
         </a>
       
@@ -5120,6 +5120,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3 — Fault 3 (MPLS VPN)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -5136,6 +5154,102 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#symptom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symptom
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-confirm-is-is-and-ldp-still-healthy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Confirm IS-IS and LDP (Still Healthy)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-confirm-bgp-session-and-address-families-still-healthy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Confirm BGP Session and Address Families (Still Healthy)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-inspect-bgpl3vpn0-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Inspect bgp.l3vpn.0 Directly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-check-the-route-target-configuration-on-both-pes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Check the Route Target Configuration on Both PEs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Fix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-verify-the-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Verify the Fix
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5438,167 @@
   
 
 
-<h1 id="part-3-fault-3-mpls-vpn">Part 3 — Fault 3 (MPLS VPN)</h1>
+<h1 id="part-3-fault-3-mplsl3vpn">Part 3 - Fault 3 (MPLS/L3VPN)</h1>
+<h2 id="symptom">Symptom</h2>
+<p>With Faults 1 and 2 both fixed and verified, the network runs cleanly again. A third ticket arrives - and this time it is worded almost identically to Part 2's:</p>
+<blockquote>
+<p>"VPN-A between CE1 and CE2 is down again. The Layer 2 service is fine."</p>
+</blockquote>
+<p>Do not assume it is the same fault repeating. Confirm the symptom and start the diagnostic sequence from the bottom again - that repetition is deliberate. Real tickets rarely tell you which layer broke, and a good habit does not skip steps just because the last fault happened to be found at a particular layer.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>PING 10.0.0.12 (10.0.0.12): 56 data bytes
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>--- 10.0.0.12 ping statistics ---
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>5 packets transmitted, 0 packets received, 100% packet loss
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>CE1&gt; ping 192.168.1.2 count 5
+</code></pre></div>
+<p>Observed - VPLS-100 still fine:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>PING 192.168.1.2 (192.168.1.2): 56 data bytes
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>64 bytes from 192.168.1.2: icmp_seq=0 ttl=64 time=27.845 ms
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>64 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=34.902 ms
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>64 bytes from 192.168.1.2: icmp_seq=2 ttl=64 time=31.117 ms
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>64 bytes from 192.168.1.2: icmp_seq=3 ttl=64 time=29.660 ms
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>64 bytes from 192.168.1.2: icmp_seq=4 ttl=64 time=38.244 ms
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>--- 192.168.1.2 ping statistics ---
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>5 packets transmitted, 5 packets received, 0% packet loss
+</code></pre></div>
+<p>Same surface symptom as Part 2. This is the point of the exercise - you cannot tell from the ping alone whether this is another BGP address-family problem, a VRF problem, or something else entirely. Work the layers in order.</p>
+<h2 id="step-1-confirm-is-is-and-ldp-still-healthy">Step 1: Confirm IS-IS and LDP (Still Healthy)</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PE1&gt; show isis adjacency
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>PE1&gt; show route table inet.3
+</code></pre></div>
+<p>Expected and observed - both unchanged and healthy, exactly as at the end of Part 1's fix. Transport layer is not the problem.</p>
+<h2 id="step-2-confirm-bgp-session-and-address-families-still-healthy">Step 2: Confirm BGP Session and Address Families (Still Healthy)</h2>
+<p>Given Part 2 just happened, check this layer again rather than assuming it stayed fixed - configuration can drift, and there is no guarantee only one thing changed since the last ticket.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Groups: 1 Peers: 1 Down peers: 0
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Table          Tot Paths  Act Paths Suppressed    History Damp State    Pending
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>bgp.l2vpn.0
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>                       1          1          0          0          0          0
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>bgp.l3vpn.0
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>                       2          2          0          0          0          0
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>Peer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>10.0.0.4              65001        320        318       0       2       01:15:40 Establ
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>  bgp.l2vpn.0: 1/1/1/0
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>  VPLS-100.l2vpn.0: 1/1/1/0
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>  bgp.l3vpn.0: 2/2/2/0
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>  VPN-A.inet.0: 1/1/1/0
+</code></pre></div>
+<p>The session is <code>Establ</code>, <code>bgp.l3vpn.0</code> shows 2 paths - the address family is negotiated and working at the BGP session level. But look at the last line: <code>VPN-A.inet.0: 1/1/1/0</code> - only <strong>one</strong> route accepted into the VRF, where the Part 0 baseline showed 2. Something is being received into <code>bgp.l3vpn.0</code> but not all of it is making it into the local VRF table.</p>
+<h2 id="step-3-inspect-bgpl3vpn0-directly">Step 3: Inspect bgp.l3vpn.0 Directly</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>PE1&gt; show route table bgp.l3vpn.0
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>bgp.l3vpn.0: 2 destinations, 2 routes (2 active, 0 holddown, 0 hidden)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>65001:1000:10.0.0.11/32
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>                   *[BGP/170] 04:20:11, localpref 100
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>                      AS path: 65100 I
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>                    &gt; Indirect
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>65001:2000:10.0.0.12/32
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>                   *[BGP/170] 00:02:03, localpref 100, from 10.0.0.4
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                      AS path: 65100 I
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+</code></pre></div>
+<p>Both VPN-IPv4 routes are present in <code>bgp.l3vpn.0</code> - PE1's own route (<code>65001:1000:...</code>) and PE2's route for CE2's loopback (<code>65001:2000:10.0.0.12/32</code>). The route from PE2 arrived over BGP successfully. This confirms Part 2's fault is not recurring - the address family is negotiated and PE2 is advertising the route.</p>
+<p>Now check the VRF table itself:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>PE1&gt; show route table VPN-A.inet.0
+</code></pre></div>
+<p>Observed:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>VPN-A.inet.0: 3 destinations, 3 routes (3 active, 0 holddown, 0 hidden)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>10.0.0.11/32       *[BGP/170] 04:20:11, localpref 100
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>172.16.1.0/30      *[Direct/0] 05:02:33
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>                    &gt; via ge-0/0/1.0
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>172.16.1.1/32      *[Local/0] 05:02:33
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>                      Local via ge-0/0/1.0
+</code></pre></div>
+<p><strong>CE2's loopback (10.0.0.12/32) and PE2's link subnet (172.16.2.0/30) are both missing from the VRF table</strong>, even though the route is clearly present in <code>bgp.l3vpn.0</code> one command ago. This is the exact signature of a route-target import mismatch: the route exists in the global VPN-IPv4 table (BGP received and accepted it), but the local VRF's import policy does not recognize it as belonging to VPN-A, so it never gets imported into <code>VPN-A.inet.0</code>.</p>
+<h2 id="step-4-check-the-route-target-configuration-on-both-pes">Step 4: Check the Route Target Configuration on Both PEs</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>PE1&gt; show configuration routing-instances VPN-A vrf-target
+</code></pre></div>
+<p>Observed on PE1 - unchanged:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>target:65001:100;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>PE2&gt; show configuration routing-instances VPN-A vrf-target
+</code></pre></div>
+<p>Observed on PE2:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>target:65001:200;
+</code></pre></div>
+<p><strong>Root cause found.</strong> PE2's <code>VPN-A</code> routing instance is now using <code>vrf-target target:65001:200</code> instead of the correct <code>target:65001:100</code>. Since <code>vrf-target</code> sets both the export and import route target to the same value, this single change affects both directions:</p>
+<ul>
+<li>PE2 now <strong>exports</strong> VPN-A routes tagged with <code>target:65001:200</code> instead of <code>target:65001:100</code> - so PE1's VRF (still importing <code>target:65001:100</code>) does not recognize PE2's routes as belonging to VPN-A and does not import them. This is exactly what Step 3 showed.</li>
+<li>PE2 now <strong>imports</strong> only routes carrying <code>target:65001:200</code> - so PE2's own VRF will also fail to import PE1's routes (<code>target:65001:100</code>), even though those routes are correctly present in PE2's <code>bgp.l3vpn.0</code>.</li>
+</ul>
+<p>The BGP session, the address families, and the underlying transport are all completely healthy. The fault is entirely inside a single line of VRF configuration on PE2.</p>
 <div class="admonition note">
-<p class="admonition-title">Coming soon</p>
+<p class="admonition-title">Why this did not affect VPLS-100</p>
+<p>VPLS-100 uses its own independent <code>vrf-target target:65001:100</code> under the <code>VPLS-100</code> routing instance, configured separately in Session 7a. Changing VPN-A's route target has no effect on VPLS-100's route target - they are two distinct routing-instance stanzas, and this is exactly why the RD/RT plan in Session 8 kept them numerically distinct in the first place.</p>
 </div>
+<h2 id="step-5-fix">Step 5: Fix</h2>
+<p>Correct the route target on PE2 back to the value shared with PE1.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>PE2&gt; configure
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>set routing-instances VPN-A vrf-target target:65001:100
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>commit
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Confirm you are editing the right routing-instance</p>
+<p>Before committing, run <code>show | compare</code> to confirm the only pending change is inside <code>routing-instances VPN-A</code> and that you have not accidentally touched <code>routing-instances VPLS-100</code>, which also uses <code>target:65001:100</code> but is a completely separate customer service.</p>
+</div>
+<h2 id="step-6-verify-the-fix">Step 6: Verify the Fix</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>PE2&gt; show configuration routing-instances VPN-A vrf-target
+</code></pre></div>
+<p>Expected:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>target:65001:100;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>PE1&gt; show route table VPN-A.inet.0
+</code></pre></div>
+<p>Expected - four routes restored:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>VPN-A.inet.0: 4 destinations, 4 routes (4 active, 0 holddown, 0 hidden)
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>+ = Active Route, - = Last Active, * = Both
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>10.0.0.11/32       *[BGP/170] 04:35:02, localpref 100
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>                    &gt; to 172.16.1.2 via ge-0/0/1.0
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>10.0.0.12/32       *[BGP/170] 00:00:22, localpref 100, from 10.0.0.4
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>                      AS path: 65100 I, validation-state: unverified
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>172.16.1.0/30      *[Direct/0] 05:17:24
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>                    &gt; via ge-0/0/1.0
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>172.16.2.0/30      *[BGP/170] 00:00:22, localpref 100, from 10.0.0.4
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>                    &gt; to 10.1.12.2 via ge-0/0/0.0, Push &lt;vpn-label&gt;, Push 299808
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>PE1&gt; show bgp summary
+</code></pre></div>
+<p>Expected - <code>VPN-A.inet.0: 2/2/2/0</code> restored under the peer.</p>
+<p>Finally, confirm end-to-end reachability one last time:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5
+</code></pre></div>
+<p>Expected - 5/5 replies, 0% packet loss.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>CE1&gt; ping 192.168.1.2 count 5
+</code></pre></div>
+<p>Expected - 5/5 replies, 0% packet loss.</p>
+<p>Both directions of VPN-A should also be tested:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>CE2&gt; ping 10.0.0.11 source 10.0.0.12 count 5
+</code></pre></div>
+<p>Expected - 5/5 replies, 0% packet loss.</p>
+<div class="admonition tip">
+<p class="admonition-title">Why this fault was placed last</p>
+<p>This fault is the hardest of the three because every layer below it - interface, IS-IS, LDP, and the BGP session itself with its address families - is completely healthy. The only observable evidence is a route present in <code>bgp.l3vpn.0</code> but absent from <code>VPN-A.inet.0</code>. Recognizing that specific signature (present in the BGP table, missing from the VRF) as a route-target problem, rather than assuming BGP itself is broken, is the core skill this session is building toward.</p>
+</div>
+<p>All three faults are now fixed. Proceed to the <a href="../verify/">Verification Checklist</a> to confirm full end-to-end health across every layer and every service.</p>
 
 
 

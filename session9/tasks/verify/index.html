@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#session-8-verification" class="md-skip">
+        <a href="#session-9-verification-checklist" class="md-skip">
           Skip to content
         </a>
       
@@ -5148,6 +5148,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -5164,6 +5182,152 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fault-and-fix-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fault and Fix Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-by-layer-health-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer-by-Layer Health Check
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer-by-Layer Health Check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#physical-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Physical / Interfaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IS-IS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ldp-mpls-transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LDP / MPLS Transport
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bgp-mp-bgp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BGP / MP-BGP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vpn-a-l3vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPN-A (L3VPN)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vpls-100-l2vpn-unaffected-control-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VPLS-100 (L2VPN, Unaffected Control Group)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-reachability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        End-to-End Reachability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reflection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reflection
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5324,10 +5488,122 @@
   
 
 
-<h1 id="session-8-verification">Session 8 — Verification</h1>
-<div class="admonition note">
-<p class="admonition-title">Coming soon</p>
-</div>
+<h1 id="session-9-verification-checklist">Session 9 - Verification Checklist</h1>
+<h2 id="fault-and-fix-summary">Fault and Fix Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Fault</th>
+<th>Layer</th>
+<th>Root Cause</th>
+<th>Fix</th>
+<th>Key Diagnostic Signature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IGP (IS-IS)</td>
+<td>P2's <code>ge-0/0/0.0</code> interface (facing P1) pinned to <code>level 1 enable</code> / <code>level 2 disable</code>, while every other router/interface in the topology runs Level 2 only</td>
+<td><code>delete protocols isis interface ge-0/0/0.0 level 1</code> and <code>level 2</code> on P2, restoring the router-wide Level 2 default</td>
+<td>Both VPN-A and VPLS-100 fail together; <code>show isis adjacency</code> shows a missing neighbor on both sides of one link; <code>show isis interface &lt;if&gt; detail</code> shows mismatched <code>Circuit type</code> on the two ends</td>
+</tr>
+<tr>
+<td>2</td>
+<td>BGP / MP-BGP</td>
+<td><code>family inet-vpn unicast</code> removed from PE2's iBGP group toward PE1</td>
+<td><code>set protocols bgp group IBGP family inet-vpn unicast</code> on PE2</td>
+<td>iBGP session stays <code>Establ</code>; VPLS-100 keeps working; <code>show bgp neighbor &lt;ip&gt; \| match NLRI</code> is missing <code>inet-vpn-unicast</code>; <code>bgp.l3vpn.0</code> and per-peer <code>VPN-A.inet.0</code> lines disappear from <code>show bgp summary</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>MPLS / L3VPN (route target)</td>
+<td>PE2's <code>VPN-A</code> routing-instance <code>vrf-target</code> changed from <code>target:65001:100</code> to <code>target:65001:200</code></td>
+<td><code>set routing-instances VPN-A vrf-target target:65001:100</code> on PE2</td>
+<td>BGP session and address families healthy; route present in <code>bgp.l3vpn.0</code> but missing from <code>VPN-A.inet.0</code>; VPLS-100 unaffected (separate routing-instance, separate RT)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="layer-by-layer-health-check">Layer-by-Layer Health Check</h2>
+<h3 id="physical-interfaces">Physical / Interfaces</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show interfaces terse | match ge-</code> - all interfaces <code>up up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show interfaces terse | match ge-</code> - all interfaces <code>up up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show interfaces terse | match ge-</code> - all interfaces <code>up up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show interfaces terse | match ge-</code> - all interfaces <code>up up</code></li>
+</ul>
+<h3 id="is-is">IS-IS</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show isis adjacency</code> - one adjacency (P1), <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P1&gt; show isis adjacency</code> - two adjacencies (PE1, P2), both <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show isis adjacency</code> - two adjacencies (P1, PE2), both <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show isis adjacency</code> - one adjacency (P2), <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>P2&gt; show configuration protocols isis interface ge-0/0/0.0</code> - no <code>level 1 enable</code> or <code>level 2 disable</code> override remains</li>
+</ul>
+<h3 id="ldp-mpls-transport">LDP / MPLS Transport</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show ldp session</code> - session(s) <code>Operational</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table inet.3</code> - three destinations (10.0.0.2, 10.0.0.3, 10.0.0.4), 10.0.0.4/32 shows a <code>Push</code> label</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table inet.3</code> - three destinations (10.0.0.1, 10.0.0.2, 10.0.0.3), 10.0.0.1/32 shows a <code>Push</code> label</li>
+</ul>
+<h3 id="bgp-mp-bgp">BGP / MP-BGP</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show bgp summary</code> - peer 10.0.0.4 shows <code>Establ</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show bgp neighbor 10.0.0.4 | match NLRI</code> - <code>inet-vpn-unicast l2vpn</code> present on every NLRI line</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show bgp neighbor 10.0.0.1 | match NLRI</code> - <code>inet-vpn-unicast l2vpn</code> present on every NLRI line</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show configuration protocols bgp group IBGP</code> - <code>family inet-vpn unicast</code> and <code>family l2vpn signaling</code> both present</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show configuration protocols bgp group IBGP</code> - <code>family inet-vpn unicast</code> and <code>family l2vpn signaling</code> both present</li>
+</ul>
+<h3 id="vpn-a-l3vpn">VPN-A (L3VPN)</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show configuration routing-instances VPN-A vrf-target</code> - <code>target:65001:100</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show configuration routing-instances VPN-A vrf-target</code> - <code>target:65001:100</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table bgp.l3vpn.0</code> - two routes: <code>65001:1000:10.0.0.11/32</code> and <code>65001:2000:10.0.0.12/32</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table bgp.l3vpn.0</code> - two routes: <code>65001:1000:10.0.0.11/32</code> and <code>65001:2000:10.0.0.12/32</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table VPN-A.inet.0</code> - four routes: <code>172.16.1.0/30</code> (Direct), <code>10.0.0.11/32</code> (BGP from CE1), <code>10.0.0.12/32</code> (BGP from PE2, two-label Push stack), <code>172.16.2.0/30</code> (BGP from PE2)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show route table VPN-A.inet.0</code> - four routes: <code>172.16.2.0/30</code> (Direct), <code>10.0.0.12/32</code> (BGP from CE2), <code>10.0.0.11/32</code> (BGP from PE1, two-label Push stack), <code>172.16.1.0/30</code> (BGP from PE1)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show bgp summary instance VPN-A</code> - CE1 (172.16.1.2) established</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show bgp summary instance VPN-A</code> - CE2 (172.16.2.2) established</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; show route receive-protocol bgp 172.16.1.1</code> - <code>10.0.0.12/32</code> present with AS path <code>65001 65001 I</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; show route receive-protocol bgp 172.16.2.1</code> - <code>10.0.0.11/32</code> present with AS path <code>65001 65001 I</code></li>
+</ul>
+<h3 id="vpls-100-l2vpn-unaffected-control-group">VPLS-100 (L2VPN, Unaffected Control Group)</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show vpls connections</code> - connection-site 2, <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE2&gt; show vpls connections</code> - connection-site 1, <code>Up</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show route table VPLS-100.l2vpn.0</code> - two routes present</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>PE1&gt; show configuration routing-instances VPLS-100 vrf-target</code> - <code>target:65001:100</code> (unchanged, independent of VPN-A's RT)</li>
+</ul>
+<h3 id="end-to-end-reachability">End-to-End Reachability</h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 10.0.0.12 source 10.0.0.11 count 5</code> - 5/5 replies, 0% packet loss (VPN-A)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 10.0.0.11 source 10.0.0.12 count 5</code> - 5/5 replies, 0% packet loss (VPN-A)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE1&gt; ping 192.168.1.2 count 5</code> - 5/5 replies, 0% packet loss (VPLS-100)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>CE2&gt; ping 192.168.1.1 count 5</code> - 5/5 replies, 0% packet loss (VPLS-100)</li>
+</ul>
+<h2 id="quick-commands">Quick Commands</h2>
+<p>Run these four commands, in this order, any time you need a fast top-to-bottom health read of the whole stack:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>show isis adjacency
+</code></pre></div>
+Expected: correct number of <code>Up</code> adjacencies for that router's position in the topology (1 for PE1/PE2, 2 for P1/P2).</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>show ldp session
+</code></pre></div>
+Expected: all sessions <code>Operational</code>.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>show bgp summary
+</code></pre></div>
+Expected: iBGP peer <code>Establ</code>, with <code>bgp.l3vpn.0</code> and <code>bgp.l2vpn.0</code> both listed and both showing active paths.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>show route table VPN-A.inet.0
+</code></pre></div>
+Expected on PE1 or PE2: four routes, including the remote CE loopback with a two-label <code>Push</code> stack.</p>
+<h2 id="reflection">Reflection</h2>
+<p>Before closing out this session, answer these for yourself - the goal is retention of the method, not just the three fixes:</p>
+<ul>
+<li>For each fault, what was the very first command you ran, and was it the right place to start?</li>
+<li>Which fault would have been fastest to misdiagnose if you had started troubleshooting from the top of the stack (VPN-A configuration) instead of the bottom (interfaces, then IGP)?</li>
+<li>What is the single distinguishing symptom that told you Fault 2 was a BGP address-family problem and not a VRF problem, given that both faults produced an identical CE1-to-CE2 ping failure?</li>
+<li>Why did VPLS-100 serve as a useful control group throughout this session, and what would it have meant if VPLS-100 had also broken during Fault 2 or Fault 3?</li>
+</ul>
+<p>This closes the JNCIS-SP lab series. You have now built, from nothing, a working IS-IS core, an MPLS/LDP transport layer, a BGP/MPLS Layer 3 VPN, a Layer 2 VPLS service, and - in this final session - practiced the diagnostic discipline needed to keep all of it running when something breaks in production.</p>
 
 
 
